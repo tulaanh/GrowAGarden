@@ -1,0 +1,1150 @@
+{
+  "pack": "Cozy Tropical Farm Starter",
+  "version": "0.2",
+  "canvas": {
+    "width": 256,
+    "height": 384,
+    "pivot": [
+      0.5,
+      0.9375
+    ]
+  },
+  "plants": {
+    "carrot": {
+      "ground_baked": true,
+      "orchard": false,
+      "render_span": 458,
+      "stages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "corn": {
+      "ground_baked": true,
+      "orchard": false,
+      "render_span": 505,
+      "stages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "rice": {
+      "ground_baked": true,
+      "orchard": false,
+      "render_span": 466,
+      "stages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "tomato": {
+      "ground_baked": true,
+      "orchard": false,
+      "render_span": 439,
+      "stages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "potato": {
+      "ground_baked": true,
+      "orchard": false,
+      "render_span": 384,
+      "stages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "onion": {
+      "ground_baked": true,
+      "orchard": false,
+      "render_span": 443,
+      "stages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "cabbage": {
+      "ground_baked": true,
+      "orchard": false,
+      "render_span": 305,
+      "stages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "eggplant": {
+      "ground_baked": true,
+      "orchard": false,
+      "render_span": 448,
+      "stages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "pumpkin": {
+      "ground_baked": true,
+      "orchard": false,
+      "render_span": 326,
+      "stages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "strawberry": {
+      "ground_baked": true,
+      "orchard": false,
+      "render_span": 327,
+      "stages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "pineapple": {
+      "ground_baked": true,
+      "orchard": false,
+      "render_span": 447,
+      "stages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "watermelon": {
+      "ground_baked": true,
+      "orchard": false,
+      "render_span": 313,
+      "stages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "mango": {
+      "ground_baked": false,
+      "orchard": true,
+      "render_span": 452,
+      "stages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "apple": {
+      "ground_baked": false,
+      "orchard": true,
+      "render_span": 506,
+      "stages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "banana": {
+      "ground_baked": false,
+      "orchard": true,
+      "render_span": 503,
+      "stages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "cucumber": {
+      "ground_baked": false,
+      "orchard": false,
+      "render_span": 418,
+      "stages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "lettuce": {
+      "ground_baked": false,
+      "orchard": false,
+      "render_span": 360,
+      "stages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "sweet_potato": {
+      "ground_baked": false,
+      "orchard": false,
+      "render_span": 273,
+      "stages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "peanut": {
+      "ground_baked": false,
+      "orchard": false,
+      "render_span": 473,
+      "stages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "bell_pepper": {
+      "ground_baked": false,
+      "orchard": false,
+      "render_span": 361,
+      "stages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "chili": {
+      "ground_baked": false,
+      "orchard": false,
+      "render_span": 437,
+      "stages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  },
+  "assets": [
+    {
+      "id": "carrot_stage_01",
+      "file": "farm/plants/carrot/stage-01.webp",
+      "source": "assets/crops/carrot_stage_01.png",
+      "sha256": "11f2e85b616cf077fac9f0335f8a1f8562ef4164c651111f537fef14e4fc52bf"
+    },
+    {
+      "id": "carrot_stage_02",
+      "file": "farm/plants/carrot/stage-02.webp",
+      "source": "assets/crops/carrot_stage_02.png",
+      "sha256": "7f4a1fa503f1c2d52aac3961ba8eaea9e3538e5afb101cebeb5f11ad818e16d2"
+    },
+    {
+      "id": "carrot_stage_03",
+      "file": "farm/plants/carrot/stage-03.webp",
+      "source": "assets/crops/carrot_stage_03.png",
+      "sha256": "8cf1c0ac674bf0d725d09942a8c4dc757ba7e35fe774d7e08cf5680bd68bcb76"
+    },
+    {
+      "id": "carrot_stage_04",
+      "file": "farm/plants/carrot/stage-04.webp",
+      "source": "assets/crops/carrot_stage_04.png",
+      "sha256": "858aba69f59342c5f1b98cba121a424df5b2ae623cf324b003756aeac36d3a4e"
+    },
+    {
+      "id": "carrot_stage_05",
+      "file": "farm/plants/carrot/stage-05.webp",
+      "source": "assets/crops/carrot_stage_05.png",
+      "sha256": "67ea9f962285a5d54514ed1a6d071bbd9daafaa7d74c0cc8e2bbe57124bc1a1d"
+    },
+    {
+      "id": "carrot_planting_packet",
+      "file": "farm/items/carrot-packet.webp",
+      "source": "assets/items/carrot_planting_packet.png",
+      "sha256": "854707d3e3e5178e53cd68dcbc8d44b15ac7850f54ccf322b9b62f7347dc2408"
+    },
+    {
+      "id": "carrot_harvest",
+      "file": "farm/items/carrot-harvest.webp",
+      "source": "assets/items/carrot_harvest.png",
+      "sha256": "2a6acfdb25961455309df82f585f57a48dd531a1cf8c640005aae88b08bc111c"
+    },
+    {
+      "id": "corn_stage_01",
+      "file": "farm/plants/corn/stage-01.webp",
+      "source": "assets/crops/corn_stage_01.png",
+      "sha256": "2d83ec30299e4a25cde03a1bab93c8f3b2660b4671fe28ba420a83b80ae50684"
+    },
+    {
+      "id": "corn_stage_02",
+      "file": "farm/plants/corn/stage-02.webp",
+      "source": "assets/crops/corn_stage_02.png",
+      "sha256": "dd9817a79355d436ab5e2294a1742bd621165052e9f5af3fe9d54199ba03a003"
+    },
+    {
+      "id": "corn_stage_03",
+      "file": "farm/plants/corn/stage-03.webp",
+      "source": "assets/crops/corn_stage_03.png",
+      "sha256": "35280ddfff814ad35a55f6c1946daf7b98c05aeb9b4a27c794d537212d5a9a38"
+    },
+    {
+      "id": "corn_stage_04",
+      "file": "farm/plants/corn/stage-04.webp",
+      "source": "assets/crops/corn_stage_04.png",
+      "sha256": "c08ec481ab1865839fb85c89cc653a27284f09dd6ec680260dcede3e376ff261"
+    },
+    {
+      "id": "corn_stage_05",
+      "file": "farm/plants/corn/stage-05.webp",
+      "source": "assets/crops/corn_stage_05.png",
+      "sha256": "39fd7de7bff718a1ae6f125e576ecdfadd0e57c94a12d6c3fdb7353ca00d6087"
+    },
+    {
+      "id": "corn_planting_packet",
+      "file": "farm/items/corn-packet.webp",
+      "source": "assets/items/corn_planting_packet.png",
+      "sha256": "03754c462aebe47b7f83f210e99f90089cf73f9378aea3dea466bf5a36ad4a24"
+    },
+    {
+      "id": "corn_harvest",
+      "file": "farm/items/corn-harvest.webp",
+      "source": "assets/items/corn_harvest.png",
+      "sha256": "887ce6171af36d2194311bebf644ee57cdfee8d640ab39d584ba1723e98ad560"
+    },
+    {
+      "id": "rice_stage_01",
+      "file": "farm/plants/rice/stage-01.webp",
+      "source": "assets/crops/rice_stage_01.png",
+      "sha256": "f1f1f8eb9fe68ee9177da2c0fcd797af697ed64908943033a0b33a313bace1e6"
+    },
+    {
+      "id": "rice_stage_02",
+      "file": "farm/plants/rice/stage-02.webp",
+      "source": "assets/crops/rice_stage_02.png",
+      "sha256": "b5747627c3eb3fb6c43dfdc307a9befe56b091db9dacc57c3f1692a28e43eb8b"
+    },
+    {
+      "id": "rice_stage_03",
+      "file": "farm/plants/rice/stage-03.webp",
+      "source": "assets/crops/rice_stage_03.png",
+      "sha256": "74fbf58a76995c34a563f9a5be68c92a2682e569a2643ca2ea3263f37eab3d9c"
+    },
+    {
+      "id": "rice_stage_04",
+      "file": "farm/plants/rice/stage-04.webp",
+      "source": "assets/crops/rice_stage_04.png",
+      "sha256": "9bd32104f0648524ad4fa8555c2ca88549986a6f7bcde4871885acd656ce2d28"
+    },
+    {
+      "id": "rice_stage_05",
+      "file": "farm/plants/rice/stage-05.webp",
+      "source": "assets/crops/rice_stage_05.png",
+      "sha256": "a3bd8d2b3a82f2ad53e1b0f7e4812ca8b065d00e3f4085019f94f25accfa8217"
+    },
+    {
+      "id": "rice_planting_packet",
+      "file": "farm/items/rice-packet.webp",
+      "source": "assets/items/rice_planting_packet.png",
+      "sha256": "f49154fe83b99b0597a9a387d5447bb70a88f819b88ad55bec299a268ef45c97"
+    },
+    {
+      "id": "rice_harvest",
+      "file": "farm/items/rice-harvest.webp",
+      "source": "assets/items/rice_harvest.png",
+      "sha256": "f5d6538bcea92ede94b99d98760187e13d94a033c4c1360bbcd0407ed2a6dc2a"
+    },
+    {
+      "id": "tomato_stage_01",
+      "file": "farm/plants/tomato/stage-01.webp",
+      "source": "assets/crops/tomato_stage_01.png",
+      "sha256": "5d1fe8320d9ac1ba2b3559c3cf60d1faff6f245cda79fe67e3bc24756753bd61"
+    },
+    {
+      "id": "tomato_stage_02",
+      "file": "farm/plants/tomato/stage-02.webp",
+      "source": "assets/crops/tomato_stage_02.png",
+      "sha256": "be68574d311e1cdb51aef15538f4cc95645e305f4a1e6070b3f1f38d4c974f2f"
+    },
+    {
+      "id": "tomato_stage_03",
+      "file": "farm/plants/tomato/stage-03.webp",
+      "source": "assets/crops/tomato_stage_03.png",
+      "sha256": "949907e0e8ae3bd4f28bfc7276c5a2551d9d9314f2c74a156096a1d6485aad93"
+    },
+    {
+      "id": "tomato_stage_04",
+      "file": "farm/plants/tomato/stage-04.webp",
+      "source": "assets/crops/tomato_stage_04.png",
+      "sha256": "7202a71daecc8e2e4ec6654f7d707c5da4666803751a2c7083f404d65975ec1c"
+    },
+    {
+      "id": "tomato_stage_05",
+      "file": "farm/plants/tomato/stage-05.webp",
+      "source": "assets/crops/tomato_stage_05.png",
+      "sha256": "891726a633602a31802986ef23989019a32fd3559fd3fc259d830317c8252dea"
+    },
+    {
+      "id": "tomato_planting_packet",
+      "file": "farm/items/tomato-packet.webp",
+      "source": "assets/items/tomato_planting_packet.png",
+      "sha256": "fc04b5aceab9489504f632c257b122a1055ec1333c173321699b41dddb2a271f"
+    },
+    {
+      "id": "tomato_harvest",
+      "file": "farm/items/tomato-harvest.webp",
+      "source": "assets/items/tomato_harvest.png",
+      "sha256": "a8803909572086c53484d4bbe2e092355178e1d86cf4d464484a5399dfd5ccf9"
+    },
+    {
+      "id": "potato_stage_01",
+      "file": "farm/plants/potato/stage-01.webp",
+      "source": "assets/crops/potato_stage_01.png",
+      "sha256": "f1e8b66e80afb254e1ec03e779933d9705d8ca9bf2ae8771359e1ff86b83cf4d"
+    },
+    {
+      "id": "potato_stage_02",
+      "file": "farm/plants/potato/stage-02.webp",
+      "source": "assets/crops/potato_stage_02.png",
+      "sha256": "addc79d6a18f2be575f97c5942f06b6f8dc4cb4c83ac5befb9c461fa79b0baf2"
+    },
+    {
+      "id": "potato_stage_03",
+      "file": "farm/plants/potato/stage-03.webp",
+      "source": "assets/crops/potato_stage_03.png",
+      "sha256": "b28d0a3836a21dc3d7008c9bed0a5fec1d386fecf1014e5cdf7953219ccdc8de"
+    },
+    {
+      "id": "potato_stage_04",
+      "file": "farm/plants/potato/stage-04.webp",
+      "source": "assets/crops/potato_stage_04.png",
+      "sha256": "59b66eb12840dded142b31a5b10931dacd15086067ddba6aaaa72a7bc374d492"
+    },
+    {
+      "id": "potato_stage_05",
+      "file": "farm/plants/potato/stage-05.webp",
+      "source": "assets/crops/potato_stage_05.png",
+      "sha256": "e86548ae053124e67e53749bdbbcc0c27fade254c7c9571ad2fbc51bab9f2d34"
+    },
+    {
+      "id": "potato_planting_packet",
+      "file": "farm/items/potato-packet.webp",
+      "source": "assets/items/potato_planting_packet.png",
+      "sha256": "2428da731083214549fa5bac874e78d40d2de3187f319c4ab2016b3681791dc9"
+    },
+    {
+      "id": "potato_harvest",
+      "file": "farm/items/potato-harvest.webp",
+      "source": "assets/items/potato_harvest.png",
+      "sha256": "75f9fdfe970222eae7a033e9522366a5fb908547bafd20272e9d4806c7c362b7"
+    },
+    {
+      "id": "onion_stage_01",
+      "file": "farm/plants/onion/stage-01.webp",
+      "source": "assets/crops/onion_stage_01.png",
+      "sha256": "57f3236b91097b31ae1453874001f390cdbf303f4565a47388abcaeef176307c"
+    },
+    {
+      "id": "onion_stage_02",
+      "file": "farm/plants/onion/stage-02.webp",
+      "source": "assets/crops/onion_stage_02.png",
+      "sha256": "a7088a4b95b80a9292c859883eb22e611b8d4328166c26d4aadf4045d56f63c5"
+    },
+    {
+      "id": "onion_stage_03",
+      "file": "farm/plants/onion/stage-03.webp",
+      "source": "assets/crops/onion_stage_03.png",
+      "sha256": "cd5236d7c505a99ec9b25f7ff3eda148576d5300f2f1c05790f1a14efec7b657"
+    },
+    {
+      "id": "onion_stage_04",
+      "file": "farm/plants/onion/stage-04.webp",
+      "source": "assets/crops/onion_stage_04.png",
+      "sha256": "4b39cd25ce3a34f35e9c58d0334499a7d01d144d232bb7b6e2602710e67ff501"
+    },
+    {
+      "id": "onion_stage_05",
+      "file": "farm/plants/onion/stage-05.webp",
+      "source": "assets/crops/onion_stage_05.png",
+      "sha256": "f7c6e323beacdd4aa57fd1688179e63f082826cd7be89da420f4295b311eb484"
+    },
+    {
+      "id": "onion_planting_packet",
+      "file": "farm/items/onion-packet.webp",
+      "source": "assets/items/onion_planting_packet.png",
+      "sha256": "73dfa2c4660d7766160a47ebb711d8878999729b1a8302832fde294f028266c6"
+    },
+    {
+      "id": "onion_harvest",
+      "file": "farm/items/onion-harvest.webp",
+      "source": "assets/items/onion_harvest.png",
+      "sha256": "95451a6366d63f31dbb5955509dc13dcb8d824079b796b629e5aeb6259fd8a73"
+    },
+    {
+      "id": "cabbage_stage_01",
+      "file": "farm/plants/cabbage/stage-01.webp",
+      "source": "assets/crops/cabbage_stage_01.png",
+      "sha256": "2708f21e8c2f184dc4f6bc10714dceecf469d6e1c9332cb609afb02617d8b13a"
+    },
+    {
+      "id": "cabbage_stage_02",
+      "file": "farm/plants/cabbage/stage-02.webp",
+      "source": "assets/crops/cabbage_stage_02.png",
+      "sha256": "e030802d380ad24f5c8e1c51c9572fe40132a7ed00454d25d892c734f0fedaf3"
+    },
+    {
+      "id": "cabbage_stage_03",
+      "file": "farm/plants/cabbage/stage-03.webp",
+      "source": "assets/crops/cabbage_stage_03.png",
+      "sha256": "db3abd03c5cf2aaeed0335ca923add3b9f81b926071772ea575c7c9445de9232"
+    },
+    {
+      "id": "cabbage_stage_04",
+      "file": "farm/plants/cabbage/stage-04.webp",
+      "source": "assets/crops/cabbage_stage_04.png",
+      "sha256": "6ab74b6a055fc54524829e3baea07df6ea72acfe7b4b52c35155477b1545d9ac"
+    },
+    {
+      "id": "cabbage_stage_05",
+      "file": "farm/plants/cabbage/stage-05.webp",
+      "source": "assets/crops/cabbage_stage_05.png",
+      "sha256": "b128373c996e8a17963a94254a0a4b301ddd4dc0b4a27a6814a271aee98693a5"
+    },
+    {
+      "id": "cabbage_planting_packet",
+      "file": "farm/items/cabbage-packet.webp",
+      "source": "assets/items/cabbage_planting_packet.png",
+      "sha256": "47943adf62f47d750de2e02250acb2cbb2f8657dbea0d2efcc30e5a35369af0e"
+    },
+    {
+      "id": "cabbage_harvest",
+      "file": "farm/items/cabbage-harvest.webp",
+      "source": "assets/items/cabbage_harvest.png",
+      "sha256": "b4e29ec6623a7af7f303f16ba3c0110844653c4106fc97b22f7dd9343252e7ff"
+    },
+    {
+      "id": "eggplant_stage_01",
+      "file": "farm/plants/eggplant/stage-01.webp",
+      "source": "assets/crops/eggplant_stage_01.png",
+      "sha256": "c1f07bb2eda4f30e5e2c6feccc8b84634bfa0f3d375e0864f3f6f6aadf278451"
+    },
+    {
+      "id": "eggplant_stage_02",
+      "file": "farm/plants/eggplant/stage-02.webp",
+      "source": "assets/crops/eggplant_stage_02.png",
+      "sha256": "aa382d091643b0ff4cd483e35f62daefce39b14b018a2ec8051262cc1d04e887"
+    },
+    {
+      "id": "eggplant_stage_03",
+      "file": "farm/plants/eggplant/stage-03.webp",
+      "source": "assets/crops/eggplant_stage_03.png",
+      "sha256": "dd2e1cf31c96c7b02bf73a87f16b1cf99c0373389965437548c6e505b0b99911"
+    },
+    {
+      "id": "eggplant_stage_04",
+      "file": "farm/plants/eggplant/stage-04.webp",
+      "source": "assets/crops/eggplant_stage_04.png",
+      "sha256": "b33966521b4e93ad799628d6823548f461581e9109ffd85925f70a01e8fd1c18"
+    },
+    {
+      "id": "eggplant_stage_05",
+      "file": "farm/plants/eggplant/stage-05.webp",
+      "source": "assets/crops/eggplant_stage_05.png",
+      "sha256": "44522e6fba749fc3fb9d6220ddc51174a63a3f87074eff1e681452db73253db5"
+    },
+    {
+      "id": "eggplant_planting_packet",
+      "file": "farm/items/eggplant-packet.webp",
+      "source": "assets/items/eggplant_planting_packet.png",
+      "sha256": "4b0801801a28541c5e8b9b36655752ecda7c20a7f7ba6f4e40c464a24d764f21"
+    },
+    {
+      "id": "eggplant_harvest",
+      "file": "farm/items/eggplant-harvest.webp",
+      "source": "assets/items/eggplant_harvest.png",
+      "sha256": "527229b36414731587e6464b557c9c467eddb2ec8531b9395f4c3e765687c83e"
+    },
+    {
+      "id": "pumpkin_stage_01",
+      "file": "farm/plants/pumpkin/stage-01.webp",
+      "source": "assets/crops/pumpkin_stage_01.png",
+      "sha256": "95cdc99702ac3c9b9b371d8476e6538675df4b568459aa12ed819bcc240c2348"
+    },
+    {
+      "id": "pumpkin_stage_02",
+      "file": "farm/plants/pumpkin/stage-02.webp",
+      "source": "assets/crops/pumpkin_stage_02.png",
+      "sha256": "0b203b364660fe33ec2ac7c2f29221977392a5f4302fff70d9ee978428e10602"
+    },
+    {
+      "id": "pumpkin_stage_03",
+      "file": "farm/plants/pumpkin/stage-03.webp",
+      "source": "assets/crops/pumpkin_stage_03.png",
+      "sha256": "4809eefb8ab5d5f79a6f232043f060f74d65db6db1e0d151e3c6f92d7dfd00b9"
+    },
+    {
+      "id": "pumpkin_stage_04",
+      "file": "farm/plants/pumpkin/stage-04.webp",
+      "source": "assets/crops/pumpkin_stage_04.png",
+      "sha256": "69f016044ba90822fb79454424151af0b01b9fff11bf6725ec6c6dde2c2a350e"
+    },
+    {
+      "id": "pumpkin_stage_05",
+      "file": "farm/plants/pumpkin/stage-05.webp",
+      "source": "assets/crops/pumpkin_stage_05.png",
+      "sha256": "d33a08a2e62a4943c2c932a41897945b4b7152b825f20c8d882b0a8f9fec80ad"
+    },
+    {
+      "id": "pumpkin_planting_packet",
+      "file": "farm/items/pumpkin-packet.webp",
+      "source": "assets/items/pumpkin_planting_packet.png",
+      "sha256": "bc4e1595cc377ce248dcc0ce0d6328b8d641f34dbee13e801a2b728a192e78bf"
+    },
+    {
+      "id": "pumpkin_harvest",
+      "file": "farm/items/pumpkin-harvest.webp",
+      "source": "assets/items/pumpkin_harvest.png",
+      "sha256": "d401d4e3ebd72e52072b0113138beddef5a484f2a96127c8d3484c265061739b"
+    },
+    {
+      "id": "strawberry_stage_01",
+      "file": "farm/plants/strawberry/stage-01.webp",
+      "source": "assets/crops/strawberry_stage_01.png",
+      "sha256": "2d3eb551cdd1dc7ef80b028e7fcd6ca5723c8ad5bfd45849df30f78515ec0950"
+    },
+    {
+      "id": "strawberry_stage_02",
+      "file": "farm/plants/strawberry/stage-02.webp",
+      "source": "assets/crops/strawberry_stage_02.png",
+      "sha256": "dc034e91be0b63142a01b2d544267649946c4067887dfd521f6c89eb43a38a7a"
+    },
+    {
+      "id": "strawberry_stage_03",
+      "file": "farm/plants/strawberry/stage-03.webp",
+      "source": "assets/crops/strawberry_stage_03.png",
+      "sha256": "8d6cd1416df3a1f32eb43eb9247dd80916e5aeccf2b5850a9c2a7adf7582f2a4"
+    },
+    {
+      "id": "strawberry_stage_04",
+      "file": "farm/plants/strawberry/stage-04.webp",
+      "source": "assets/crops/strawberry_stage_04.png",
+      "sha256": "ca7383390e593e34fdca69d61727ae7d4af109e9ed00549031c4504c9c01784f"
+    },
+    {
+      "id": "strawberry_stage_05",
+      "file": "farm/plants/strawberry/stage-05.webp",
+      "source": "assets/crops/strawberry_stage_05.png",
+      "sha256": "2e1ffd4cbc2edad3e2dacb023041171e9b6f60a8a60190615ca89cc5a450d501"
+    },
+    {
+      "id": "strawberry_planting_packet",
+      "file": "farm/items/strawberry-packet.webp",
+      "source": "assets/items/strawberry_planting_packet.png",
+      "sha256": "98986b96bd0297b080e3c13e0f959f060c65be5afeb0b1387121cac2bb9eea24"
+    },
+    {
+      "id": "strawberry_harvest",
+      "file": "farm/items/strawberry-harvest.webp",
+      "source": "assets/items/strawberry_harvest.png",
+      "sha256": "c4f7e0aa326c857285dda4fdf0dbee149dd786b5c1f889e524014ae1d2e19123"
+    },
+    {
+      "id": "pineapple_stage_01",
+      "file": "farm/plants/pineapple/stage-01.webp",
+      "source": "assets/crops/pineapple_stage_01.png",
+      "sha256": "7760b901581804dfed5142622f0f934dd34283fe9a35f60c7af94dc553f2de41"
+    },
+    {
+      "id": "pineapple_stage_02",
+      "file": "farm/plants/pineapple/stage-02.webp",
+      "source": "assets/crops/pineapple_stage_02.png",
+      "sha256": "a170f020c6b53cbec19995047d4ee773196b7ac0a3ba3423cc2fe4789c3b4644"
+    },
+    {
+      "id": "pineapple_stage_03",
+      "file": "farm/plants/pineapple/stage-03.webp",
+      "source": "assets/crops/pineapple_stage_03.png",
+      "sha256": "0261cd939bf8e3f00c46c781441f5750854d7b57dfb2cf8526f69c01db186115"
+    },
+    {
+      "id": "pineapple_stage_04",
+      "file": "farm/plants/pineapple/stage-04.webp",
+      "source": "assets/crops/pineapple_stage_04.png",
+      "sha256": "d1a1ce1907ab385503d411bf0e3fc5dc2fd6ba702698c3b4888ac7c6be547483"
+    },
+    {
+      "id": "pineapple_stage_05",
+      "file": "farm/plants/pineapple/stage-05.webp",
+      "source": "assets/crops/pineapple_stage_05.png",
+      "sha256": "3082010c4bf207e9ebcdb03c2d95dcb98a08f235a9a1e76f11b9c06f9a905673"
+    },
+    {
+      "id": "pineapple_planting_packet",
+      "file": "farm/items/pineapple-packet.webp",
+      "source": "assets/items/pineapple_planting_packet.png",
+      "sha256": "3482b0683e5c1723c6e810d182aa5ee89ab62141994c1b11543491c74bc8169b"
+    },
+    {
+      "id": "pineapple_harvest",
+      "file": "farm/items/pineapple-harvest.webp",
+      "source": "assets/items/pineapple_harvest.png",
+      "sha256": "38ee585e34aa0d95545f9287054b9053795c95cf497f4221a9f842531d9bde23"
+    },
+    {
+      "id": "watermelon_stage_01",
+      "file": "farm/plants/watermelon/stage-01.webp",
+      "source": "assets/crops/watermelon_stage_01.png",
+      "sha256": "4b9823fb45f096c4ed8565b529a9848a57791e38a257fcf741c936496fbde38b"
+    },
+    {
+      "id": "watermelon_stage_02",
+      "file": "farm/plants/watermelon/stage-02.webp",
+      "source": "assets/crops/watermelon_stage_02.png",
+      "sha256": "bb74aec7c86b93273ac658ff4f3d5fa36a0f27f0a1e50ede2bf7aab425744c7d"
+    },
+    {
+      "id": "watermelon_stage_03",
+      "file": "farm/plants/watermelon/stage-03.webp",
+      "source": "assets/crops/watermelon_stage_03.png",
+      "sha256": "eb1ff7cbc7dd44d4368122132f39fbc39755f5694bc2fdef14ac6eb7f00567bd"
+    },
+    {
+      "id": "watermelon_stage_04",
+      "file": "farm/plants/watermelon/stage-04.webp",
+      "source": "assets/crops/watermelon_stage_04.png",
+      "sha256": "c0928a35d42ad5ebf16203e09b88c4172e8acf1148ffed0f943e2572d97f64c5"
+    },
+    {
+      "id": "watermelon_stage_05",
+      "file": "farm/plants/watermelon/stage-05.webp",
+      "source": "assets/crops/watermelon_stage_05.png",
+      "sha256": "b51c9393c35e59cf9437f2c8fd4b058cbfe4361ed88bcf7420ae2ddbd7df7415"
+    },
+    {
+      "id": "watermelon_planting_packet",
+      "file": "farm/items/watermelon-packet.webp",
+      "source": "assets/items/watermelon_planting_packet.png",
+      "sha256": "de1630c1e9a03a46ac6a4763332e31fc547c6886ac66b9355f9d0bc9784978ec"
+    },
+    {
+      "id": "watermelon_harvest",
+      "file": "farm/items/watermelon-harvest.webp",
+      "source": "assets/items/watermelon_harvest.png",
+      "sha256": "37d18fe45a6a677838a1410534e03bd1c9caf2db7f03f9aaa2c3caec1789db07"
+    },
+    {
+      "id": "mango_stage_01",
+      "file": "farm/plants/mango/stage-01.webp",
+      "source": "assets/orchard/mango_stage_01.png",
+      "sha256": "57ecc09f63f0fd07129729049d41311c43114a24288c443160b20a5898ab7eb3"
+    },
+    {
+      "id": "mango_stage_02",
+      "file": "farm/plants/mango/stage-02.webp",
+      "source": "assets/orchard/mango_stage_02.png",
+      "sha256": "37674c9cd6bd451ac8a0730fadcb98b113afad2b4e190a7e5ebd9cf00c3207a0"
+    },
+    {
+      "id": "mango_stage_03",
+      "file": "farm/plants/mango/stage-03.webp",
+      "source": "assets/orchard/mango_stage_03.png",
+      "sha256": "e4a59db601e808e17c0aa3f4d6160411c6ee1860a5640d51cc86030ea1ac0925"
+    },
+    {
+      "id": "mango_stage_04",
+      "file": "farm/plants/mango/stage-04.webp",
+      "source": "assets/orchard/mango_stage_04.png",
+      "sha256": "cfc17be69c498c46488747bded5b26145f5a27050c6b10e8e3deff777f483440"
+    },
+    {
+      "id": "mango_stage_05",
+      "file": "farm/plants/mango/stage-05.webp",
+      "source": "assets/orchard/mango_stage_05.png",
+      "sha256": "19addd650af4b6179b89b18d674cb528b90245bc0f138978eae8309b63c34ffa"
+    },
+    {
+      "id": "mango_planting_packet",
+      "file": "farm/items/mango-packet.webp",
+      "source": "assets/items/mango_planting_packet.png",
+      "sha256": "259772d4ec27fc515dfdd6dffab56168114e0aed553e197d69b8a61ee2f59ee1"
+    },
+    {
+      "id": "mango_harvest",
+      "file": "farm/items/mango-harvest.webp",
+      "source": "assets/items/mango_harvest.png",
+      "sha256": "76c760f66d56064dafb8a183a4fbdeb0c67fcddff9e273e3f118c5d5f5d31a82"
+    },
+    {
+      "id": "apple_stage_01",
+      "file": "farm/plants/apple/stage-01.webp",
+      "source": "assets/orchard/apple_stage_01.png",
+      "sha256": "a792db55297abcbe39bc38766b2bc37ee47bc17c288fd61f3a7c7a4f9989fea0"
+    },
+    {
+      "id": "apple_stage_02",
+      "file": "farm/plants/apple/stage-02.webp",
+      "source": "assets/orchard/apple_stage_02.png",
+      "sha256": "6a399eeabb220c52cd0b0ad3bdedca6978966ded59e82a5bbce006d05dfb1828"
+    },
+    {
+      "id": "apple_stage_03",
+      "file": "farm/plants/apple/stage-03.webp",
+      "source": "assets/orchard/apple_stage_03.png",
+      "sha256": "ff656fac862513a18018db5f139a9181f78d9c1786a11e0e75c121bb90fa1fd8"
+    },
+    {
+      "id": "apple_stage_04",
+      "file": "farm/plants/apple/stage-04.webp",
+      "source": "assets/orchard/apple_stage_04.png",
+      "sha256": "e180fdd889806a1d3818ec79bd4c2e7c0d9140112338c8700b599bc6c72289ca"
+    },
+    {
+      "id": "apple_stage_05",
+      "file": "farm/plants/apple/stage-05.webp",
+      "source": "assets/orchard/apple_stage_05.png",
+      "sha256": "f9d36b1577f58ac3385b630aa9b6c503a8cdf9e613814b163e1bb7721f7073ef"
+    },
+    {
+      "id": "apple_planting_packet",
+      "file": "farm/items/apple-packet.webp",
+      "source": "assets/items/apple_planting_packet.png",
+      "sha256": "0ad4085103e1a61cf883852e8423f001186c96a78e4227d8e0fb0888b6e844df"
+    },
+    {
+      "id": "apple_harvest",
+      "file": "farm/items/apple-harvest.webp",
+      "source": "assets/items/apple_harvest.png",
+      "sha256": "57c5409a77fd5eb9111a07cdba0bf5054e9fc4cc221cb72f3dbd9d2a39616239"
+    },
+    {
+      "id": "banana_stage_01",
+      "file": "farm/plants/banana/stage-01.webp",
+      "source": "assets/orchard/banana_stage_01.png",
+      "sha256": "e1c85abae7c90915bdea2642218c3eaf1504ea39c9fa6f4e9146de452f66141f"
+    },
+    {
+      "id": "banana_stage_02",
+      "file": "farm/plants/banana/stage-02.webp",
+      "source": "assets/orchard/banana_stage_02.png",
+      "sha256": "f2ac71d974f4a5ff4ea7c22ca7d4435e40b751a1bb68dedc40c995cee88c9cd3"
+    },
+    {
+      "id": "banana_stage_03",
+      "file": "farm/plants/banana/stage-03.webp",
+      "source": "assets/orchard/banana_stage_03.png",
+      "sha256": "f356af309db89cd689c94cc60015dbf8359d794fcd759d3fadbc73ccbcb32a9b"
+    },
+    {
+      "id": "banana_stage_04",
+      "file": "farm/plants/banana/stage-04.webp",
+      "source": "assets/orchard/banana_stage_04.png",
+      "sha256": "f2b951a7735c666e8475311f9f13c2146a7386d23fa1a08978d1bd55be451114"
+    },
+    {
+      "id": "banana_stage_05",
+      "file": "farm/plants/banana/stage-05.webp",
+      "source": "assets/orchard/banana_stage_05.png",
+      "sha256": "9de8f1f59b5aaca79fb69eee8f560c1bdc7d6fc4ed8d1eec7842bc0a8b917c9e"
+    },
+    {
+      "id": "banana_planting_packet",
+      "file": "farm/items/banana-packet.webp",
+      "source": "assets/items/banana_planting_packet.png",
+      "sha256": "eb3d2c5d8c578174f98cf2eb839e59e390b9a1a79bebd4dde8746704c1d94734"
+    },
+    {
+      "id": "banana_harvest",
+      "file": "farm/items/banana-harvest.webp",
+      "source": "assets/items/banana_harvest.png",
+      "sha256": "fbef8526a9a635534d939e6e3f08fbc8b33d21227f93402627082f726f47949e"
+    },
+    {
+      "id": "cucumber_stage_01",
+      "file": "farm/plants/cucumber/stage-01.webp",
+      "source": "assets/crops/cucumber_stage_01.png",
+      "sha256": "85b171cc5316e0a595e951079ac1877cf8a46c95debbe69461560559ad983f5f"
+    },
+    {
+      "id": "cucumber_stage_02",
+      "file": "farm/plants/cucumber/stage-02.webp",
+      "source": "assets/crops/cucumber_stage_02.png",
+      "sha256": "7ea237ee0e2188e83f7218d864ca8506edf35fae4d650449851f9972747be160"
+    },
+    {
+      "id": "cucumber_stage_03",
+      "file": "farm/plants/cucumber/stage-03.webp",
+      "source": "assets/crops/cucumber_stage_03.png",
+      "sha256": "b1bdeee75c13a6908044c26b6a16ab84aed7387199d99aa2441f64649c14153c"
+    },
+    {
+      "id": "cucumber_stage_04",
+      "file": "farm/plants/cucumber/stage-04.webp",
+      "source": "assets/crops/cucumber_stage_04.png",
+      "sha256": "72631edc8cfdf5d5669a0deac8a36d63b6e9bbce50f450f697ee684f57fb0ea3"
+    },
+    {
+      "id": "cucumber_stage_05",
+      "file": "farm/plants/cucumber/stage-05.webp",
+      "source": "assets/crops/cucumber_stage_05.png",
+      "sha256": "40e031b74fe859e7b6bd22bfe379be17d01d8616d2c39a4a1a00bf352c2e1d6c"
+    },
+    {
+      "id": "cucumber_planting_packet",
+      "file": "farm/items/cucumber-packet.webp",
+      "source": "assets/items/cucumber_planting_packet.png",
+      "sha256": "be43d9240bb3fa0269de9c0b818254af02bcd84f404a9ba7ce8eb2e1e8369487"
+    },
+    {
+      "id": "cucumber_harvest",
+      "file": "farm/items/cucumber-harvest.webp",
+      "source": "assets/items/cucumber_harvest.png",
+      "sha256": "7b0727117ad4061e0c9cc716d280795ffc493fce7816daed2ed08bc42d3bf6bf"
+    },
+    {
+      "id": "lettuce_stage_01",
+      "file": "farm/plants/lettuce/stage-01.webp",
+      "source": "assets/crops/lettuce_stage_01.png",
+      "sha256": "783fffece78b7e44862130faa2826f118e2d359373408709d36237d2b28da55c"
+    },
+    {
+      "id": "lettuce_stage_02",
+      "file": "farm/plants/lettuce/stage-02.webp",
+      "source": "assets/crops/lettuce_stage_02.png",
+      "sha256": "c197a00d75ff914e4a078e52fa50b4263a069fe45684c7f1367a355fdd28ce02"
+    },
+    {
+      "id": "lettuce_stage_03",
+      "file": "farm/plants/lettuce/stage-03.webp",
+      "source": "assets/crops/lettuce_stage_03.png",
+      "sha256": "3d7f70a3173b266537c2df7b126bd7b5484babaf821dbbf0ce5d627df3ec6a4f"
+    },
+    {
+      "id": "lettuce_stage_04",
+      "file": "farm/plants/lettuce/stage-04.webp",
+      "source": "assets/crops/lettuce_stage_04.png",
+      "sha256": "4104cb291e03820dcd7f27f97ae0a517ca1250ce8d13aca8d2cd4e4a20a97d76"
+    },
+    {
+      "id": "lettuce_stage_05",
+      "file": "farm/plants/lettuce/stage-05.webp",
+      "source": "assets/crops/lettuce_stage_05.png",
+      "sha256": "c5d3a76edbf87b7f98d6827dd4cc6dc3d13bf675f3acbd19c3a58c6d4c57efe1"
+    },
+    {
+      "id": "lettuce_planting_packet",
+      "file": "farm/items/lettuce-packet.webp",
+      "source": "assets/items/lettuce_planting_packet.png",
+      "sha256": "66580519a842f1485f2c89ddd20703013c27dd9dce0e12d37a9d156873adb463"
+    },
+    {
+      "id": "lettuce_harvest",
+      "file": "farm/items/lettuce-harvest.webp",
+      "source": "assets/items/lettuce_harvest.png",
+      "sha256": "f28240196acbf4cf946a6132438698b852963605f1d4c17e44780b0a8f0b6bad"
+    },
+    {
+      "id": "sweet_potato_stage_01",
+      "file": "farm/plants/sweet_potato/stage-01.webp",
+      "source": "assets/crops/sweet_potato_stage_01.png",
+      "sha256": "fff2211592758778366d2d99753497595384a852bcec2c5f8d5cb3c7376a4d1a"
+    },
+    {
+      "id": "sweet_potato_stage_02",
+      "file": "farm/plants/sweet_potato/stage-02.webp",
+      "source": "assets/crops/sweet_potato_stage_02.png",
+      "sha256": "c9e2c9e80ff7818dcb0997f2f21f7eefcd0c45c995333d41b5e8059884462571"
+    },
+    {
+      "id": "sweet_potato_stage_03",
+      "file": "farm/plants/sweet_potato/stage-03.webp",
+      "source": "assets/crops/sweet_potato_stage_03.png",
+      "sha256": "272f5a20c0e75344e40d2e4c9db135a0944ca1ac536f15915109f22958291aaa"
+    },
+    {
+      "id": "sweet_potato_stage_04",
+      "file": "farm/plants/sweet_potato/stage-04.webp",
+      "source": "assets/crops/sweet_potato_stage_04.png",
+      "sha256": "fbdccafe7e33ddf95615c97161b616dd0f534bf6a88cd8faed1e18d27058b663"
+    },
+    {
+      "id": "sweet_potato_stage_05",
+      "file": "farm/plants/sweet_potato/stage-05.webp",
+      "source": "assets/crops/sweet_potato_stage_05.png",
+      "sha256": "2878b698f0d139d7a539cf60e7efac2a598876c7da2bf5900f3445f809274e86"
+    },
+    {
+      "id": "sweet_potato_planting_packet",
+      "file": "farm/items/sweet_potato-packet.webp",
+      "source": "assets/items/sweet_potato_planting_packet.png",
+      "sha256": "6bd1400b3d10b857f3c254ae303a2e1030523a6f22e5a8c2e95a13548331335e"
+    },
+    {
+      "id": "sweet_potato_harvest",
+      "file": "farm/items/sweet_potato-harvest.webp",
+      "source": "assets/items/sweet_potato_harvest.png",
+      "sha256": "2d0541f145d472e507e050611bc02565ec1a578f7d94fbebf6ab78a0fe7171e0"
+    },
+    {
+      "id": "peanut_stage_01",
+      "file": "farm/plants/peanut/stage-01.webp",
+      "source": "assets/crops/peanut_stage_01.png",
+      "sha256": "8361cd530f0695aa38956e77ecf730f54ca480662735e91aa1d73001419bba5d"
+    },
+    {
+      "id": "peanut_stage_02",
+      "file": "farm/plants/peanut/stage-02.webp",
+      "source": "assets/crops/peanut_stage_02.png",
+      "sha256": "05655e3e38620bbe6c33f83028d220f85e278beb1a29662f9e77074a929c0a5c"
+    },
+    {
+      "id": "peanut_stage_03",
+      "file": "farm/plants/peanut/stage-03.webp",
+      "source": "assets/crops/peanut_stage_03.png",
+      "sha256": "19ab3e04de16bf5f74fd9d242400f3f8b9bc4edd5f9d0d556a35eb6f7240914e"
+    },
+    {
+      "id": "peanut_stage_04",
+      "file": "farm/plants/peanut/stage-04.webp",
+      "source": "assets/crops/peanut_stage_04.png",
+      "sha256": "bf863559e3d9aab17d2f6a50c2db5cce0901c24586242fec70a4ebe99794f901"
+    },
+    {
+      "id": "peanut_stage_05",
+      "file": "farm/plants/peanut/stage-05.webp",
+      "source": "assets/crops/peanut_stage_05.png",
+      "sha256": "d34da43e910f05d99f1c1e3f0625449c5b20e0691bf426e4f74e593b5d9d781a"
+    },
+    {
+      "id": "peanut_planting_packet",
+      "file": "farm/items/peanut-packet.webp",
+      "source": "assets/items/peanut_planting_packet.png",
+      "sha256": "56fbdddaba8821f187d09fe2f66176b62898469cd660e8e20b903af199655c88"
+    },
+    {
+      "id": "peanut_harvest",
+      "file": "farm/items/peanut-harvest.webp",
+      "source": "assets/items/peanut_harvest.png",
+      "sha256": "65233c96fed5a85285b69da76bb48869f3a189799b0634ae72cdb99fe8268e8c"
+    },
+    {
+      "id": "bell_pepper_stage_01",
+      "file": "farm/plants/bell_pepper/stage-01.webp",
+      "source": "assets/crops/bell_pepper_stage_01.png",
+      "sha256": "47f0636f91f87f764e969db17db6b7c33cfdce37baf45fe4781eb073c617c2f9"
+    },
+    {
+      "id": "bell_pepper_stage_02",
+      "file": "farm/plants/bell_pepper/stage-02.webp",
+      "source": "assets/crops/bell_pepper_stage_02.png",
+      "sha256": "532cc17bd55bb69bd449217a4d2f4558773e1421e79ff855a77e8dfbf89afff7"
+    },
+    {
+      "id": "bell_pepper_stage_03",
+      "file": "farm/plants/bell_pepper/stage-03.webp",
+      "source": "assets/crops/bell_pepper_stage_03.png",
+      "sha256": "6359ae4774692c8e0b3ef869832ecaec41415cba90d086bc3672718beda0a622"
+    },
+    {
+      "id": "bell_pepper_stage_04",
+      "file": "farm/plants/bell_pepper/stage-04.webp",
+      "source": "assets/crops/bell_pepper_stage_04.png",
+      "sha256": "6b5732fdd8dbfe2d73317e35b43cfead4bafb3a2b9f266042a24b1277f5a1243"
+    },
+    {
+      "id": "bell_pepper_stage_05",
+      "file": "farm/plants/bell_pepper/stage-05.webp",
+      "source": "assets/crops/bell_pepper_stage_05.png",
+      "sha256": "12bd9335acc572c37c3ee4fc7530eabb42b2e96315a434f4e7695eeb61a9af83"
+    },
+    {
+      "id": "bell_pepper_planting_packet",
+      "file": "farm/items/bell_pepper-packet.webp",
+      "source": "assets/items/bell_pepper_planting_packet.png",
+      "sha256": "3fdb000fbfb3561e6f627130d88cbc6c9f32d6a892d2980cf6f0584da3443351"
+    },
+    {
+      "id": "bell_pepper_harvest",
+      "file": "farm/items/bell_pepper-harvest.webp",
+      "source": "assets/items/bell_pepper_harvest.png",
+      "sha256": "50c08fe9448328c16290d57be52e5e3f8287dc0dae35ba8e2760faaeccd3fb5d"
+    },
+    {
+      "id": "chili_stage_01",
+      "file": "farm/plants/chili/stage-01.webp",
+      "source": "assets/crops/chili_stage_01.png",
+      "sha256": "e8701bbfd03b4cab1fbb703064b2f08b622ade81a742ef5cfdf681fe20cc14aa"
+    },
+    {
+      "id": "chili_stage_02",
+      "file": "farm/plants/chili/stage-02.webp",
+      "source": "assets/crops/chili_stage_02.png",
+      "sha256": "cfbc7850287efed344b6d32ad640e8db2481559cf36317c28125a21a2a99b17b"
+    },
+    {
+      "id": "chili_stage_03",
+      "file": "farm/plants/chili/stage-03.webp",
+      "source": "assets/crops/chili_stage_03.png",
+      "sha256": "152f2ae547948ea9e2893d4f4bf72d33508cbbdf412587c749b14557b97013d5"
+    },
+    {
+      "id": "chili_stage_04",
+      "file": "farm/plants/chili/stage-04.webp",
+      "source": "assets/crops/chili_stage_04.png",
+      "sha256": "121a881d5f28dda15023f69abbdd4f72b07cfe4790e8c01a77cba97d65643ece"
+    },
+    {
+      "id": "chili_stage_05",
+      "file": "farm/plants/chili/stage-05.webp",
+      "source": "assets/crops/chili_stage_05.png",
+      "sha256": "6a5df876d024bdffc8b29f1e479b034f034ab4fb26a8202d3876843499484059"
+    },
+    {
+      "id": "chili_planting_packet",
+      "file": "farm/items/chili-packet.webp",
+      "source": "assets/items/chili_planting_packet.png",
+      "sha256": "7329c6778b8ed39634572a015a7a84bbe8f8101fd37e1a4f957db50d0d9a1c62"
+    },
+    {
+      "id": "chili_harvest",
+      "file": "farm/items/chili-harvest.webp",
+      "source": "assets/items/chili_harvest.png",
+      "sha256": "6f4e30bbe2a4092d754c862f132eed09aae1eb8a10bf3c5423582b25617aa67a"
+    }
+  ]
+}
