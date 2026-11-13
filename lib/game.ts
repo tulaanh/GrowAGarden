@@ -71,7 +71,7 @@ export function plantVisual(plot:Plot,now:number) {
  const stage=amount>=1?total:amount<.1?1:Math.min(total-1,2+Math.floor((amount-.1)/.9*(total-2)));
  return {stage,total,art:plantArt(plot.seed_id,stage),label:stage===total?'Đã trưởng thành':(stage===1&&plantDefinition(plot.seed_id)?.orchard?'Cây con':'Giai đoạn '+stage+'/'+total)};
 }
-export function catalogArt(item:CatalogItem) { return item.kind==='gacha'?'gacha/'+item.id.replace('gacha_',''):item.kind==='seed'?'farm/items/'+item.id+'-packet':'farm/items/carrot-packet'; }
+export function catalogArt(item:CatalogItem) { return item.kind==='gacha'?'gacha/'+item.id.replace('gacha_',''):item.kind==='seed'?'farm/items/'+item.id+'-packet':'farm/items/sack'; }
 export function catalogLabel(item:CatalogItem) { return (item.kind==='seed'?'Hạt ':'')+item.name; }
 export function seedOdds(id:string,drops:SeedDrop[],catalog:CatalogItem[]) {
  const available=drops.filter(d=>d.seed_id===id&&catalog.some(c=>c.id===d.plant_id&&c.kind==='seed'&&!c.retired&&c.active&&c.grow_seconds>0));

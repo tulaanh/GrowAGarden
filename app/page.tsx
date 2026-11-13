@@ -100,7 +100,7 @@ export default function Home(){
        const p=game.plots.find(p=>p.slot===i),grown=p&&Date.parse(p.ready_at)<=now;
        return <div className={'plot-position '+(p?'has-plant':'')} style={{left:x+'%',top:y+'%',zIndex:Math.round(y)}} key={i}>
         <button className={'plot '+(grown?'grown ':'')+(p&&plantDefinition(p.seed_id)?.ground?'has-baked-ground':'')} onClick={()=>{if(!needLogin()){setSlot(i);setError('');}}} aria-label={'Ô '+(i+1)+(p?': '+itemName(p.seed_id,game.catalog)+', '+timeLeft(p.ready_at,now):': đất trống')}>
-         <span className="soil"/>{p?<Plant plot={p} now={now}/>:<span className="plot-plus">+</span>}
+         <span className={'soil '+(!p||!plantDefinition(p.seed_id)?.ground?'image-soil':'')}>{(!p||!plantDefinition(p.seed_id)?.ground)&&<Art name={'farm/items/'+(p?'soil_tilled':'soil_unworked')}/>}</span>{p?<Plant plot={p} now={now}/>:<span className="plot-plus">+</span>}
          {grown&&<span className="harvest-tag">Thu hoạch</span>}
          <span className="plot-number">{i+1}</span>
         </button>
@@ -124,7 +124,7 @@ export default function Home(){
     <div className="account-summary"><div><strong>{game.profile?.display_name}</strong><p className="email">{session.user.email}</p><span>Cấp {lv.level} · {game.profile?.xp||0} XP tích lũy</span></div><Money amount={game.profile?.coins||0}/></div>
     <div className="button-row">{game.manager&&<button className="primary" onClick={()=>navigate('admin')}>Quản lý nhiệm vụ & cửa hàng</button>}<button className="secondary" disabled={busy} onClick={()=>run(async()=>{const result=await supabase!.auth.signOut();if(result.error)throw result.error;},'Đã đăng xuất.')}>Đăng xuất</button></div>
     <h3>Nông sản sưu tầm</h3><div className="collection">{game.catalog.filter(c=>c.kind==='seed').map(c=><div className={'collection-item '+(!game.collection.some(x=>x.seed_id===c.id)?'uncollected':'')} key={c.id}><Art name={harvestArt(c.id)}/><strong>{c.name}</strong><span>{game.collection.find(x=>x.seed_id===c.id)?.quantity||0} nông sản</span><span>{plantStages[c.id]} giai đoạn phát triển</span></div>)}</div>
-    <h3>Kho vật phẩm</h3><div className="inventory-list">{game.catalog.filter(c=>c.kind!=='seed'||inventory(c.id)>0).map(c=><div className="info-row" key={c.id}><span className="inventory-name">{c.kind!=='fertilizer'&&<Art name={catalogArt(c)}/>}<span>{catalogLabel(c)}</span></span><strong>{inventory(c.id)}</strong></div>)}</div>
+    <h3>Kho vật phẩm</h3><div className="inventory-list">{game.catalog.filter(c=>c.kind!=='seed'||inventory(c.id)>0).map(c=><div className="info-row" key={c.id}><span className="inventory-name"><Art name={catalogArt(c)}/><span>{catalogLabel(c)}</span></span><strong>{inventory(c.id)}</strong></div>)}</div>
     <h3>Lịch sử Đồng tri thức</h3>{!game.ledger.length?<p className="helper">Các khoản thưởng và mua hàng sẽ xuất hiện ở đây.</p>:<div className="ledger">{game.ledger.map(l=><div className="ledger-row" key={l.id}><span>{l.note||'Thưởng thêm'}<small><DateLabel value={l.created_at}/></small></span><strong className={l.amount>0?'positive':''}>{l.amount>0?'+':''}{l.amount}</strong></div>)}</div>}
    </>}</section>}
    {view==='admin'&&game.manager&&session&&<Admin data={game} userId={session.user.id} busy={busy} run={run} openFile={openFile} error={error}/>}
@@ -152,7 +152,7 @@ function ShopCard({item:c,data,level,owned,balance,busy,guest,onBuy}:{item:Catal
  const unavailable=c.kind==='gacha'&&!seedOdds(c.id,data.drops,data.catalog).length;
  const label=busy?'Đang xử lý...':unavailable?'Tạm ngừng bán':guest?'Đăng nhập để mua':locked?'Mở ở cấp '+c.min_level:!validQuantity?'Chọn số lượng 1–99':insufficient?'Thiếu '+missing.toLocaleString('vi-VN')+' ĐTT':'Mua · '+total.toLocaleString('vi-VN')+' ĐTT';
  return <article className="shop-card">
-  <div className="shop-art">{c.kind!=='fertilizer'?<Art name={catalogArt(c)}/>:<span className="fertilizer-art"><Icon name="fertilizer"/></span>}</div>
+  <div className="shop-art"><Art name={catalogArt(c)}/></div>
   <h3>{catalogLabel(c)}</h3>
   <p>{c.kind==='gacha'?'Gieo 1 hạt → nhận 1 cây ngẫu nhiên':'Giảm tối đa '+Math.round(c.reduction_seconds/60)+' phút'}</p>
   {c.kind==='gacha'&&<SeedOdds id={c.id} data={data}/>}

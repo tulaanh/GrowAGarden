@@ -15,8 +15,8 @@ export function Icon({name}:{name:string}){
  };return <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true">{shapes[name]??shapes.garden}</svg>;
 }
 export function Art({name,className='',alt=''}:{name:string;className?:string;alt?:string}){
- const crop=name.startsWith('farm/plants/'),item=name.startsWith('farm/items/');
- return <img className={'art '+className} src={'/art/'+name+'.webp'} width={crop||item?256:name==='island'?1200:name==='sign'?1200:640} height={crop?384:item?256:name==='island'?800:name==='sign'?400:640} alt={alt} draggable={false}/>;
+ const crop=name.startsWith('farm/plants/'),item=name.startsWith('farm/items/'),soil=name.startsWith('farm/items/soil_');
+ return <img className={'art '+className} src={'/art/'+name+'.webp'} width={crop||item?256:name==='island'?1200:name==='sign'?1200:640} height={soil?144:crop?384:item?256:name==='island'?800:name==='sign'?400:640} alt={alt} draggable={false}/>;
 }
 export function Plant({plot,now}:{plot:Plot;now:number}){
  const visual=plantVisual(plot,now),reduced=useReducedMotion();

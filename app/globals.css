@@ -15,3 +15,4 @@
 .farm-plant{height:var(--plant-height)}.farm-plant.without-ground{bottom:22px}.farm-plant>.art{position:absolute;left:50%;bottom:calc(var(--plant-height)*var(--sprite-bottom));width:calc(var(--plant-height)*var(--sprite-width));height:calc(var(--plant-height)*var(--sprite-height));max-width:none;transform:translateX(-50%)}.has-baked-ground .soil{background:transparent;border-color:transparent;box-shadow:none}.has-baked-ground.grown .soil{outline:2px solid #e2b84e;outline-offset:2px}.growth-track .art{height:64px}
 @media(max-width:540px){:root{--plant-height:94px}.growth-track .art{height:48px}}
 @media(max-width:375px){:root{--plant-height:82px}}
+.soil.image-soil{inset:0;transform:none;border:0;border-radius:0;background:none;box-shadow:none}.soil.image-soil>.art{position:absolute;bottom:0;left:0;width:100%;height:auto}
