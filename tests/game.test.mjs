@@ -3,7 +3,11 @@ import assert from 'node:assert/strict';
 import {existsSync,readFileSync} from 'node:fs';
 import ts from 'typescript';
 const js=ts.transpile(readFileSync(new URL('../lib/game.ts',import.meta.url),'utf8'),{module:ts.ModuleKind.ES2022});
-const {levelInfo,levelTitle,timeLeft,growth,plantVisual,plantArt,plantStages,plants,catalogArt,harvestArt,defaults,seedOdds,defaultDrops}=await import('data:text/javascript;base64,'+Buffer.from(js).toString('base64'));
+const {levelInfo,levelTitle,discoveredSeedIds,timeLeft,growth,plantVisual,plantArt,plantStages,plants,catalogArt,harvestArt,defaults,seedOdds,defaultDrops}=await import('data:text/javascript;base64,'+Buffer.from(js).toString('base64'));
+test('seed discovery includes starters and gacha plants, including harvested plants',()=>{
+ assert.deepEqual(discoveredSeedIds([]),['carrot','rice']);
+ assert.deepEqual(discoveredSeedIds([{seed_id:'tomato',source_seed_id:'gacha_rare',harvested:true},{seed_id:'onion',source_seed_id:'onion'},{seed_id:'tomato',source_seed_id:'gacha_common'}]),['carrot','rice','tomato']);
+});
 test('level titles match the selected progression and remain available after level 20',()=>{
  assert.equal(levelTitle(1),'Hạt Mầm Tri Thức');
  assert.equal(levelTitle(6),'Người Nuôi Dưỡng Mầm Xanh');

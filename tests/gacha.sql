@@ -15,6 +15,10 @@ begin
   perform public.garden_buy('gacha_rare',1,gen_random_uuid());
   raise exception 'TEST: gacha level lock ignored';
  exception when raise_exception then if sqlerrm like 'TEST:%' then raise; end if; end;
+ begin
+  perform public.garden_buy('tomato',1,gen_random_uuid());
+  raise exception 'TEST: undiscovered seed purchase allowed';
+ exception when raise_exception then if sqlerrm like 'TEST:%' then raise; end if; end;
  perform public.garden_buy('gacha_common',2,request);
  perform public.garden_buy('gacha_common',2,request);
  if (select coins from public.garden_profiles where user_id=player) is distinct from 980
@@ -52,10 +56,6 @@ begin
  or (select coins from public.garden_profiles where user_id=player) is distinct from before_coins-(select price from public.garden_catalog where id='carrot') then
   raise exception 'TEST: direct seed purchase or retry incorrect';
  end if;
- begin
-  perform public.garden_buy('tomato',1,gen_random_uuid());
-  raise exception 'TEST: direct seed level lock ignored';
- exception when raise_exception then if sqlerrm like 'TEST:%' then raise; end if; end;
  update public.garden_plots set ready_at=now()+interval '5 seconds' where id=p.id;
  perform public.garden_fertilize(p.id);
  if (select ready_at from public.garden_plots where id=p.id) is distinct from now()

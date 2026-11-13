@@ -25,14 +25,16 @@ export function Plant({plot,now}:{plot:Plot;now:number}){
  const style={'--sprite-width':512/metrics.render_span,'--sprite-height':768/metrics.render_span,'--sprite-bottom':-48/metrics.render_span} as React.CSSProperties;
  return <motion.span className={'plant-art farm-plant '+(metrics.ground_baked?'with-ground':'without-ground')} style={style} key={visual.art} initial={reduced?false:{opacity:.6}} animate={{opacity:1}} transition={{duration:reduced?0:.4}}><Art name={visual.art}/></motion.span>;
 }
-export function SeedOdds({id,data}:{id:string;data:GameData}) {
+export function SeedOdds({id,data,revealAll=false}:{id:string;data:GameData;revealAll?:boolean}) {
  const [open,setOpen]=useState(false);
  const odds=seedOdds(id,data.drops,data.catalog);
+ const known=odds.filter(d=>revealAll||data.discoveredSeeds.includes(d.plant_id));
+ const unknown=odds.filter(d=>!revealAll&&!data.discoveredSeeds.includes(d.plant_id)).reduce((sum,d)=>sum+d.percent,0);
  return <div className="seed-odds"><button type="button" className="seed-odds-trigger" aria-haspopup="dialog" onClick={e=>{e.currentTarget.focus({preventScroll:true});setOpen(true);}}>Cây có thể nhận & tỷ lệ</button>{open&&createPortal(
-  <Dialog title={'Cây có thể nhận · '+itemName(id,data.catalog)} className="odds-dialog" onClose={()=>setOpen(false)}><div className="seed-odds seed-odds-modal">{odds.length?<ul>{odds.map(d=>{
+  <Dialog title={'Cây có thể nhận · '+itemName(id,data.catalog)} className="odds-dialog" onClose={()=>setOpen(false)}><div className="seed-odds seed-odds-modal">{odds.length?<ul>{known.map(d=>{
   const plant=data.catalog.find(c=>c.id===d.plant_id)!;
   return <li key={d.plant_id}><strong>{itemName(d.plant_id,data.catalog)} · {Number(d.percent.toFixed(1))}%</strong><span>{Math.round(plant.grow_seconds/60)} phút · {plant.xp} XP</span></li>;
- })}</ul>:<p>Hạt này hiện chưa có cây để gieo.</p>}</div></Dialog>,document.body)}</div>;
+ })}{unknown>0&&<li><strong>Cây chưa khám phá · {Number(unknown.toFixed(1))}%</strong><span>Gieo hạt để khám phá</span></li>}</ul>:<p>Hạt này hiện chưa có cây để gieo.</p>}</div></Dialog>,document.body)}</div>;
 }
 export function Dialog({title,children,onClose,drawer=false,className=''}:{title:string;children:React.ReactNode;onClose:()=>void;drawer?:boolean;className?:string}){
  const ref=useRef<HTMLDialogElement>(null);

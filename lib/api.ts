@@ -1,5 +1,5 @@
 import { supabase } from './supabase';
-import { emptyData, type GameData } from './game';
+import { discoveredSeedIds, emptyData, type GameData } from './game';
 export async function rpc(name:string,args:Record<string,unknown>={}) {
  if(!supabase) throw new Error('Chưa kết nối được ứng dụng.');
  const result=await supabase.rpc(name,args);
@@ -13,7 +13,7 @@ export async function loadGame(userId:string):Promise<GameData> {
  const error=results.find(r=>r.error)?.error;
  if(error)throw new Error('Chưa tải được dữ liệu. Kiểm tra kết nối rồi thử lại.');
  const [people,plots,catalog,inventory,collection,tasks,progress,attempts,reviews,ledger,drops,land]=results.map(r=>r.data||[]);
- return {...emptyData,profile:people.find(p=>p.user_id===userId)||null,manager:await rpc('garden_manager'),people,plots:plots.filter(p=>!p.harvested),unlockedSlots:[0,1,2,3,...land.filter(l=>l.user_id===userId).map(l=>l.slot)],catalog:catalog.filter(c=>!c.retired),drops,inventory,collection,tasks,progress,attempts,reviews,ledger:ledger.sort((a,b)=>b.created_at.localeCompare(a.created_at))} as GameData;
+ return {...emptyData,profile:people.find(p=>p.user_id===userId)||null,manager:await rpc('garden_manager'),people,plots:plots.filter(p=>!p.harvested),discoveredSeeds:discoveredSeedIds(plots),unlockedSlots:[0,1,2,3,...land.filter(l=>l.user_id===userId).map(l=>l.slot)],catalog:catalog.filter(c=>!c.retired),drops,inventory,collection,tasks,progress,attempts,reviews,ledger:ledger.sort((a,b)=>b.created_at.localeCompare(a.created_at))} as GameData;
 }
 export async function uploadFiles(files:File[],bucket:string,userId:string):Promise<string[]> {
  if(files.length>5)throw new Error('Mỗi lần nộp tối đa 5 tệp.');
