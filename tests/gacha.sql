@@ -12,10 +12,6 @@ begin
  perform public.garden_initialize();
  update public.garden_profiles set coins=1000 where user_id=player;
  begin
-  perform public.garden_buy('carrot',1,gen_random_uuid());
-  raise exception 'TEST: direct species purchase was allowed';
- exception when raise_exception then if sqlerrm like 'TEST:%' then raise; end if; end;
- begin
   perform public.garden_buy('gacha_rare',1,gen_random_uuid());
   raise exception 'TEST: gacha level lock ignored';
  exception when raise_exception then if sqlerrm like 'TEST:%' then raise; end if; end;
@@ -47,7 +43,19 @@ begin
   raise exception 'TEST: catalog change altered existing plant';
  end if;
  update public.garden_catalog set grow_seconds=grow_seconds-100,xp=xp-1 where id=p.seed_id;
- insert into public.garden_inventory values(player,'fertilizer',2),(player,'carrot',1);
+ insert into public.garden_inventory values(player,'fertilizer',2);
+ request:=gen_random_uuid();
+ before_coins:=(select coins from public.garden_profiles where user_id=player);
+ perform public.garden_buy('carrot',1,request);
+ perform public.garden_buy('carrot',1,request);
+ if (select quantity from public.garden_inventory where user_id=player and item_id='carrot') is distinct from 1
+ or (select coins from public.garden_profiles where user_id=player) is distinct from before_coins-(select price from public.garden_catalog where id='carrot') then
+  raise exception 'TEST: direct seed purchase or retry incorrect';
+ end if;
+ begin
+  perform public.garden_buy('tomato',1,gen_random_uuid());
+  raise exception 'TEST: direct seed level lock ignored';
+ exception when raise_exception then if sqlerrm like 'TEST:%' then raise; end if; end;
  update public.garden_plots set ready_at=now()+interval '5 seconds' where id=p.id;
  perform public.garden_fertilize(p.id);
  if (select ready_at from public.garden_plots where id=p.id) is distinct from now()
