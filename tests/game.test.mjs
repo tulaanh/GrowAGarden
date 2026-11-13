@@ -3,7 +3,13 @@ import assert from 'node:assert/strict';
 import {existsSync,readFileSync} from 'node:fs';
 import ts from 'typescript';
 const js=ts.transpile(readFileSync(new URL('../lib/game.ts',import.meta.url),'utf8'),{module:ts.ModuleKind.ES2022});
-const {levelInfo,timeLeft,growth,plantVisual,plantArt,plantStages,plants,catalogArt,harvestArt,defaults,seedOdds,defaultDrops}=await import('data:text/javascript;base64,'+Buffer.from(js).toString('base64'));
+const {levelInfo,levelTitle,timeLeft,growth,plantVisual,plantArt,plantStages,plants,catalogArt,harvestArt,defaults,seedOdds,defaultDrops}=await import('data:text/javascript;base64,'+Buffer.from(js).toString('base64'));
+test('level titles match the selected progression and remain available after level 20',()=>{
+ assert.equal(levelTitle(1),'Hạt Mầm Tri Thức');
+ assert.equal(levelTitle(6),'Người Nuôi Dưỡng Mầm Xanh');
+ assert.equal(levelTitle(20),'Huyền Thoại Vườn Tri Thức');
+ assert.equal(levelTitle(50),'Huyền Thoại Vườn Tri Thức');
+});
 test('level thresholds match cumulative XP',()=>{
  assert.equal(levelInfo(0).level,1);assert.equal(levelInfo(99).level,1);assert.equal(levelInfo(100).level,2);assert.equal(levelInfo(299).level,2);assert.equal(levelInfo(300).level,3);assert.equal(levelInfo(600).level,4);
  assert.deepEqual(levelInfo(120),{level:2,current:20,needed:200,progress:10});

@@ -46,6 +46,17 @@ export const defaults: CatalogItem[] = [
 const tierWeights=[[1920,378,56],[960,1050,280],[360,735,1400]];
 export const defaultDrops: SeedDrop[] = ['gacha_common','gacha_rare','gacha_special'].flatMap((seed,index)=>plants.map(p=>({seed_id:seed,plant_id:p.id,weight:tierWeights[index][p.tier-1]})));
 export const emptyData: GameData = { profile:null,manager:false,people:[],plots:[],unlockedSlots:[0,1,2,3],catalog:defaults,drops:defaultDrops,inventory:[],collection:[],tasks:[],progress:[],attempts:[],reviews:[],ledger:[] };
+const levelTitles = [
+ 'Hạt Mầm Tri Thức', 'Người Gieo Hạt', 'Mầm Non Chăm Chỉ', 'Người Chăm Vườn',
+ 'Nhà Làm Vườn Tập Sự', 'Người Nuôi Dưỡng Mầm Xanh', 'Nhà Làm Vườn Chăm Chỉ', 'Người Khám Phá Khu Vườn',
+ 'Người Ươm Mầm Tri Thức', 'Nhà Làm Vườn Tri Thức', 'Người Gặt Hái Kiến Thức', 'Người Chăm Vườn Tài Ba',
+ 'Nhà Sưu Tầm Hạt Giống', 'Người Nuôi Dưỡng Ước Mơ', 'Nghệ Nhân Vườn Xanh', 'Người Kiến Tạo Khu Vườn',
+ 'Bậc Thầy Ươm Mầm', 'Người Gìn Giữ Mầm Xanh', 'Bậc Thầy Tri Thức', 'Huyền Thoại Vườn Tri Thức',
+];
+export function levelTitle(level:number) {
+ return levelTitles[Math.min(levelTitles.length-1,Math.max(0,Math.floor(level)-1))];
+}
+
 export function levelInfo(xp: number) {
  const level = Math.floor((1 + Math.sqrt(1 + 8 * Math.max(0,xp) / 100)) / 2);
  const start = 50 * level * (level - 1);

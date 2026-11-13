@@ -3,7 +3,7 @@ import {useCallback,useEffect,useRef,useState} from 'react';
 import type {Session} from '@supabase/supabase-js';
 import {supabase} from '../lib/supabase';
 import {cleanupFiles,loadGame,rpc,uploadFiles} from '../lib/api';
-import {catalogArt,catalogLabel,emptyData,harvestArt,itemName,levelInfo,plantArt,plantDefinition,plantStages,plantVisual,seedOdds,statusText,timeLeft,type GameData,type Task,type CatalogItem} from '../lib/game';
+import {catalogArt,catalogLabel,emptyData,harvestArt,itemName,levelInfo,levelTitle,plantArt,plantDefinition,plantStages,plantVisual,seedOdds,statusText,timeLeft,type GameData,type Task,type CatalogItem} from '../lib/game';
 import {Art,DateLabel,Dialog,Empty,FileLinks,FilePicker,Icon,Money,SeedOdds} from './ui';
 import {Admin} from './admin';
 import {GardenMap} from './garden-map';
@@ -86,7 +86,7 @@ export default function Home(){
   <header className="game-header">
    <div className="title-sign"><Art name="sign"/><h1>VƯỜN BÀI TẬP</h1></div>
    <div className="hud">
-    <button className="player" onClick={()=>navigate('account')} aria-label="Mở tài khoản"><span className="avatar"><Icon name="account"/></span><span><strong>{game.profile?.display_name||'Người làm vườn'}</strong><span className="xp-bar"><span style={{width:lv.progress+'%'}}/></span><small>Cấp {lv.level} · {lv.current}/{lv.needed} XP</small></span></button>
+    <button className="player" onClick={()=>navigate('account')} aria-label={'Mở tài khoản · Cấp '+lv.level+' · '+levelTitle(lv.level)}><span className="avatar"><Icon name="account"/></span><span><strong>{game.profile?.display_name||'Người làm vườn'}</strong><span className="xp-bar"><span style={{width:lv.progress+'%'}}/></span><small>Cấp {lv.level} · {lv.current}/{lv.needed} XP</small><span className="player-title">{levelTitle(lv.level)}</span></span></button>
     <button className="wallet" onClick={()=>navigate('account')} aria-label={'Ví '+(game.profile?.coins||0)+' Đồng tri thức'}><Money amount={game.profile?.coins||0}/></button>
    </div>
   </header>
