@@ -1,5 +1,6 @@
 'use client';
-import {useLayoutEffect,useRef} from 'react';
+import {useLayoutEffect,useRef,useState} from 'react';
+import {createPortal} from 'react-dom';
 import {motion,useReducedMotion} from 'framer-motion';
 import {plantVisual,type Plot,type GameData,seedOdds,itemName} from '../lib/game';
 import farmArt from '../lib/farm-art.json';
@@ -16,7 +17,7 @@ export function Icon({name}:{name:string}){
 }
 export function Art({name,className='',alt=''}:{name:string;className?:string;alt?:string}){
  const crop=name.startsWith('farm/plants/'),item=name.startsWith('farm/items/'),soil=name.startsWith('farm/items/soil_');
- return <img className={'art '+className} src={'/art/'+name+'.webp'} width={crop||item?256:name==='island'?1200:name==='sign'?1200:640} height={soil?144:crop?384:item?256:name==='island'?800:name==='sign'?400:640} alt={alt} draggable={false}/>;
+ return <img className={'art '+className} src={'/art/'+name+'.webp'} width={crop||item?256:name==='sign'?1200:640} height={soil?144:crop?384:item?256:name==='sign'?400:640} alt={alt} draggable={false}/>;
 }
 export function Plant({plot,now}:{plot:Plot;now:number}){
  const visual=plantVisual(plot,now),reduced=useReducedMotion();
@@ -25,13 +26,15 @@ export function Plant({plot,now}:{plot:Plot;now:number}){
  return <motion.span className={'plant-art farm-plant '+(metrics.ground_baked?'with-ground':'without-ground')} style={style} key={visual.art} initial={reduced?false:{opacity:.6}} animate={{opacity:1}} transition={{duration:reduced?0:.4}}><Art name={visual.art}/></motion.span>;
 }
 export function SeedOdds({id,data}:{id:string;data:GameData}) {
+ const [open,setOpen]=useState(false);
  const odds=seedOdds(id,data.drops,data.catalog);
- return <details className="seed-odds"><summary>Cây có thể nhận & tỷ lệ</summary>{odds.length?<ul>{odds.map(d=>{
+ return <div className="seed-odds"><button type="button" className="seed-odds-trigger" aria-haspopup="dialog" onClick={e=>{e.currentTarget.focus({preventScroll:true});setOpen(true);}}>Cây có thể nhận & tỷ lệ</button>{open&&createPortal(
+  <Dialog title={'Cây có thể nhận · '+itemName(id,data.catalog)} className="odds-dialog" onClose={()=>setOpen(false)}><div className="seed-odds seed-odds-modal">{odds.length?<ul>{odds.map(d=>{
   const plant=data.catalog.find(c=>c.id===d.plant_id)!;
   return <li key={d.plant_id}><strong>{itemName(d.plant_id,data.catalog)} · {Number(d.percent.toFixed(1))}%</strong><span>{Math.round(plant.grow_seconds/60)} phút · {plant.xp} XP</span></li>;
- })}</ul>:<p>Hạt này hiện chưa có cây để gieo.</p>}</details>;
+ })}</ul>:<p>Hạt này hiện chưa có cây để gieo.</p>}</div></Dialog>,document.body)}</div>;
 }
-export function Dialog({title,children,onClose,drawer=false}:{title:string;children:React.ReactNode;onClose:()=>void;drawer?:boolean}){
+export function Dialog({title,children,onClose,drawer=false,className=''}:{title:string;children:React.ReactNode;onClose:()=>void;drawer?:boolean;className?:string}){
  const ref=useRef<HTMLDialogElement>(null);
  useLayoutEffect(()=>{
   const d=ref.current;
@@ -39,8 +42,8 @@ export function Dialog({title,children,onClose,drawer=false}:{title:string;child
   d?.showModal();
   return()=>{if(d?.open)d.close();requestAnimationFrame(()=>{if(opener?.isConnected&&opener!==document.body)opener.focus({preventScroll:true});else(document.querySelector('[aria-current="page"]') as HTMLElement|null)?.focus({preventScroll:true});});};
  },[]);
- return <dialog ref={ref} className={'dialog '+(drawer?'drawer':'')} onCancel={onClose} aria-label={title}>
-  <div className="dialog-heading"><h2>{title}</h2><button className="icon-button" aria-label="Đóng" onClick={onClose}>×</button></div>{children}
+ return <dialog ref={ref} className={'dialog '+(drawer?'drawer ':'')+className} onCancel={e=>{e.preventDefault();e.stopPropagation();onClose();}} aria-label={title}>
+  <div className="dialog-heading"><h2>{title}</h2><button type="button" className="icon-button" aria-label="Đóng" onClick={onClose}>×</button></div>{children}
  </dialog>;
 }
 export function Empty({title,children}:{title:string;children:React.ReactNode}){return <div className="empty"><Art name="farm/plants/carrot/stage-02"/><h3>{title}</h3><p>{children}</p></div>;}

@@ -44,7 +44,7 @@ Các RPC công khai kiểm tra người dùng và gọi triển khai giao dịch
 
 ## Minh họa và kiểm chứng
 
-Ảnh cây dùng gói Cozy Tropical Farm do chủ ứng dụng cung cấp: `public/art/farm/plants/<loài>/` chứa ảnh giai đoạn, `public/art/farm/items/` chứa túi giống và nông sản. Có 147 WebP (khoảng 1,72 MB). Metadata, nguồn và điểm neo ở `lib/farm-art.json`; hướng dẫn ở `public/art/GROWTH-ASSETS.md`. Gói tải về được giữ ngoài public tại `asset-sources/Farming-Game-Assets/`; ảnh cây cũ lưu ở `asset-sources/previous-game-plants/`. Có thể tái xuất bằng `node scripts/prepare-farm-art.mjs`. Phông nền, đảo, bảng tên và hạt gacha giữ bộ minh họa imagegen trước đây. Chữ, nút và số liệu vẫn là HTML thật.
+Ảnh cây dùng gói Cozy Tropical Farm do chủ ứng dụng cung cấp: `public/art/farm/plants/<loài>/` chứa ảnh giai đoạn, `public/art/farm/items/` chứa túi giống và nông sản. Có 147 WebP (khoảng 1,72 MB). Metadata, nguồn và điểm neo ở `lib/farm-art.json`; hướng dẫn ở `public/art/GROWTH-ASSETS.md`. Gói tải về được giữ ngoài public tại `asset-sources/Farming-Game-Assets/`; ảnh cây cũ lưu ở `asset-sources/previous-game-plants/`. Có thể tái xuất bằng `node scripts/prepare-farm-art.mjs`. Nền dùng ảnh `public/art/farm/items/plot_grass.png`; bảng tên và hạt gacha giữ bộ minh họa imagegen trước đây. Chữ, nút và số liệu vẫn là HTML thật.
 
 `tests/economy.sql` kiểm tra chuỗi nộp/trả/nộp lại/duyệt, thưởng một lần, cấp độ mua hàng, bón phân, thu hoạch và giữ snapshot XP. Toàn bộ fixture chạy trong giao dịch rollback. Kiểm tra HTTP trực tiếp bằng ba tài khoản tạm đã xác nhận RLS, Storage riêng tư và xử lý yêu cầu mua/trồng/thu hoạch đồng thời; các tài khoản và dữ liệu thử được dọn sau kiểm tra.
 

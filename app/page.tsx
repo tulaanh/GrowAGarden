@@ -80,7 +80,6 @@ export default function Home(){
  const positions=[[50,27],[31,38],[69,38],[12,49],[50,49],[88,49],[31,61],[69,61],[50,73]];
  const ownProgress=selectedTask?game.progress.find(p=>p.task_id===selectedTask.id&&p.user_id===session?.user.id):undefined;
  return <div className="world">
-  <img className="landscape" src="/art/landscape.webp" alt="" width="1024" height="1536" fetchPriority="high"/>
   <header className="game-header">
    <div className="title-sign"><Art name="sign"/><h1>VƯỜN BÀI TẬP</h1></div>
    <div className="hud">
@@ -95,7 +94,6 @@ export default function Home(){
    {view==='garden'&&<>
     <div className="garden-layout">
      <section className="garden-stage" aria-label="Khu vườn chín ô đất">
-      <Art name="island" className="island"/>
       {positions.map(([x,y],i)=>{
        const p=game.plots.find(p=>p.slot===i),grown=p&&Date.parse(p.ready_at)<=now;
        return <div className={'plot-position '+(p?'has-plant':'')} style={{left:x+'%',top:y+'%',zIndex:Math.round(y)}} key={i}>
