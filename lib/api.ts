@@ -8,12 +8,12 @@ export async function rpc(name:string,args:Record<string,unknown>={}) {
 }
 export async function loadGame(userId:string):Promise<GameData> {
  await rpc('garden_initialize');
- const names=['garden_profiles','garden_plots','garden_catalog','garden_inventory','garden_collection','garden_tasks','garden_progress','garden_attempts','garden_reviews','garden_ledger','garden_seed_drops'];
+ const names=['garden_profiles','garden_plots','garden_catalog','garden_inventory','garden_collection','garden_tasks','garden_progress','garden_attempts','garden_reviews','garden_ledger','garden_seed_drops','garden_unlocked_slots'];
  const results=await Promise.all(names.map(name=>supabase!.from(name).select('*')));
  const error=results.find(r=>r.error)?.error;
  if(error)throw new Error('Chưa tải được dữ liệu. Kiểm tra kết nối rồi thử lại.');
- const [people,plots,catalog,inventory,collection,tasks,progress,attempts,reviews,ledger,drops]=results.map(r=>r.data||[]);
- return {...emptyData,profile:people.find(p=>p.user_id===userId)||null,manager:await rpc('garden_manager'),people,plots:plots.filter(p=>!p.harvested),catalog:catalog.filter(c=>!c.retired),drops,inventory,collection,tasks,progress,attempts,reviews,ledger:ledger.sort((a,b)=>b.created_at.localeCompare(a.created_at))} as GameData;
+ const [people,plots,catalog,inventory,collection,tasks,progress,attempts,reviews,ledger,drops,land]=results.map(r=>r.data||[]);
+ return {...emptyData,profile:people.find(p=>p.user_id===userId)||null,manager:await rpc('garden_manager'),people,plots:plots.filter(p=>!p.harvested),unlockedSlots:[0,1,2,3,...land.filter(l=>l.user_id===userId).map(l=>l.slot)],catalog:catalog.filter(c=>!c.retired),drops,inventory,collection,tasks,progress,attempts,reviews,ledger:ledger.sort((a,b)=>b.created_at.localeCompare(a.created_at))} as GameData;
 }
 export async function uploadFiles(files:File[],bucket:string,userId:string):Promise<string[]> {
  if(files.length>5)throw new Error('Mỗi lần nộp tối đa 5 tệp.');

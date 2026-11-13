@@ -4,8 +4,10 @@ import type {Session} from '@supabase/supabase-js';
 import {supabase} from '../lib/supabase';
 import {cleanupFiles,loadGame,rpc,uploadFiles} from '../lib/api';
 import {catalogArt,catalogLabel,emptyData,harvestArt,itemName,levelInfo,plantArt,plantDefinition,plantStages,plantVisual,seedOdds,statusText,timeLeft,type GameData,type Task,type CatalogItem} from '../lib/game';
-import {Art,DateLabel,Dialog,Empty,FileLinks,FilePicker,Icon,Money,Plant,SeedOdds} from './ui';
+import {Art,DateLabel,Dialog,Empty,FileLinks,FilePicker,Icon,Money,SeedOdds} from './ui';
 import {Admin} from './admin';
+import {GardenMap} from './garden-map';
+import {gardenSlotLabel,slotUnlockCost} from '../lib/garden-map';
 
 type View='garden'|'tasks'|'shop'|'account'|'admin';
 export type Run=(job:()=>Promise<void>,message?:string)=>Promise<void>;
@@ -16,6 +18,7 @@ export default function Home(){
  const [view,setView]=useState<View>('garden'),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
  const [taskFilter,setTaskFilter]=useState<'open'|'all'>('open');
  const [slot,setSlot]=useState<number|null>(null),[selectedTask,setSelectedTask]=useState<Task|null>(null);
+ const [unlockSlot,setUnlockSlot]=useState<{slot:number;request:string}|null>(null);
  const [auth,setAuth]=useState(false),[signup,setSignup]=useState(false),[email,setEmail]=useState(''),[password,setPassword]=useState('');
  const [files,setFiles]=useState<File[]>([]),[now,setNow]=useState(Date.now());
  const [preview,setPreview]=useState<{url:string;pdf:boolean}|null>(null);
@@ -25,8 +28,8 @@ export default function Home(){
  const lv=levelInfo(game.profile?.xp||0);
  const plot=game.plots.find(p=>p.slot===slot);
  const visual=plot?plantVisual(plot,now):null;
+ const unlockPrice=slotUnlockCost(game.unlockedSlots.length);
  const inventory=(id:string)=>game.inventory.find(i=>i.item_id===id)?.quantity||0;
- const pending=game.tasks.filter(t=>t.status==='published'&&!game.progress.some(p=>p.task_id===t.id&&p.user_id===session?.user.id&&p.status==='approved')).length;
  const visibleTasks=game.tasks.filter(t=>(t.status==='published'||game.progress.some(p=>p.task_id===t.id&&p.user_id===session?.user.id))&&(taskFilter==='all'||!game.progress.some(p=>p.task_id===t.id&&p.user_id===session?.user.id&&p.status==='approved')));
  const refresh=useCallback(async()=>{
   const id=session?.user.id;if(!id)return;
@@ -35,7 +38,7 @@ export default function Home(){
  useEffect(()=>{
   if(!supabase){setError('Chưa kết nối được dịch vụ.');setReady(true);return;}
   supabase.auth.getSession().then(({data,error})=>{if(error)setError('Chưa khôi phục được đăng nhập.');setSession(data.session);setReady(true);});
-  const {data:l}=supabase.auth.onAuthStateChange((_e,s)=>{setSession(s);if(!s){setData(emptyData);setSlot(null);setSelectedTask(null);setView('garden');}});
+  const {data:l}=supabase.auth.onAuthStateChange((_e,s)=>{setSession(s);if(!s){setData(emptyData);setSlot(null);setUnlockSlot(null);setSelectedTask(null);setView('garden');}});
   return()=>l.subscription.unsubscribe();
  },[]);
  useEffect(()=>{if(!session)return;setLoading(true);refresh().catch(e=>setError(e.message)).finally(()=>setLoading(false));},[session?.user.id,refresh]);
@@ -76,8 +79,7 @@ export default function Home(){
   },'Đã nộp bài. Bạn sẽ nhận thưởng khi được duyệt.');
  }
  function chooseTask(t:Task){if(needLogin())return;setFiles([]);setSelectedTask(t);setError('');}
- function navigate(next:View){setView(next);setSlot(null);setError('');}
- const positions=[[50,27],[31,38],[69,38],[12,49],[50,49],[88,49],[31,61],[69,61],[50,73]];
+ function navigate(next:View){setView(next);setSlot(null);setUnlockSlot(null);setError('');}
  const ownProgress=selectedTask?game.progress.find(p=>p.task_id===selectedTask.id&&p.user_id===session?.user.id):undefined;
  return <div className="world">
   <header className="game-header">
@@ -91,23 +93,7 @@ export default function Home(){
    {!ready||loading?<div className="loading" role="status">Đang chuẩn bị khu vườn...</div>:null}
    {error&&<div className="alert" role="alert"><span>{error}</span><button onClick={()=>{setError('');if(session)refresh().catch(e=>setError(e.message));}}>Thử lại</button><button aria-label="Đóng thông báo" onClick={()=>setError('')}>×</button></div>}
    {notice&&<div className="toast" role="status">{notice}</div>}
-   {view==='garden'&&<>
-    <div className="garden-layout">
-     <section className="garden-stage" aria-label="Khu vườn chín ô đất">
-      {positions.map(([x,y],i)=>{
-       const p=game.plots.find(p=>p.slot===i),grown=p&&Date.parse(p.ready_at)<=now;
-       return <div className={'plot-position '+(p?'has-plant':'')} style={{left:x+'%',top:y+'%',zIndex:Math.round(y)}} key={i}>
-        <button className={'plot '+(grown?'grown ':'')+(p&&plantDefinition(p.seed_id)?.ground?'has-baked-ground':'')} onClick={()=>{if(!needLogin()){setSlot(i);setError('');}}} aria-label={'Ô '+(i+1)+(p?': '+itemName(p.seed_id,game.catalog)+', '+timeLeft(p.ready_at,now):': đất trống')}>
-         <span className={'soil '+(!p||!plantDefinition(p.seed_id)?.ground?'image-soil':'')}>{(!p||!plantDefinition(p.seed_id)?.ground)&&<Art name={'farm/items/'+(p?'soil_tilled':'soil_unworked')}/>}</span>{p?<Plant plot={p} now={now}/>:<span className="plot-plus">+</span>}
-         {grown&&<span className="harvest-tag">Thu hoạch</span>}
-         <span className="plot-number">{i+1}</span>
-        </button>
-       </div>;
-      })}
-     </section>
-     <aside className="garden-info parchment"><p className="kicker">GÓC VƯỜN CỦA BẠN</p><h2>Gieo mầm tri thức</h2><p>Làm bài mỗi ngày, nhận Đồng tri thức và vun đắp khu vườn riêng.</p><div className="info-row"><span>Cây đang trồng</span><strong>{game.plots.length}/9</strong></div><div className="info-row"><span>Nhiệm vụ cần làm</span><strong>{pending}</strong></div><button className="secondary" onClick={()=>navigate('shop')}>Ghé cửa hàng hạt giống</button>{!session&&<button className="primary" onClick={()=>setAuth(true)}>Đăng nhập để chơi</button>}</aside>
-    </div>
-   </>}
+   {view==='garden'&&<GardenMap plots={game.plots} catalog={game.catalog} unlockedSlots={game.unlockedSlots} now={now} onSelect={selected=>{if(!needLogin()){setSlot(selected);setError('');}}} onUnlock={selected=>{if(!needLogin()){setUnlockSlot({slot:selected,request:crypto.randomUUID()});setError('');}}}/>}
    {view==='tasks'&&<section className="parchment content-panel"><div className="panel-heading"><div><p className="kicker">MỖI BÀI LÀ MỘT BƯỚC TIẾN</p><h2>Nhiệm vụ</h2></div>{game.manager&&<button className="secondary" onClick={()=>navigate('admin')}>Quản lý bài tập</button>}</div>
     {session&&<div className="tabs"><button className={taskFilter==='open'?'active':''} onClick={()=>setTaskFilter('open')}>Cần hoàn thành</button><button className={taskFilter==='all'?'active':''} onClick={()=>setTaskFilter('all')}>Tất cả</button></div>}
     {!session?<Empty title="Bắt đầu hành trình học tập">Đăng nhập để xem bài tập và lưu thành quả của bạn.<button className="primary" onClick={()=>setAuth(true)}>Đăng nhập</button></Empty>:
@@ -129,7 +115,16 @@ export default function Home(){
   </main>
   <nav className="bottom-nav" aria-label="Điều hướng chính">{([['garden','Khu vườn'],['tasks','Nhiệm vụ'],['shop','Cửa hàng'],['account','Tài khoản']] as [View,string][]).map(([id,label])=><button className={view===id?'active':''} key={id} onClick={()=>navigate(id)} aria-current={view===id?'page':undefined}><Icon name={id}/><span>{label}</span></button>)}</nav>
   {auth&&<Dialog title={signup?'Tạo tài khoản':'Đăng nhập'} onClose={()=>setAuth(false)}><p>Tạo một khu vườn của riêng bạn, bắt đầu từ bài tập hôm nay.</p><form onSubmit={authenticate}><label htmlFor="email">Email</label><input id="email" type="email" autoComplete="email" required value={email} onChange={e=>setEmail(e.target.value)}/><label htmlFor="password">Mật khẩu</label><input id="password" type="password" autoComplete={signup?'new-password':'current-password'} minLength={6} required value={password} onChange={e=>setPassword(e.target.value)}/>{error&&<p className="inline-error" role="alert">{error}</p>}<button className="primary" disabled={busy}>{busy?'Đang xử lý...':signup?'Tạo tài khoản & vào vườn':'Đăng nhập'}</button></form><button className="link-button" onClick={()=>{setSignup(!signup);setError('');}}>{signup?'Đã có tài khoản? Đăng nhập':'Chưa có tài khoản? Đăng ký'}</button></Dialog>}
-  {slot!==null&&session&&<Dialog title={plot?itemName(plot.seed_id,game.catalog):'Gieo hạt vào ô '+(slot+1)} onClose={()=>setSlot(null)}>
+  {unlockSlot&&session&&<Dialog title={'Mở vị trí trồng '+(unlockSlot.slot+1)} onClose={()=>{if(!busy)setUnlockSlot(null);}}>
+   <p>Mở thêm một vị trí để trồng 1 cây. Khu vườn có tối đa 16 cây.</p>
+   <div className="info-row"><span>Chi phí mở vị trí</span><strong>{unlockPrice?.toLocaleString('vi-VN')} Đồng tri thức</strong></div>
+   <div className="info-row"><span>Số dư của bạn</span><strong>{(game.profile?.coins||0).toLocaleString('vi-VN')} Đồng tri thức</strong></div>
+   {unlockPrice!==null&&(game.profile?.coins||0)<unlockPrice&&<p className="helper">Bạn cần thêm {(unlockPrice-(game.profile?.coins||0)).toLocaleString('vi-VN')} Đồng tri thức.</p>}
+   <button className="primary" disabled={busy||unlockPrice===null||(game.profile?.coins||0)<unlockPrice} onClick={()=>run(async()=>{await rpc('garden_unlock_slot',{p_slot:unlockSlot.slot,p_cost:unlockPrice,p_request:unlockSlot.request});setUnlockSlot(null);},'Đã mở thêm 1 vị trí trồng cây!')}>{busy?'Đang mở vị trí...':'Mở vị trí · '+unlockPrice?.toLocaleString('vi-VN')+' Đồng tri thức'}</button>
+   {error&&<p className="inline-error" role="alert">{error}</p>}
+  </Dialog>}
+  {slot!==null&&session&&(plot||game.unlockedSlots.includes(slot))&&<Dialog title={plot?itemName(plot.seed_id,game.catalog):'Gieo hạt · '+gardenSlotLabel(slot)} onClose={()=>setSlot(null)}>
+   {!game.unlockedSlots.includes(slot)&&<p className="helper">Bạn có thể thu hoạch cây hiện có. Vị trí này cần mở khóa trước khi gieo cây mới.</p>}
    {plot&&visual?<><Art name={visual.art} className="detail-plant"/><p className="center growth-label">{visual.label}</p><div className="growth-track" aria-label="Các giai đoạn phát triển">{Array.from({length:visual.total},(_,i)=>i+1).map(stage=><span className={stage<=visual.stage?'reached':''} key={stage} aria-current={stage===visual.stage?'step':undefined}><Art name={plantArt(plot.seed_id,stage)}/><small>{stage===1?(plantDefinition(plot.seed_id)?.orchard?'Cây con':'Mới gieo'):stage===visual.total?'Chín':stage}</small></span>)}</div>{plot.source_seed_id&&<p className="center helper">Gieo từ {itemName(plot.source_seed_id,game.catalog)}</p>}<p className="center">{timeLeft(plot.ready_at,now)}</p><p className="center helper">Thu hoạch nhận {plot.xp_reward} XP và 1 nông sản</p>{Date.parse(plot.ready_at)<=now?<button className="primary" disabled={busy} onClick={()=>run(async()=>{await rpc('garden_harvest',{p_plot:plot.id});setSlot(null);},'Đã thu hoạch nông sản và nhận XP!')}>Thu hoạch</button>:<><button className="primary" disabled={busy||inventory('fertilizer')===0} onClick={()=>run(async()=>{await rpc('garden_fertilize',{p_plot:plot.id});},'Đã bón phân cho cây.')}>Bón phân · còn {inventory('fertilizer')}</button><p className="helper">Giảm tối đa {Math.round((game.catalog.find(c=>c.id==='fertilizer')?.reduction_seconds||1800)/60)} phút chờ cho mỗi phần phân bón.</p><button className="secondary" onClick={()=>{setSlot(null);navigate('shop');}}>Mua phân bón</button></>}</>:
     <><p>Chọn hạt trong kho để gieo. Hạt gacha sẽ trở thành một cây ngẫu nhiên ngay khi gieo.</p><div className="seed-options">{game.catalog.filter(c=>c.kind==='gacha'||(c.kind==='seed'&&inventory(c.id)>0)).map(c=><div key={c.id}><button className="seed-option" disabled={busy||inventory(c.id)===0||(c.kind==='gacha'&&!seedOdds(c.id,game.drops,game.catalog).length)} onClick={()=>run(async()=>{await rpc('garden_plant',{p_slot:slot,p_seed:c.id});},c.kind==='gacha'?'Đã gieo hạt! Cây bạn nhận được đang ở ô đất này.':'Đã gieo hạt giống.')}><Art name={catalogArt(c)}/><span><strong>{catalogLabel(c)}</strong><small>{c.kind==='gacha'?'Khám phá cây khi gieo':Math.round(c.grow_seconds/60)+' phút · '+c.xp+' XP'}</small></span><b>×{inventory(c.id)}</b></button>{c.kind==='gacha'&&<SeedOdds id={c.id} data={game}/>}</div>)}</div><button className="secondary" onClick={()=>{setSlot(null);navigate('shop');}}>Mua thêm hạt giống</button></>}
    {error&&<p className="inline-error" role="alert">{error}</p>}

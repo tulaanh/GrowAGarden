@@ -9,7 +9,7 @@ export type Review = { id: string; progress_id: string; action: 'approved'|'retu
 export type LedgerEntry = { id: string; amount: number; kind: string; note: string; created_at: string };
 export type Inventory = { item_id: string; quantity: number };
 export type Crop = { seed_id: string; quantity: number };
-export type GameData = { profile: Profile | null; manager: boolean; people: Profile[]; plots: Plot[]; catalog: CatalogItem[]; drops: SeedDrop[]; inventory: Inventory[]; collection: Crop[]; tasks: Task[]; progress: Progress[]; attempts: Attempt[]; reviews: Review[]; ledger: LedgerEntry[] };
+export type GameData = { profile: Profile | null; manager: boolean; people: Profile[]; plots: Plot[]; unlockedSlots: number[]; catalog: CatalogItem[]; drops: SeedDrop[]; inventory: Inventory[]; collection: Crop[]; tasks: Task[]; progress: Progress[]; attempts: Attempt[]; reviews: Review[]; ledger: LedgerEntry[] };
 export type PlantDefinition = {id:string;name:string;tier:1|2|3;minutes:number;xp:number;frames:number[];ground:boolean;orchard?:boolean};
 export const plants: PlantDefinition[] = [
  {id:'carrot',name:'Cà rốt',tier:1,minutes:30,xp:20,frames:[1,3,5],ground:true},
@@ -45,7 +45,7 @@ export const defaults: CatalogItem[] = [
 ];
 const tierWeights=[[1920,378,56],[960,1050,280],[360,735,1400]];
 export const defaultDrops: SeedDrop[] = ['gacha_common','gacha_rare','gacha_special'].flatMap((seed,index)=>plants.map(p=>({seed_id:seed,plant_id:p.id,weight:tierWeights[index][p.tier-1]})));
-export const emptyData: GameData = { profile:null,manager:false,people:[],plots:[],catalog:defaults,drops:defaultDrops,inventory:[],collection:[],tasks:[],progress:[],attempts:[],reviews:[],ledger:[] };
+export const emptyData: GameData = { profile:null,manager:false,people:[],plots:[],unlockedSlots:[0,1,2,3],catalog:defaults,drops:defaultDrops,inventory:[],collection:[],tasks:[],progress:[],attempts:[],reviews:[],ledger:[] };
 export function levelInfo(xp: number) {
  const level = Math.floor((1 + Math.sqrt(1 + 8 * Math.max(0,xp) / 100)) / 2);
  const start = 50 * level * (level - 1);

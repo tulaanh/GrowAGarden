@@ -10,6 +10,8 @@ Quản lý giao bài, người chơi nộp ảnh, quản lý duyệt để phát
 - Hạt Hiếm: 30 Đồng tri thức, cấp 2; tỷ lệ ba nhóm 40/50/10%.
 - Hạt Đặc biệt: 60 Đồng tri thức, cấp 3; tỷ lệ ba nhóm 15/35/50%.
 - Có 21 loại cây từ Cozy Tropical Farm Starter v0.2; mỗi cây có 3–5 mốc phát triển trong game, gồm trạng thái mới gieo hoặc cây con.
+- Toàn bộ khu vườn có tối đa 16 vị trí, mỗi vị trí trồng 1 cây. Ban đầu mở sẵn 4 vị trí ở giữa; 12 vị trí còn lại có giá mở lần lượt 100, 200… 1.200 Đồng tri thức (tổng 7.800). Có thể chọn bất kỳ vị trí đang khóa; giá phụ thuộc số vị trí đã mở thêm.
+- Giao diện giữ tỷ lệ hiển thị 100%, khóa thu phóng bằng cử chỉ, Ctrl/Cmd kết hợp phím cộng/trừ hoặc cuộn chuột. Trong màn hình vườn, kéo chuột, kéo một ngón tay, cuộn chuột/bàn di chuột hoặc dùng phím mũi tên để di chuyển bản đồ; thanh tiêu đề và điều hướng đứng yên.
 - Cà rốt mặc định 30 phút/20 XP, Ngô 120 phút/60 XP, Xoài 360 phút/150 XP. Các cây khác xem trong cửa hàng và quản lý.
 - Phân bón: 5 Đồng tri thức, giảm tối đa 30 phút.
 - Mốc XP các cấp: 0, 100, 300, 600, 1000... Cấp tiếp theo cần thêm 100 nhân cấp hiện tại.
@@ -41,6 +43,8 @@ Sau đó áp dụng `supabase/migrations/20261112132736_gacha_growth_stages.sql`
 Áp dụng tiếp `supabase/migrations/20261112164437_tropical_crop_assets.sql` để chuyển sang 21 loài mới. Hướng dương được đổi thành Ngô, Sen vàng thành Xoài; số dư, XP, tổng kho/bộ sưu tập và snapshot cây được kiểm tra giữ nguyên trong cùng giao dịch. Loài cũ bị ẩn bằng RLS và chặn tái cấp/gieo. Dự án đang chạy đã áp dụng migration.
 
 Các RPC công khai kiểm tra người dùng và gọi triển khai giao dịch trong `garden_private`. Ví được khóa trước khi cập nhật số dư; thưởng và mua hàng có ràng buộc chống ghi trùng. Cây chín được xác định theo thời gian máy chủ, không cần cron.
+
+Sau hai migration `20261113110115_expand_grass_planting.sql` và `20261113154419_finite_garden_unlocks.sql`, áp dụng `supabase/migrations/20261113155941_sixteen_planting_slots.sql` để giới hạn toàn bộ vườn ở 16 cây, mỗi vị trí một cây. Dự án đang chạy đã được cập nhật. Cây có sẵn vẫn được chăm sóc và thu hoạch; nếu vị trí chưa mở thì cần trả phí trước khi trồng lại. Giá mở vị trí, số dư, quyền sở hữu và chống trừ tiền lặp đều được kiểm tra phía máy chủ. `tests/grass-planting.sql` kiểm tra giới hạn 16 cây, giá tăng dần, kho hạt, thu hoạch cây cũ, lịch sử ví và RLS trong giao dịch rollback.
 
 ## Minh họa và kiểm chứng
 
