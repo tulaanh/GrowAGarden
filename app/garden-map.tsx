@@ -1,6 +1,6 @@
 'use client';
-import {useCallback,useEffect,useMemo,useRef,useState,type PointerEvent} from 'react';
-import {gardenSlotLabel,plantingSlots,slotScreenPosition,slotUnlockCost,MAX_PLANTING_SLOTS} from '../lib/garden-map';
+import {useCallback,useEffect,useMemo,useRef,useState,type CSSProperties,type PointerEvent} from 'react';
+import {gardenSlotLabel,plantingSlots,slotScreenPosition,slotUnlockCost} from '../lib/garden-map';
 import {itemName,plantDefinition,timeLeft,type CatalogItem,type Plot} from '../lib/game';
 import {Art,Plant} from './ui';
 import styles from './garden-map.module.css';
@@ -11,9 +11,10 @@ export function GardenMap({plots,catalog,unlockedSlots,now,onSelect,onUnlock}:{p
  const ignoreClickUntil=useRef(0);
  const [size,setSize]=useState({width:0,height:0});
  const [camera,setCamera]=useState({x:0,y:0});
+ const [zoom,setZoom]=useState(1);
  const [dragging,setDragging]=useState(false);
  const bySlot=useMemo(()=>new Map(plots.map(plot=>[plot.slot,plot])),[plots]);
- const positions=useMemo(()=>plantingSlots.map(slot=>({id:slot.id,...slotScreenPosition(slot,size.width,size.height,camera)})),[size,camera]);
+ const positions=useMemo(()=>plantingSlots.map(slot=>({id:slot.id,...slotScreenPosition(slot,size.width,size.height,camera,zoom)})),[size,camera,zoom]);
  const opened=useMemo(()=>new Set(unlockedSlots),[unlockedSlots]);
  const price=slotUnlockCost(opened.size);
  const move=useCallback((x:number,y:number)=>{
@@ -57,8 +58,8 @@ export function GardenMap({plots,catalog,unlockedSlots,now,onSelect,onUnlock}:{p
   drag.current=null;setDragging(false);
   if(event.currentTarget.hasPointerCapture(event.pointerId))event.currentTarget.releasePointerCapture(event.pointerId);
  }
- return <section ref={field} className={styles.field+' '+(dragging?styles.dragging:'')}
-  aria-label="Khu vườn tối đa 16 cây" aria-describedby="garden-map-help" tabIndex={0}
+ return <section ref={field} className={styles.field+' '+(dragging?styles.dragging:'')} style={{'--garden-zoom':zoom} as CSSProperties}
+  aria-label="Khu vườn tối đa 16 cây" tabIndex={0}
   onPointerDown={startDrag} onPointerMove={moveDrag} onPointerUp={endDrag} onPointerCancel={endDrag} onLostPointerCapture={endDrag}
   onKeyDown={event=>{
    const directions:Record<string,[number,number]>={ArrowLeft:[96,0],ArrowRight:[-96,0],ArrowUp:[0,48],ArrowDown:[0,-48]};
@@ -91,9 +92,10 @@ export function GardenMap({plots,catalog,unlockedSlots,now,onSelect,onUnlock}:{p
      </button>}
    </div>;
   })}
-  <div className={styles.help} onPointerDown={event=>event.stopPropagation()}>
-   <div><strong>Đã mở {opened.size}/{MAX_PLANTING_SLOTS} vị trí</strong><span id="garden-map-help">Mỗi vị trí trồng 1 cây · Kéo để di chuyển</span></div>
-   <button type="button" onClick={()=>setCamera({x:0,y:0})}>Về giữa</button>
+  <div className={styles.zoomControls} onPointerDown={event=>event.stopPropagation()} onKeyDown={event=>event.stopPropagation()} aria-label="Điều chỉnh độ phóng đại">
+   <button type="button" aria-label="Thu nhỏ khu vườn" disabled={zoom<=0.8} onClick={()=>setZoom(value=>Math.max(0.8,Math.round((value-0.1)*10)/10))}>−</button>
+   <span aria-live="polite">{Math.round(zoom*100)}%</span>
+   <button type="button" aria-label="Phóng to khu vườn" disabled={zoom>=1.6} onClick={()=>setZoom(value=>Math.min(1.6,Math.round((value+0.1)*10)/10))}>+</button>
   </div>
  </section>;
 }

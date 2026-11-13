@@ -16,6 +16,6 @@ export function slotUnlockCost(unlockedCount:number) {
  return unlockedCount>=MAX_PLANTING_SLOTS?null:(Math.max(INITIAL_OPEN_SLOTS.length,unlockedCount)-INITIAL_OPEN_SLOTS.length+1)*100;
 }
 
-export function slotScreenPosition(slot:{x:number;y:number},width:number,height:number,camera:{x:number;y:number}) {
- return {x:width/2+camera.x+slot.x,y:height/2+90+camera.y+slot.y};
+export function slotScreenPosition(slot:{x:number;y:number},width:number,height:number,camera:{x:number;y:number},zoom=1) {
+ return {x:width/2+camera.x+slot.x*zoom,y:height/2+90+camera.y+slot.y*zoom};
 }

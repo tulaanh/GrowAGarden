@@ -11,7 +11,7 @@ Quản lý giao bài, người chơi nộp ảnh, quản lý duyệt để phát
 - Hạt Đặc biệt: 60 Đồng tri thức, cấp 3; tỷ lệ ba nhóm 15/35/50%.
 - Có 21 loại cây từ Cozy Tropical Farm Starter v0.2; mỗi cây có 3–5 mốc phát triển trong game, gồm trạng thái mới gieo hoặc cây con.
 - Toàn bộ khu vườn có tối đa 16 vị trí, mỗi vị trí trồng 1 cây. Ban đầu mở sẵn 4 vị trí ở giữa; 12 vị trí còn lại có giá mở lần lượt 100, 200… 1.200 Đồng tri thức (tổng 7.800). Có thể chọn bất kỳ vị trí đang khóa; giá phụ thuộc số vị trí đã mở thêm.
-- Giao diện giữ tỷ lệ hiển thị 100%, khóa thu phóng bằng cử chỉ, Ctrl/Cmd kết hợp phím cộng/trừ hoặc cuộn chuột. Trong màn hình vườn, kéo chuột, kéo một ngón tay, cuộn chuột/bàn di chuột hoặc dùng phím mũi tên để di chuyển bản đồ; thanh tiêu đề và điều hướng đứng yên.
+- Giao diện giữ tỷ lệ trình duyệt cố định. Trong màn hình vườn, dùng nút + và − để thu phóng bản đồ từ 80% đến 160%; kéo chuột, kéo một ngón tay, cuộn chuột/bàn di chuột hoặc dùng phím mũi tên để di chuyển bản đồ.
 - Cà rốt mặc định 30 phút/20 XP, Ngô 120 phút/60 XP, Xoài 360 phút/150 XP. Các cây khác xem trong cửa hàng và quản lý.
 - Phân bón: 5 Đồng tri thức, giảm tối đa 30 phút.
 - Mốc XP các cấp: 0, 100, 300, 600, 1000... Cấp tiếp theo cần thêm 100 nhân cấp hiện tại.

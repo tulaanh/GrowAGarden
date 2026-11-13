@@ -1,0 +1,20 @@
+.list { display:grid;gap:12px;width:100%;margin:12px 0 16px; }
+.choice { min-width:0;border:2px solid #d3b57c;border-radius:12px;background:#fffdf1; }
+.option { display:grid;grid-template-columns:56px minmax(0,1fr) auto;align-items:center;gap:12px;width:100%;min-height:84px;padding:10px 14px;border:0;border-radius:10px;background:transparent;color:var(--ink);text-align:left; }
+.option:not(:disabled):hover { background:#fff3d8; }
+.option>img { display:block;width:56px;height:60px;object-fit:contain; }
+.option>span { min-width:0; }
+.option strong { display:block;font-size:15px;line-height:1.35;overflow-wrap:anywhere; }
+.option small { display:block;margin-top:4px;font-size:11px;line-height:1.5; }
+.option b { justify-self:end;font-size:14px;white-space:nowrap; }
+.choice> :global(.seed-odds) { margin:0;padding:0 14px;border-top:1px solid #e9d8b6; }
+.choice :global(.seed-odds-trigger) { display:block;width:100%;min-height:44px;padding:8px 0;font-size:12px; }
+@media(max-width:400px) {
+ .list { gap:10px; }
+ .option { grid-template-columns:44px minmax(0,1fr) auto;gap:10px;padding:10px;min-height:76px; }
+ .option>img { width:44px;height:54px; }
+ .option strong { font-size:14px; }
+ .option small { font-size:10px; }
+ .option b { font-size:13px; }
+ .choice> :global(.seed-odds) { padding-inline:10px; }
+}
