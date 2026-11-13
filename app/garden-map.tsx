@@ -131,10 +131,6 @@ export function GardenMap({plots,catalog,unlockedSlots,now,onSelect,onUnlock}:{p
    </div>;
   })}
   </div>
-  <div className={styles.zoomControls} onPointerDown={event=>event.stopPropagation()} onKeyDown={event=>event.stopPropagation()} aria-label="Điều chỉnh độ phóng đại">
-   <button type="button" aria-label="Thu nhỏ khu vườn" disabled={settledView.zoom<=0.8} onClick={()=>updateView({...view.current,zoom:Math.max(0.8,Math.round((view.current.zoom-0.1)*10)/10)},true)}>−</button>
-   <span aria-live="polite">{Math.round(settledView.zoom*100)}%</span>
-   <button type="button" aria-label="Phóng to khu vườn" disabled={settledView.zoom>=1.6} onClick={()=>updateView({...view.current,zoom:Math.min(1.6,Math.round((view.current.zoom+0.1)*10)/10)},true)}>+</button>
-  </div>
+
  </section>;
 }
