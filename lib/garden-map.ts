@@ -19,3 +19,9 @@ export function slotUnlockCost(unlockedCount:number) {
 export function slotScreenPosition(slot:{x:number;y:number},width:number,height:number,camera:{x:number;y:number},zoom=1) {
  return {x:width/2+camera.x+slot.x*zoom,y:height/2+90+camera.y+slot.y*zoom};
 }
+
+export function pinchGardenView(view:{x:number;y:number;zoom:number},start:{x:number;y:number},center:{x:number;y:number},startDistance:number,distance:number,origin:{x:number;y:number}) {
+ const zoom=Math.max(0.8,Math.min(1.6,view.zoom*distance/Math.max(1,startDistance)));
+ const ratio=zoom/view.zoom;
+ return {x:center.x-origin.x-(start.x-origin.x-view.x)*ratio,y:center.y-origin.y-(start.y-origin.y-view.y)*ratio,zoom};
+}

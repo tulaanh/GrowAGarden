@@ -1,25 +1,40 @@
 'use client';
-import {useCallback,useEffect,useMemo,useRef,useState,type CSSProperties,type PointerEvent} from 'react';
-import {gardenSlotLabel,plantingSlots,slotScreenPosition,slotUnlockCost} from '../lib/garden-map';
+import {useCallback,useEffect,useMemo,useRef,useState,type PointerEvent} from 'react';
+import {gardenSlotLabel,plantingSlots,slotScreenPosition,slotUnlockCost,pinchGardenView} from '../lib/garden-map';
 import {itemName,plantDefinition,timeLeft,type CatalogItem,type Plot} from '../lib/game';
 import {Art,Plant} from './ui';
 import styles from './garden-map.module.css';
 
 export function GardenMap({plots,catalog,unlockedSlots,now,onSelect,onUnlock}:{plots:Plot[];catalog:CatalogItem[];unlockedSlots:number[];now:number;onSelect:(slot:number)=>void;onUnlock:(slot:number)=>void}) {
  const field=useRef<HTMLElement>(null);
- const drag=useRef<{id:number;x:number;y:number;camera:{x:number;y:number};moved:boolean}|null>(null);
+ const scene=useRef<HTMLDivElement>(null);
+ const view=useRef({x:0,y:0,zoom:1});
+ const pointers=useRef(new Map<number,{x:number;y:number}>());
+ const gesture=useRef<{kind:'drag';x:number;y:number;view:typeof view.current;moved:boolean}|{kind:'pinch';distance:number;center:{x:number;y:number};view:typeof view.current}|null>(null);
+ const frame=useRef<number|null>(null);
  const ignoreClickUntil=useRef(0);
  const [size,setSize]=useState({width:0,height:0});
- const [camera,setCamera]=useState({x:0,y:0});
- const [zoom,setZoom]=useState(1);
+ const [settledView,setSettledView]=useState(view.current);
  const [dragging,setDragging]=useState(false);
  const bySlot=useMemo(()=>new Map(plots.map(plot=>[plot.slot,plot])),[plots]);
- const positions=useMemo(()=>plantingSlots.map(slot=>({id:slot.id,...slotScreenPosition(slot,size.width,size.height,camera,zoom)})),[size,camera,zoom]);
  const opened=useMemo(()=>new Set(unlockedSlots),[unlockedSlots]);
  const price=slotUnlockCost(opened.size);
- const move=useCallback((x:number,y:number)=>{
-  setCamera(current=>({x:Math.max(-480,Math.min(480,current.x+x)),y:Math.max(-320,Math.min(320,current.y+y))}));
+ const paint=useCallback(()=>{
+  if(frame.current!==null)return;
+  frame.current=requestAnimationFrame(()=>{
+   frame.current=null;
+   const {x,y,zoom}=view.current;
+   if(scene.current)scene.current.style.transform=`translate3d(${x}px,${y}px,0) scale(${zoom})`;
+  });
  },[]);
+ const updateView=useCallback((next:typeof view.current,settle=false)=>{
+  view.current={...next,x:Math.max(-480,Math.min(480,next.x)),y:Math.max(-320,Math.min(320,next.y))};
+  paint();
+  if(settle)setSettledView(view.current);
+ },[paint]);
+ const move=useCallback((x:number,y:number)=>{
+  updateView({...view.current,x:view.current.x+x,y:view.current.y+y},true);
+ },[updateView]);
  useEffect(()=>{
   const element=field.current;if(!element)return;
   const observer=new ResizeObserver(([entry])=>setSize({width:entry.contentRect.width,height:entry.contentRect.height}));
@@ -37,38 +52,61 @@ export function GardenMap({plots,catalog,unlockedSlots,now,onSelect,onUnlock}:{p
   element.addEventListener('wheel',panWheel,{passive:false});
   return()=>{
    observer.disconnect();
+   if(frame.current!==null)cancelAnimationFrame(frame.current);
    root.style.overflow=previousOverflow;root.style.overscrollBehavior=previousOverscroll;
    element.removeEventListener('wheel',panWheel);
   };
  },[move]);
  function startDrag(event:PointerEvent<HTMLElement>) {
-  if(!event.isPrimary||event.button!==0)return;
-  drag.current={id:event.pointerId,x:event.clientX,y:event.clientY,camera,moved:false};
+  if(event.pointerType==='mouse'&&event.button!==0)return;
+  if(pointers.current.size>=2)return;
+  pointers.current.set(event.pointerId,{x:event.clientX,y:event.clientY});
+  const points=[...pointers.current.values()];
+  if(points.length===1){gesture.current={kind:'drag',...points[0],view:view.current,moved:false};return;}
+  const [a,b]=points;
+  gesture.current={kind:'pinch',distance:Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)),center:{x:(a.x+b.x)/2,y:(a.y+b.y)/2},view:view.current};
+  for(const id of pointers.current.keys())event.currentTarget.setPointerCapture(id);
+  ignoreClickUntil.current=Date.now()+300;
+  setDragging(true);
  }
  function moveDrag(event:PointerEvent<HTMLElement>) {
-  const active=drag.current;if(!active||active.id!==event.pointerId)return;
+  if(!pointers.current.has(event.pointerId))return;
+  pointers.current.set(event.pointerId,{x:event.clientX,y:event.clientY});
+  const active=gesture.current;if(!active)return;
+  if(active.kind==='pinch'){
+   const [a,b]=[...pointers.current.values()];if(!a||!b)return;
+   const rect=event.currentTarget.getBoundingClientRect();
+   updateView(pinchGardenView(active.view,active.center,{x:(a.x+b.x)/2,y:(a.y+b.y)/2},active.distance,Math.hypot(a.x-b.x,a.y-b.y),{x:rect.left+rect.width/2,y:rect.top+rect.height/2+90}));
+   return;
+  }
   const dx=event.clientX-active.x,dy=event.clientY-active.y;
   if(!active.moved&&Math.hypot(dx,dy)<8)return;
   if(!active.moved){active.moved=true;event.currentTarget.setPointerCapture(event.pointerId);setDragging(true);}
-  setCamera({x:Math.max(-480,Math.min(480,active.camera.x+dx)),y:Math.max(-320,Math.min(320,active.camera.y+dy))});
+  updateView({...active.view,x:active.view.x+dx,y:active.view.y+dy});
  }
  function endDrag(event:PointerEvent<HTMLElement>) {
-  if(drag.current?.id!==event.pointerId)return;
-  if(drag.current.moved)ignoreClickUntil.current=Date.now()+200;
-  drag.current=null;setDragging(false);
+  if(!pointers.current.has(event.pointerId))return;
+  const active=gesture.current;
+  pointers.current.delete(event.pointerId);
+  if(active&&(active.kind==='pinch'||active.moved))ignoreClickUntil.current=Date.now()+300;
   if(event.currentTarget.hasPointerCapture(event.pointerId))event.currentTarget.releasePointerCapture(event.pointerId);
+  const remaining=[...pointers.current.values()][0];
+  if(remaining){gesture.current={kind:'drag',...remaining,view:view.current,moved:true};return;}
+  gesture.current=null;setDragging(false);setSettledView(view.current);
  }
- return <section ref={field} className={styles.field+' '+(dragging?styles.dragging:'')} style={{'--garden-zoom':zoom} as CSSProperties}
+ return <section ref={field} className={styles.field+' '+(dragging?styles.dragging:'')}
   aria-label="Khu vườn tối đa 16 cây" tabIndex={0}
-  onPointerDown={startDrag} onPointerMove={moveDrag} onPointerUp={endDrag} onPointerCancel={endDrag} onLostPointerCapture={endDrag}
+  onPointerDown={startDrag} onPointerMove={moveDrag} onPointerUp={endDrag} onPointerCancel={endDrag} onLostPointerCapture={event=>{if(event.target===event.currentTarget)endDrag(event);}}
   onKeyDown={event=>{
    const directions:Record<string,[number,number]>={ArrowLeft:[96,0],ArrowRight:[-96,0],ArrowUp:[0,48],ArrowDown:[0,-48]};
-   if(event.key==='Home'){event.preventDefault();setCamera({x:0,y:0});}
+   if(event.key==='Home'){event.preventDefault();updateView({...view.current,x:0,y:0},true);}
    else if(directions[event.key]){event.preventDefault();move(...directions[event.key]);}
   }}>
-  {positions.map(position=>{
+  <div ref={scene} className={styles.scene}>
+  {plantingSlots.map(position=>{
    const plot=bySlot.get(position.id),unlocked=opened.has(position.id),grown=plot&&Date.parse(plot.ready_at)<=now;
-   const visible=position.x>=55&&position.x<=size.width-55&&position.y>=(size.width<=540?250:290)&&position.y<=size.height-100;
+   const screen=slotScreenPosition(position,size.width,size.height,settledView,settledView.zoom);
+   const visible=screen.x>=55&&screen.x<=size.width-55&&screen.y>=(size.width<=540?250:290)&&screen.y<=size.height-100;
    return <div data-planting-slot={position.id} key={position.id}>
     <div className={styles.ground+' '+(!unlocked&&!plot?styles.lockedGround:'')} style={{left:position.x,top:position.y}}>
      <img src="/art/farm/items/plot_grass.png" alt="" width="512" height="256" draggable={false}/>
@@ -92,10 +130,11 @@ export function GardenMap({plots,catalog,unlockedSlots,now,onSelect,onUnlock}:{p
      </button>}
    </div>;
   })}
+  </div>
   <div className={styles.zoomControls} onPointerDown={event=>event.stopPropagation()} onKeyDown={event=>event.stopPropagation()} aria-label="Điều chỉnh độ phóng đại">
-   <button type="button" aria-label="Thu nhỏ khu vườn" disabled={zoom<=0.8} onClick={()=>setZoom(value=>Math.max(0.8,Math.round((value-0.1)*10)/10))}>−</button>
-   <span aria-live="polite">{Math.round(zoom*100)}%</span>
-   <button type="button" aria-label="Phóng to khu vườn" disabled={zoom>=1.6} onClick={()=>setZoom(value=>Math.min(1.6,Math.round((value+0.1)*10)/10))}>+</button>
+   <button type="button" aria-label="Thu nhỏ khu vườn" disabled={settledView.zoom<=0.8} onClick={()=>updateView({...view.current,zoom:Math.max(0.8,Math.round((view.current.zoom-0.1)*10)/10)},true)}>−</button>
+   <span aria-live="polite">{Math.round(settledView.zoom*100)}%</span>
+   <button type="button" aria-label="Phóng to khu vườn" disabled={settledView.zoom>=1.6} onClick={()=>updateView({...view.current,zoom:Math.min(1.6,Math.round((view.current.zoom+0.1)*10)/10)},true)}>+</button>
   </div>
  </section>;
 }

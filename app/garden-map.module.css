@@ -1,14 +1,15 @@
 .field { position:fixed;inset:0;z-index:-1;isolation:isolate;overflow:hidden;overscroll-behavior:none;touch-action:none;user-select:none;cursor:grab;background:#87aa62; }
-.ground { position:absolute;width:192px;height:96px;transform:translate(-50%,-50%) scale(var(--garden-zoom));pointer-events:none; }
+.scene { position:absolute;left:50%;top:calc(50% + 90px);transform-origin:0 0;will-change:transform; }
+.ground { position:absolute;width:192px;height:96px;transform:translate(-50%,-50%);pointer-events:none; }
 .ground img { display:block;width:100%;height:100%;max-width:none; }
 .lockedGround img { filter:grayscale(.65) brightness(.78); }
 .dragging,.dragging button { cursor:grabbing; }
-.lockedSlot { position:absolute;z-index:1;width:192px;height:96px;transform:translate(-50%,-50%) scale(var(--garden-zoom));clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);border:0;background:transparent;color:#6c4c28;display:grid;place-items:center; }
+.lockedSlot { position:absolute;z-index:1;width:192px;height:96px;transform:translate(-50%,-50%);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);border:0;background:transparent;color:#6c4c28;display:grid;place-items:center; }
 .lockedSlot:hover { background:#fff2b326; }.lockedSlot:focus-visible { background:#fff2b35c;outline:0; }
-.lockedSlot:not(:disabled):active { transform:translate(-50%,-50%) scale(var(--garden-zoom)); }
+.lockedSlot:not(:disabled):active { transform:translate(-50%,-50%); }
 .lockLabel { display:flex;flex-direction:column;align-items:center;gap:2px;min-width:100px;padding:4px 8px;border:2px solid #a87c43;border-radius:8px;background:#fff2cf;box-shadow:0 2px 0 #704a2866; }
 .lockLabel strong { display:flex;align-items:center;gap:4px;font-size:11px;line-height:16px; }.lockLabel>span { font-size:10px;line-height:12px; }
-.position { position:absolute;width:100px;height:52px;transform:translate(-50%,-50%) scale(var(--garden-zoom)); }
+.position { position:absolute;width:100px;height:52px;transform:translate(-50%,-50%); }
 .zoomControls { position:absolute;z-index:1000000;right:16px;bottom:96px;display:flex;align-items:center;gap:4px;padding:4px;border:2px solid #ae783e;border-radius:10px;background:#fff8e8f5;color:#55351f; }
 .zoomControls button { width:44px;height:44px;border:1px solid #bd914f;border-radius:7px;background:#ffedbf;color:#674620;font-size:22px;font-weight:900; }
 .zoomControls span { min-width:42px;text-align:center;font-size:12px;font-weight:900; }
