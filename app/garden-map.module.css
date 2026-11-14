@@ -1,4 +1,4 @@
-.field { position:fixed;inset:0;z-index:-1;isolation:isolate;overflow:hidden;overscroll-behavior:none;touch-action:none;user-select:none;cursor:grab;background:#87aa62; }
+.field { position:fixed;inset:0;z-index:-1;isolation:isolate;overflow:hidden;overscroll-behavior:none;touch-action:none;user-select:none;cursor:grab;background-color:#93b76b;background-image:radial-gradient(ellipse at 50% 32%,#b6d689 0%,#95bc70 55%,#7ba15d 100%); }
 .scene { position:absolute;left:50%;top:calc(50% + 90px);transform-origin:0 0;will-change:transform; }
 .ground { position:absolute;width:192px;height:96px;transform:translate(-50%,-50%);pointer-events:none; }
 .ground img { display:block;width:100%;height:100%;max-width:none; }
@@ -16,3 +16,5 @@
 .field :global(.plot-plus) { font-size:20px; }
 .field :global(.plot-number) { font-size:9px;bottom:-9px;white-space:nowrap; }
 .field :global(.harvest-tag) { font-size:9px;bottom:-16px; }
+
+.farmhouse { position:absolute;left:-145px;top:-350px;width:290px;height:auto;max-width:none;pointer-events:none;user-select:none;z-index:0; }

@@ -82,7 +82,7 @@ export default function Home(){
  function chooseTask(t:Task){if(needLogin())return;setFiles([]);setSelectedTask(t);setError('');}
  function navigate(next:View){setView(next);setSlot(null);setUnlockSlot(null);setError('');}
  const ownProgress=selectedTask?game.progress.find(p=>p.task_id===selectedTask.id&&p.user_id===session?.user.id):undefined;
- return <div className="world">
+ return <div className={"world "+(view==='garden'?'garden-world':'')}>
   <header className="game-header">
    <div className="title-sign"><Art name="sign"/><h1>VƯỜN BÀI TẬP</h1></div>
    <div className="hud">
