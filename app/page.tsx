@@ -84,7 +84,6 @@ export default function Home(){
  const ownProgress=selectedTask?game.progress.find(p=>p.task_id===selectedTask.id&&p.user_id===session?.user.id):undefined;
  return <div className="world">
   <header className="game-header">
-   <div className="title-sign"><Art name="sign"/><h1>VƯỜN BÀI TẬP</h1></div>
    <div className="hud">
     <button className="player" onClick={()=>navigate('account')} aria-label={'Mở tài khoản · Cấp '+lv.level+' · '+levelTitle(lv.level)}><span className="avatar"><Icon name="account"/></span><span><strong>{game.profile?.display_name||'Người làm vườn'}</strong><span className="xp-bar"><span style={{width:lv.progress+'%'}}/></span><small>Cấp {lv.level} · {lv.current}/{lv.needed} XP</small><span className="player-title">{levelTitle(lv.level)}</span></span></button>
     <button className="wallet" onClick={()=>navigate('account')} aria-label={'Ví '+(game.profile?.coins||0)+' Đồng tri thức'}><Money amount={game.profile?.coins||0}/></button>
