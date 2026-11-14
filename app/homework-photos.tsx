@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { validateFiles } from "../lib/api";
 import styles from "./homework-photos.module.css";
 
@@ -43,6 +43,7 @@ export function HomeworkPhotos({ files, onChange, disabled = false }: {
       <p>Chụp từng trang, kiểm tra ảnh rồi nộp tất cả cùng một lần. Tối đa 5 ảnh, 10 MB/ảnh.</p>
       {!disabled && !full && cameraOpen ? (
         <HomeworkCamera
+          photoCount={files.length}
           onCapture={addFiles}
           onClose={() => setCameraOpen(false)}
           onError={(message) => { setError(message); setCameraOpen(false); }}
@@ -98,11 +99,13 @@ function PhotoPreview({ file, index }: { file: File; index: number }) {
   );
 }
 
-function HomeworkCamera({ onCapture, onClose, onError }: {
+function HomeworkCamera({ photoCount, onCapture, onClose, onError }: {
+  photoCount: number;
   onCapture: (files: File[]) => void;
   onClose: () => void;
   onError: (message: string) => void;
 }) {
+  const dialog = useRef<HTMLDialogElement>(null);
   const video = useRef<HTMLVideoElement>(null);
   const active = useRef(false);
   const capturing = useRef(false);
@@ -110,6 +113,12 @@ function HomeworkCamera({ onCapture, onClose, onError }: {
   onErrorRef.current = onError;
   const [ready, setReady] = useState(false);
   const [saving, setSaving] = useState(false);
+
+  useLayoutEffect(() => {
+    const element = dialog.current;
+    element?.showModal();
+    return () => { if (element?.open) element.close(); };
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -178,17 +187,24 @@ function HomeworkCamera({ onCapture, onClose, onError }: {
   }
 
   return (
-    <div className={styles.camera}>
-      <video ref={video} autoPlay muted playsInline aria-label="Camera chụp bài làm"
-        onCanPlay={() => setReady(true)}
-        onError={() => onError("Không xem được camera. Hãy mở lại camera hoặc chọn ảnh có sẵn.")} />
-      {!ready && <p role="status">Đang mở camera. Hãy cho phép sử dụng camera nếu trình duyệt hỏi.</p>}
-      <div className={styles.actions}>
-        <button type="button" className="secondary" onClick={capture} disabled={!ready || saving}>
+    <dialog ref={dialog} className={styles.camera} aria-label="Chụp ảnh bài làm toàn màn hình"
+      onCancel={(event) => { event.preventDefault(); event.stopPropagation(); onClose(); }}>
+      <header className={styles.cameraHeader}>
+        <strong>Chụp ảnh bài làm</strong>
+        <button type="button" className={styles.cameraButton} autoFocus onClick={onClose}>Đóng camera</button>
+      </header>
+      <div className={styles.viewfinder}>
+        <video ref={video} autoPlay muted playsInline aria-label="Camera chụp bài làm"
+          onCanPlay={() => setReady(true)}
+          onError={() => onError("Không xem được camera. Hãy mở lại camera hoặc chọn ảnh có sẵn.")} />
+        {!ready && <p className={styles.cameraLoading} role="status">Đang mở camera. Hãy cho phép sử dụng camera nếu trình duyệt hỏi.</p>}
+      </div>
+      <footer className={styles.cameraControls}>
+        <p role="status">Đã chọn {photoCount}/5 ảnh. Chụp từng trang rồi đóng camera để kiểm tra và nộp bài.</p>
+        <button type="button" className={styles.cameraButton} onClick={capture} disabled={!ready || saving}>
           {saving ? "Đang lưu ảnh..." : "Chụp ảnh"}
         </button>
-        <button type="button" className="secondary" autoFocus onClick={onClose}>Đóng camera</button>
-      </div>
-    </div>
+      </footer>
+    </dialog>
   );
 }

@@ -34,6 +34,7 @@ async function setup(t, getUserMedia) {
   t.mock.method(URL, 'createObjectURL', () => `blob:test-${Math.random()}`);
   t.mock.method(URL, 'revokeObjectURL', () => { revoked++; });
   const source = { videoWidth: 1920, videoHeight: 1440, play: async () => {} };
+  const modal = { open: false, showModal() { this.open = true; }, close() { this.open = false; } };
   let files = [];
   function Form({ disabled }) {
     const [value, setValue] = useState([]);
@@ -42,7 +43,9 @@ async function setup(t, getUserMedia) {
   }
   let root;
   await act(async () => {
-    root = TestRenderer.create(React.createElement(Form), { createNodeMock: el => el.type === 'video' ? source : null });
+    root = TestRenderer.create(React.createElement(Form), {
+      createNodeMock: el => el.type === 'video' ? source : el.type === 'dialog' ? modal : null,
+    });
   });
   t.after(async () => {
     await act(async () => root.unmount());
@@ -52,7 +55,7 @@ async function setup(t, getUserMedia) {
   });
   const button = text => root.root.findAllByType('button').find(b => [b.props.children].flat().join('') === text);
   return {
-    root, button, blobs, files: () => files, revoked: () => revoked,
+    root, button, blobs, modal, files: () => files, revoked: () => revoked,
     open: async () => {
       await act(async () => button(files.length ? 'Chụp thêm ảnh' : 'Mở camera chụp bài').props.onClick());
       await act(async () => root.root.findByType('video').props.onCanPlay());
@@ -134,5 +137,24 @@ test('submitting stops camera and discards a photo still being encoded', async t
   await h.disable();
   assert.equal(stops, 1);
   await act(async () => h.blobs.shift()(new Blob(['late photo'], { type: 'image/jpeg' })));
+  assert.equal(h.files().length, 1);
+});
+
+test('camera opens as a modal, updates photo count and Escape closes only the camera', async t => {
+  let stops = 0;
+  const h = await setup(t, async () => ({ getTracks: () => [{ stop: () => stops++ }] }));
+  await h.open();
+  assert.equal(h.modal.open, true);
+  const camera = () => h.root.root.findByType('dialog');
+  assert.equal(camera().props['aria-label'], 'Chụp ảnh bài làm toàn màn hình');
+  await h.snap();
+  const counter = camera().findByProps({ role: 'status' });
+  assert.match([counter.props.children].flat().join(''), /1\/5/);
+  const event = { preventDefault: t.mock.fn(), stopPropagation: t.mock.fn() };
+  await act(async () => camera().props.onCancel(event));
+  assert.equal(event.preventDefault.mock.callCount(), 1);
+  assert.equal(event.stopPropagation.mock.callCount(), 1);
+  assert.equal(h.modal.open, false);
+  assert.equal(stops, 1);
   assert.equal(h.files().length, 1);
 });
