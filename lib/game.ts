@@ -1,6 +1,6 @@
 export type CatalogItem = { id: string; name: string; kind: 'seed' | 'gacha' | 'fertilizer'; price: number; grow_seconds: number; xp: number; min_level: number; reduction_seconds: number; active: boolean; retired?: boolean };
 export type Profile = { user_id: string; coins: number; xp: number; display_name: string };
-export type Plot = { id: string; slot: number; seed_id: string; source_seed_id: string | null; planted_at: string; ready_at: string; growth_seconds: number; xp_reward: number; harvested: boolean };
+export type Plot = { id: string; slot: number; seed_id: string; source_seed_id: string | null; planted_at: string; ready_at: string; next_water_at: string; growth_seconds: number; xp_reward: number; harvested: boolean };
 export type SeedDrop = { seed_id: string; plant_id: string; weight: number };
 export type Task = { id: string; title: string; body: string; reward: number; due_at: string | null; status: 'draft'|'published'|'hidden'; files: string[] };
 export type Progress = { id: string; user_id: string; task_id: string; status: 'submitted'|'returned'|'approved'; reward_snapshot: number; submitted_at: string; approved_at: string | null; bonus_given: boolean };
@@ -9,30 +9,30 @@ export type Review = { id: string; progress_id: string; action: 'approved'|'retu
 export type LedgerEntry = { id: string; amount: number; kind: string; note: string; created_at: string };
 export type Inventory = { item_id: string; quantity: number };
 export type Crop = { seed_id: string; quantity: number };
-export type GameData = { profile: Profile | null; manager: boolean; people: Profile[]; plots: Plot[]; unlockedSlots: number[]; discoveredSeeds: string[]; catalog: CatalogItem[]; drops: SeedDrop[]; inventory: Inventory[]; collection: Crop[]; tasks: Task[]; progress: Progress[]; attempts: Attempt[]; reviews: Review[]; ledger: LedgerEntry[] };
+export type GameData = { profile: Profile | null; manager: boolean; plots: Plot[]; unlockedSlots: number[]; discoveredSeeds: string[]; catalog: CatalogItem[]; drops: SeedDrop[]; inventory: Inventory[]; collection: Crop[] };
 export type PlantDefinition = {id:string;name:string;tier:1|2|3;minutes:number;xp:number;frames:number[];ground:boolean;orchard?:boolean};
 export const plants: PlantDefinition[] = [
  {id:'carrot',name:'Cà rốt',tier:1,minutes:30,xp:20,frames:[1,3,5],ground:true},
- {id:'rice',name:'Lúa',tier:1,minutes:45,xp:30,frames:[1,3,5],ground:true},
- {id:'onion',name:'Hành tây',tier:1,minutes:45,xp:30,frames:[1,3,5],ground:true},
- {id:'lettuce',name:'Xà lách',tier:1,minutes:30,xp:20,frames:[1,3,5],ground:false},
- {id:'potato',name:'Khoai tây',tier:1,minutes:60,xp:40,frames:[1,2,3,5],ground:true},
- {id:'cabbage',name:'Bắp cải',tier:1,minutes:60,xp:40,frames:[1,2,3,5],ground:true},
- {id:'corn',name:'Ngô',tier:1,minutes:120,xp:60,frames:[1,2,3,5],ground:true},
- {id:'tomato',name:'Cà chua',tier:2,minutes:90,xp:50,frames:[1,2,3,5],ground:true},
- {id:'eggplant',name:'Cà tím',tier:2,minutes:120,xp:60,frames:[1,2,3,5],ground:true},
- {id:'pumpkin',name:'Bí ngô',tier:2,minutes:180,xp:90,frames:[1,2,3,4,5],ground:true},
- {id:'strawberry',name:'Dâu tây',tier:2,minutes:120,xp:60,frames:[1,2,3,4,5],ground:true},
- {id:'cucumber',name:'Dưa chuột',tier:2,minutes:90,xp:50,frames:[1,2,3,5],ground:false},
- {id:'chili',name:'Ớt',tier:2,minutes:120,xp:60,frames:[1,2,3,5],ground:false},
- {id:'bell_pepper',name:'Ớt chuông',tier:2,minutes:150,xp:75,frames:[1,2,3,5],ground:false},
- {id:'sweet_potato',name:'Khoai lang',tier:2,minutes:120,xp:60,frames:[1,2,3,4,5],ground:false},
- {id:'pineapple',name:'Dứa',tier:3,minutes:240,xp:120,frames:[1,2,3,4,5],ground:true},
- {id:'watermelon',name:'Dưa hấu',tier:3,minutes:240,xp:120,frames:[1,2,3,4,5],ground:true},
- {id:'peanut',name:'Đậu phộng',tier:3,minutes:180,xp:90,frames:[1,2,3,4,5],ground:false},
- {id:'mango',name:'Xoài',tier:3,minutes:360,xp:150,frames:[1,2,3,4,5],ground:false,orchard:true},
- {id:'apple',name:'Táo',tier:3,minutes:360,xp:150,frames:[1,2,3,4,5],ground:false,orchard:true},
- {id:'banana',name:'Chuối',tier:3,minutes:300,xp:140,frames:[1,2,3,4,5],ground:false,orchard:true}
+ {id:'rice',name:'Lúa',tier:1,minutes:60,xp:30,frames:[1,3,5],ground:true},
+ {id:'onion',name:'Hành tây',tier:1,minutes:90,xp:30,frames:[1,3,5],ground:true},
+ {id:'lettuce',name:'Xà lách',tier:1,minutes:45,xp:20,frames:[1,3,5],ground:false},
+ {id:'potato',name:'Khoai tây',tier:1,minutes:120,xp:40,frames:[1,2,3,5],ground:true},
+ {id:'cabbage',name:'Bắp cải',tier:1,minutes:180,xp:40,frames:[1,2,3,5],ground:true},
+ {id:'corn',name:'Ngô',tier:1,minutes:240,xp:60,frames:[1,2,3,5],ground:true},
+ {id:'tomato',name:'Cà chua',tier:2,minutes:300,xp:50,frames:[1,2,3,5],ground:true},
+ {id:'eggplant',name:'Cà tím',tier:2,minutes:360,xp:60,frames:[1,2,3,5],ground:true},
+ {id:'pumpkin',name:'Bí ngô',tier:2,minutes:900,xp:90,frames:[1,2,3,4,5],ground:true},
+ {id:'strawberry',name:'Dâu tây',tier:2,minutes:600,xp:60,frames:[1,2,3,4,5],ground:true},
+ {id:'cucumber',name:'Dưa chuột',tier:2,minutes:480,xp:50,frames:[1,2,3,5],ground:false},
+ {id:'chili',name:'Ớt',tier:2,minutes:720,xp:60,frames:[1,2,3,5],ground:false},
+ {id:'bell_pepper',name:'Ớt chuông',tier:2,minutes:1080,xp:75,frames:[1,2,3,5],ground:false},
+ {id:'sweet_potato',name:'Khoai lang',tier:2,minutes:1440,xp:60,frames:[1,2,3,4,5],ground:false},
+ {id:'pineapple',name:'Dứa',tier:3,minutes:2160,xp:120,frames:[1,2,3,4,5],ground:true},
+ {id:'watermelon',name:'Dưa hấu',tier:3,minutes:2880,xp:120,frames:[1,2,3,4,5],ground:true},
+ {id:'peanut',name:'Đậu phộng',tier:3,minutes:1800,xp:90,frames:[1,2,3,4,5],ground:false},
+ {id:'mango',name:'Xoài',tier:3,minutes:4320,xp:150,frames:[1,2,3,4,5],ground:false,orchard:true},
+ {id:'apple',name:'Táo',tier:3,minutes:3960,xp:150,frames:[1,2,3,4,5],ground:false,orchard:true},
+ {id:'banana',name:'Chuối',tier:3,minutes:3360,xp:140,frames:[1,2,3,4,5],ground:false,orchard:true}
 ];
 export const plantStages: Record<string,number> = Object.fromEntries(plants.map(p=>[p.id,p.frames.length]));
 export function plantDefinition(id:string) { return plants.find(p=>p.id===id); }
@@ -45,7 +45,7 @@ export const defaults: CatalogItem[] = [
 ];
 const tierWeights=[[1920,378,56],[960,1050,280],[360,735,1400]];
 export const defaultDrops: SeedDrop[] = ['gacha_common','gacha_rare','gacha_special'].flatMap((seed,index)=>plants.map(p=>({seed_id:seed,plant_id:p.id,weight:tierWeights[index][p.tier-1]})));
-export const emptyData: GameData = { profile:null,manager:false,people:[],plots:[],unlockedSlots:[0,1,2,3],discoveredSeeds:['carrot','rice'],catalog:defaults,drops:defaultDrops,inventory:[],collection:[],tasks:[],progress:[],attempts:[],reviews:[],ledger:[] };
+export const emptyData: GameData = { profile:null,manager:false,plots:[],unlockedSlots:[0,1,2,3],discoveredSeeds:['carrot','rice'],catalog:defaults,drops:defaultDrops,inventory:[],collection:[] };
 const levelTitles = [
  'Hạt Mầm Tri Thức', 'Người Gieo Hạt', 'Mầm Non Chăm Chỉ', 'Người Chăm Vườn',
  'Nhà Làm Vườn Tập Sự', 'Người Nuôi Dưỡng Mầm Xanh', 'Nhà Làm Vườn Chăm Chỉ', 'Người Khám Phá Khu Vườn',

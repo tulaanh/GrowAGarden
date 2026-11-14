@@ -1,11 +1,13 @@
 'use client';
-import {useCallback,useEffect,useMemo,useRef,useState,type CSSProperties,type PointerEvent} from 'react';
+import {memo,useCallback,useEffect,useMemo,useRef,useState,type CSSProperties,type PointerEvent} from 'react';
 import {gardenSlotLabel,plantingSlots,gardenSurroundings,gardenFence,slotScreenPosition,slotUnlockCost,pinchGardenView,SLOT_WIDTH,SLOT_HEIGHT,GARDEN_ORIGIN_Y} from '../lib/garden-map';
 import {itemName,plantDefinition,timeLeft,type CatalogItem,type Plot} from '../lib/game';
 import {Art,Plant} from './ui';
 import styles from './garden-map.module.css';
+import {useClock} from './data-hooks';
 
-export function GardenMap({plots,catalog,unlockedSlots,now,onSelect,onUnlock}:{plots:Plot[];catalog:CatalogItem[];unlockedSlots:number[];now:number;onSelect:(slot:number)=>void;onUnlock:(slot:number)=>void}) {
+export const GardenMap=memo(function GardenMap({plots,catalog,unlockedSlots,onSelect,onUnlock}:{plots:Plot[];catalog:CatalogItem[];unlockedSlots:number[];onSelect:(slot:number)=>void;onUnlock:(slot:number)=>void}) {
+ const now=useClock(plots.length>0);
  const field=useRef<HTMLElement>(null);
  const scene=useRef<HTMLDivElement>(null);
  const view=useRef({x:0,y:0,zoom:1});
@@ -14,7 +16,6 @@ export function GardenMap({plots,catalog,unlockedSlots,now,onSelect,onUnlock}:{p
  const frame=useRef<number|null>(null);
  const ignoreClickUntil=useRef(0);
  const [size,setSize]=useState({width:0,height:0});
- const [settledView,setSettledView]=useState(view.current);
  const [dragging,setDragging]=useState(false);
  const bySlot=useMemo(()=>new Map(plots.map(plot=>[plot.slot,plot])),[plots]);
  const opened=useMemo(()=>new Set(unlockedSlots),[unlockedSlots]);
@@ -28,21 +29,17 @@ export function GardenMap({plots,catalog,unlockedSlots,now,onSelect,onUnlock}:{p
    if(scene.current)scene.current.style.transform=`translate3d(${x}px,${y}px,0) scale(${zoom})`;
   });
  },[]);
- const updateView=useCallback((next:typeof view.current,settle=false)=>{
+ const updateView=useCallback((next:typeof view.current)=>{
   view.current={...next,x:Math.max(-480,Math.min(480,next.x)),y:Math.max(-320,Math.min(320,next.y))};
   paint();
-  if(settle)setSettledView(view.current);
  },[paint]);
  const move=useCallback((x:number,y:number)=>{
-  updateView({...view.current,x:view.current.x+x,y:view.current.y+y},true);
+  updateView({...view.current,x:view.current.x+x,y:view.current.y+y});
  },[updateView]);
- function changeZoom(amount:number) {
-  updateView({...view.current,zoom:Math.max(.8,Math.min(1.6,Math.round((view.current.zoom+amount)*10)/10))},true);
- }
  function revealSlot(position:{x:number;y:number}) {
   const screen=slotScreenPosition(position,size.width,size.height,view.current,view.current.zoom);
   if(screen.x<SLOT_WIDTH/2||screen.x>size.width-SLOT_WIDTH/2||screen.y<220||screen.y>size.height-200){
-   updateView({...view.current,x:-position.x*view.current.zoom,y:-position.y*view.current.zoom},true);
+   updateView({...view.current,x:-position.x*view.current.zoom,y:-position.y*view.current.zoom});
   }
  }
  useEffect(()=>{
@@ -102,27 +99,18 @@ export function GardenMap({plots,catalog,unlockedSlots,now,onSelect,onUnlock}:{p
   if(event.currentTarget.hasPointerCapture(event.pointerId))event.currentTarget.releasePointerCapture(event.pointerId);
   const remaining=[...pointers.current.values()][0];
   if(remaining){gesture.current={kind:'drag',...remaining,view:view.current,moved:true};return;}
-  gesture.current=null;setDragging(false);setSettledView(view.current);
+  gesture.current=null;setDragging(false);
  }
  return <><section ref={field} className={styles.field+' '+(dragging?styles.dragging:'')} style={units}
   aria-label="Khu vườn tối đa 16 cây" tabIndex={0}
   onPointerDown={startDrag} onPointerMove={moveDrag} onPointerUp={endDrag} onPointerCancel={endDrag} onLostPointerCapture={event=>{if(event.target===event.currentTarget)endDrag(event);}}
   onKeyDown={event=>{
    const directions:Record<string,[number,number]>={ArrowLeft:[SLOT_WIDTH/2,0],ArrowRight:[-SLOT_WIDTH/2,0],ArrowUp:[0,SLOT_HEIGHT/2],ArrowDown:[0,-SLOT_HEIGHT/2]};
-   if(event.key==='Home'){event.preventDefault();updateView({x:0,y:0,zoom:1},true);}
+   if(event.key==='Home'){event.preventDefault();updateView({x:0,y:0,zoom:1});}
    else if(directions[event.key]){event.preventDefault();move(...directions[event.key]);}
   }}>
   <div ref={scene} className={styles.scene}>
-  <div aria-hidden="true">
-   {gardenSurroundings.map(tile=><div key={`${tile.column},${tile.row}`} data-garden-tile={tile.kind} className={styles.ground+(tile.kind==='grass'?' '+styles.meadow:'')} style={{left:tile.x,top:tile.y}}>
-    <img src={'/art/farm/items/'+(tile.kind==='grass'?'plot_grass.png':'plot_stone_path.png')} alt="" width="512" height="256" draggable={false}/>
-   </div>)}
-   {gardenFence.map(segment=><svg key={segment.id} className={styles.fence+' '+(segment.axis==='row'?styles.fenceReverse:'')} style={{left:segment.x,top:segment.y,zIndex:Math.round(segment.y)+2000}} width={SLOT_WIDTH/2} height={SLOT_HEIGHT/2} viewBox="0 0 96 48">
-    <path d="M0-24 96 24v7L0-17Zm0 15L96 39v7L0-2Z" fill="#d6ad72" stroke="#795837" strokeWidth="1.5" strokeLinejoin="round"/>
-    <path d="M-4 2v-33l5-5 5 5V7Zm96 48V17l5-5 5 5v38Z" fill="#b78750" stroke="#795837" strokeWidth="1.5" strokeLinejoin="round"/>
-    <path d="M-1-29v30m96 18v30M8-18l79 39" fill="none" stroke="#f0d5a2" strokeWidth="2"/>
-   </svg>)}
-  </div>
+  <GardenScenery/>
   {plantingSlots.map(position=>{
    const plot=bySlot.get(position.id),unlocked=opened.has(position.id),grown=plot&&Date.parse(plot.ready_at)<=now;
    return <div data-planting-slot={position.id} key={position.id}>
@@ -133,10 +121,11 @@ export function GardenMap({plots,catalog,unlockedSlots,now,onSelect,onUnlock}:{p
      <button type="button" className={'plot '+styles.plot+' '+(grown?'grown ':'')+(plot&&plantDefinition(plot.seed_id)?.ground?'has-baked-ground':'')}
       onFocus={event=>{if(event.currentTarget.matches(':focus-visible'))revealSlot(position);}}
       onClick={()=>{if(Date.now()>=ignoreClickUntil.current)onSelect(position.id);}}
-      aria-label={gardenSlotLabel(position.id)+(plot?': '+itemName(plot.seed_id,catalog)+', '+timeLeft(plot.ready_at,now):': đất trống')}>
+      aria-label={gardenSlotLabel(position.id)+(plot?': '+itemName(plot.seed_id,catalog)+', '+timeLeft(plot.ready_at,now)+(!grown&&Date.parse(plot.next_water_at)<=now?', cần tưới nước':''):': đất trống')}>
       <span className={'soil '+(!plot||!plantDefinition(plot.seed_id)?.ground?'image-soil':'')}>{(!plot||!plantDefinition(plot.seed_id)?.ground)&&<Art name={'farm/items/'+(plot?'soil_tilled':'soil_unworked')}/>}</span>
       {plot?<Plant plot={plot} now={now}/>:<span className="plot-plus">+</span>}
       {grown&&<span className="harvest-tag">Thu hoạch</span>}
+      {plot&&!grown&&Date.parse(plot.next_water_at)<=now&&<span className={styles.waterTag} aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 2C9.7 5.6 5 10.4 5 15a7 7 0 0 0 14 0c0-4.6-4.7-9.4-7-13Z" fill="#51a8ce" stroke="#18555d" strokeWidth="1.5"/><path d="M8.5 15.5c.2 1.5 1.1 2.5 2.5 2.9" fill="none" stroke="#e4f5f5" strokeWidth="1.5" strokeLinecap="round"/></svg></span>}
       <span className="plot-number">{position.id+1}{!unlocked?' · khóa sau thu hoạch':''}</span>
      </button>
     </div>:<button type="button" className={styles.lockedSlot} style={{left:position.x,top:position.y,zIndex:Math.round(position.y)+2000}}
@@ -153,13 +142,18 @@ export function GardenMap({plots,catalog,unlockedSlots,now,onSelect,onUnlock}:{p
   </div>
 
  </section>
- <div className={styles.mapToolbar}>
-  <div className={styles.mapControls} role="group" aria-label="Góc nhìn khu vườn">
-   <button type="button" aria-label="Thu nhỏ khu vườn" disabled={settledView.zoom<=.8} onClick={()=>changeZoom(-.1)}>−</button>
-   <output aria-label="Tỷ lệ thu phóng">{Math.round(settledView.zoom*100)}%</output>
-   <button type="button" aria-label="Phóng to khu vườn" disabled={settledView.zoom>=1.6} onClick={()=>changeZoom(.1)}>+</button>
-   <button type="button" className={styles.recenter} onClick={()=>updateView({x:0,y:0,zoom:1},true)}>Về giữa</button>
-  </div>
- </div>
  </>;
-}
+});
+
+const GardenScenery=memo(function GardenScenery(){
+ return <div aria-hidden="true">
+   {gardenSurroundings.map(tile=><div key={`${tile.column},${tile.row}`} data-garden-tile={tile.kind} className={styles.ground+(tile.kind==='grass'?' '+styles.meadow:'')} style={{left:tile.x,top:tile.y}}>
+    <img src={'/art/farm/items/'+(tile.kind==='grass'?'plot_grass.png':'plot_stone_path.png')} alt="" width="512" height="256" draggable={false}/>
+   </div>)}
+   {gardenFence.map(segment=><svg key={segment.id} className={styles.fence+' '+(segment.axis==='row'?styles.fenceReverse:'')} style={{left:segment.x,top:segment.y,zIndex:Math.round(segment.y)+2000}} width={SLOT_WIDTH/2} height={SLOT_HEIGHT/2} viewBox="0 0 96 48">
+    <path d="M0-24 96 24v7L0-17Zm0 15L96 39v7L0-2Z" fill="#d6ad72" stroke="#795837" strokeWidth="1.5" strokeLinejoin="round"/>
+    <path d="M-4 2v-33l5-5 5 5V7Zm96 48V17l5-5 5 5v38Z" fill="#b78750" stroke="#795837" strokeWidth="1.5" strokeLinejoin="round"/>
+    <path d="M-1-29v30m96 18v30M8-18l79 39" fill="none" stroke="#f0d5a2" strokeWidth="2"/>
+   </svg>)}
+  </div>;
+});

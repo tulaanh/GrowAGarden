@@ -11,12 +11,13 @@ Quản lý giao bài, người chơi nộp ảnh, quản lý duyệt để phát
 - Hạt Đặc biệt: 60 Đồng tri thức, cấp 3; tỷ lệ ba nhóm 15/35/50%.
 - Có 21 loại cây từ Cozy Tropical Farm Starter v0.2; mỗi cây có 3–5 mốc phát triển trong game, gồm trạng thái mới gieo hoặc cây con.
 - Toàn bộ khu vườn có tối đa 16 vị trí, mỗi vị trí trồng 1 cây. Ban đầu mở sẵn 4 vị trí ở giữa; 12 vị trí còn lại có giá mở lần lượt 100, 200… 1.200 Đồng tri thức (tổng 7.800). Có thể chọn bất kỳ vị trí đang khóa; giá phụ thuộc số vị trí đã mở thêm.
-- Giao diện giữ tỷ lệ trình duyệt cố định. Trong màn hình vườn, dùng nút + và − để thu phóng bản đồ từ 80% đến 160%; kéo chuột, kéo một ngón tay, cuộn chuột/bàn di chuột hoặc dùng phím mũi tên để di chuyển bản đồ.
+- Giao diện giữ tỷ lệ trình duyệt cố định. Trong màn hình vườn, chụm hai ngón tay để thu phóng bản đồ từ 80% đến 160%; kéo chuột, kéo một ngón tay, cuộn chuột/bàn di chuột hoặc dùng phím mũi tên để di chuyển bản đồ.
 - Cà rốt mặc định 30 phút/20 XP, Ngô 120 phút/60 XP, Xoài 360 phút/150 XP. Các cây khác xem trong cửa hàng và quản lý.
 - Phân bón: 5 Đồng tri thức, giảm tối đa 30 phút.
+- Sau mỗi 5–10 phút, cây cần tưới. Mỗi lượt bắt đầu với 1 phút để giải liên tiếp nhiều câu, mỗi câu chỉ được trả lời một lần; mỗi câu đúng cộng 15 giây làm bài và giảm tối đa 1 phút thời gian lớn, trả lời sai kết thúc lượt.
 - Mốc XP các cấp: 0, 100, 300, 600, 1000... Cấp tiếp theo cần thêm 100 nhân cấp hiện tại.
 
-Hạt gacha được mua vào kho; khi gieo, máy chủ chọn và lưu loài cây, không đổi khi tải lại. Hạt riêng của cây có từ bản trước vẫn dùng được; cửa hàng chỉ bán hạt gacha và phân bón. Giá/cấp của vật phẩm, thời gian/XP của cây chỉnh được trong mục Quản lý. Cây đã gieo giữ thời gian và XP tại lúc gieo. Tắt một loài cây trong quản lý sẽ chia lại tỷ lệ giữa các cây còn lại; nếu không còn cây hợp lệ thì không thể mua hoặc gieo hạt gacha.
+Hạt gacha được mua vào kho; khi gieo, máy chủ chọn và lưu loài cây, không đổi khi tải lại. Cửa hàng bán hạt gacha, phân bón và hạt riêng của các cây đã khám phá; Cà rốt và Lúa được mở sẵn. Giá/cấp của vật phẩm, thời gian/XP của cây chỉnh được trong mục Quản lý. Thời gian lớn mặc định có 21 mốc từ 30 phút đến 3 ngày, tăng theo nhóm cây. Cây đã gieo giữ thời gian và XP tại lúc gieo. Tắt một loài cây trong quản lý sẽ chia lại tỷ lệ giữa các cây còn lại; nếu không còn cây hợp lệ thì không thể mua hoặc gieo hạt gacha.
 
 ## Sử dụng
 
@@ -26,11 +27,11 @@ Mọi tài khoản mới khác là người chơi. Quyền quản lý nằm tron
 
 Trong Quản lý → Cheat menu, admin có thể cộng Đồng tri thức, XP, thêm hạt/phân bón và làm chín cây của chính mình. Quyền được kiểm tra lại tại máy chủ; mỗi thao tác có mã yêu cầu chống ghi lặp và lịch sử trong schema riêng. Cộng tiền cũng ghi vào lịch sử ví. Giới hạn mỗi lần: 1.000.000 tiền hoặc XP, 9.999 vật phẩm. Làm chín cây vẫn cần thu hoạch để nhận XP và nông sản.
 
-Trạng thái mới được tải lại sau mỗi thao tác, khi quay lại cửa sổ và mỗi 30 giây khi trang đang mở.
+Dữ liệu liên quan được tải lại sau thao tác, khi quay lại cửa sổ và mỗi 30 giây khi trang hiển thị. Nhiệm vụ, bài duyệt, lịch sử ví và lịch sử nộp bài có nút Xem thêm; ảnh và nhận xét chỉ tải khi mở chi tiết.
 
 ## Chạy và triển khai
 
-Yêu cầu Node.js 20.9 trở lên. Chạy `npm ci` rồi `npm run dev`. `npm test` kiểm tra XP và tính tăng trưởng; `npm run build` tạo bản static trong `out/`.
+Yêu cầu Node.js 20.9 trở lên. Chạy `npm ci` rồi `npm run dev`. `npm test` chạy kiểm tra frontend và các migration/fixture SQL trên PostgreSQL cục bộ trong bộ nhớ; `npm run build` tạo bản static trong `out/`.
 
 `.env.production` chỉ chứa URL và publishable key được dùng công khai ở trình duyệt. Không đưa service-role key hoặc khóa quản trị vào client. Để dùng dự án khác, tạo `.env.local` từ `.env.example`.
 
@@ -46,13 +47,19 @@ Các RPC công khai kiểm tra người dùng và gọi triển khai giao dịch
 
 Sau hai migration `20261113110115_expand_grass_planting.sql` và `20261113154419_finite_garden_unlocks.sql`, áp dụng `supabase/migrations/20261113155941_sixteen_planting_slots.sql` để giới hạn toàn bộ vườn ở 16 cây, mỗi vị trí một cây. Dự án đang chạy đã được cập nhật. Cây có sẵn vẫn được chăm sóc và thu hoạch; nếu vị trí chưa mở thì cần trả phí trước khi trồng lại. Giá mở vị trí, số dư, quyền sở hữu và chống trừ tiền lặp đều được kiểm tra phía máy chủ. `tests/grass-planting.sql` kiểm tra giới hạn 16 cây, giá tăng dần, kho hạt, thu hoạch cây cũ, lịch sử ví và RLS trong giao dịch rollback.
 
+Áp dụng tiếp `supabase/migrations/20261113164956_direct_seed_purchases.sql`, `20261113165508_seed_discovery_unlocks.sql` và `20261114051020_scoped_game_reads.sql` theo thứ tự. Migration cuối thêm RPC đọc cây đã khám phá, RPC phân trang nhiệm vụ, index và policy hồ sơ tương đương. **Triển khai migration trước phiên bản frontend này**; client cũ tiếp tục dùng được sau migration.
+
+Để bật tưới cây và ngân hàng câu hỏi, áp dụng tiếp `supabase/migrations/20261114090820_watering_math.sql` rồi `supabase/migrations/20261114091957_grade12_watering.sql` trước khi triển khai frontend tương ứng. Người quản lý vào Quản lý → Ngân hàng câu hỏi để tải tệp JSON và xem mẫu. Ngân hàng ban đầu trống. Áp dụng thêm `supabase/migrations/20261114102633_one_minute_watering.sql` trước khi triển khai giao diện mới. Áp dụng tiếp các migration `20261114102951_watering_server_clock.sql`, `20261114103125_watering_quiz_bonus_time.sql` và `20261114104039_end_watering_on_wrong_answer.sql`. Lượt tưới đang mở giữ câu hỏi và hạn chót khi mở lại; hết giờ hoặc chọn tưới xong sẽ kết thúc lượt.
+
+Câu hỏi và lựa chọn hỗ trợ LaTeX trong `$...$`, `$$...$$`, `\(...\)` hoặc `\[...\]`. Trong chuỗi JSON, mỗi dấu `\` của LaTeX phải được viết thành `\\`. Xem tệp `examples/toan-12.json` để biết ví dụ có phân số và căn bậc hai. Câu cũ không có dấu phân cách vẫn được hiển thị như văn bản. Đáp án ngắn vẫn được so sánh dưới dạng văn bản.
+
 ## Minh họa và kiểm chứng
 
 ### Lưới cảnh quan khu vườn
 
 Một ô đất chuẩn có hình chiếu isometric 192 × 96 px ở mức thu phóng 100%, được khai báo duy nhất bằng `SLOT_WIDTH` và `SLOT_HEIGHT` trong `lib/garden-map.ts`. Luống trồng, lối đi và viền cỏ dùng cùng lưới `gardenGridPosition(column, row)`. Lối đi bao quanh rộng một ô, viền cỏ rộng một ô; mỗi đoạn hàng rào theo đúng một cạnh ô, chừa cổng rộng hai ô. Toàn bộ cảnh nằm trong cùng một lớp di chuyển và thu phóng 80–160%.
 
-Màu cỏ xanh, đất nâu và lối đi màu cát tiếp nối bộ cây Cozy Tropical Farm hiện có. Phần đất trống, đất có cây và trạng thái thu hoạch giữ nguyên ảnh, kích thước và nhãn của giao diện ban đầu; dùng lại `soil_unworked`, `soil_tilled` hoặc đất tích hợp trong ảnh cây. Nhãn khóa ghi chi phí thật. Các chi tiết cảnh quan tĩnh để thao tác trồng cây là điểm tập trung. Nút +, − và Về giữa điều khiển góc nhìn; dùng Tab để chọn ô ngoài khung nhìn sẽ đưa ô đó về giữa.
+Màu cỏ xanh, đất nâu và lối đi màu cát tiếp nối bộ cây Cozy Tropical Farm hiện có. Phần đất trống, đất có cây và trạng thái thu hoạch giữ nguyên ảnh, kích thước và nhãn của giao diện ban đầu; dùng lại `soil_unworked`, `soil_tilled` hoặc đất tích hợp trong ảnh cây. Nhãn khóa ghi chi phí thật. Các chi tiết cảnh quan tĩnh để thao tác trồng cây là điểm tập trung. Dùng phím Home để đưa góc nhìn về giữa; dùng Tab để chọn ô ngoài khung nhìn sẽ đưa ô đó về giữa.
 
 ### Bộ ảnh
 

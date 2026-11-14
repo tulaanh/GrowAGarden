@@ -1,0 +1,290 @@
+[
+  {
+    "topic": "Nguyên hàm cơ bản",
+    "question": "Tìm họ nguyên hàm của hàm số $f(x)=x$.",
+    "type": "choice",
+    "options": [
+      "$\\int f(x)\\,dx=C$",
+      "$\\int f(x)\\,dx=\\frac{x^2}{2}+C$",
+      "$\\int f(x)\\,dx=-\\frac{x^2}{2}-C$",
+      "$\\int f(x)\\,dx=x^2+C$"
+    ],
+    "answer": "B"
+  },
+  {
+    "topic": "Nguyên hàm cơ bản",
+    "question": "Tìm họ nguyên hàm của hàm số $f(x)=x^{2021}$ trên $\\mathbb{R}$.",
+    "type": "choice",
+    "options": [
+      "$\\int f(x)\\,dx=\\frac{x^{2022}}{2022}$",
+      "$\\int f(x)\\,dx=2021x^{2020}+C$",
+      "$\\int f(x)\\,dx=\\frac{x^{2022}}{2022}+C$",
+      "$\\int f(x)\\,dx=\\frac{x^{2021}}{2021}+C$"
+    ],
+    "answer": "C"
+  },
+  {
+    "topic": "Nguyên hàm cơ bản",
+    "question": "Hàm số nào dưới đây không phải là nguyên hàm của hàm số $f(x)=x^3$?",
+    "type": "choice",
+    "options": [
+      "$y=\\frac{x^4}{4}+2$",
+      "$y=\\frac{x^4}{4}$",
+      "$y=3x^2$",
+      "$y=\\frac{x^4}{4}-2^{2019}$"
+    ],
+    "answer": "C"
+  },
+  {
+    "topic": "Nguyên hàm cơ bản",
+    "question": "Họ tất cả các nguyên hàm của hàm số $f(x)=3x^2$ là:",
+    "type": "choice",
+    "options": [
+      "$x^3+C$",
+      "$6x+C$",
+      "$x^3$",
+      "$6x$"
+    ],
+    "answer": "A"
+  },
+  {
+    "topic": "Nguyên hàm cơ bản",
+    "question": "Họ nguyên hàm của hàm số $f(x)=x^4+2022$ là:",
+    "type": "choice",
+    "options": [
+      "$4x^3+2022x+C$",
+      "$\\frac{x^5}{5}+2022x+C$",
+      "$4x^3+C$",
+      "$\\frac{x^5}{5}+C$"
+    ],
+    "answer": "B"
+  },
+  {
+    "topic": "Nguyên hàm cơ bản",
+    "question": "Họ nguyên hàm $F(x)$ của hàm số $f(x)=x^3-x+1$ là:",
+    "type": "choice",
+    "options": [
+      "$F(x)=\\frac{x^4}{4}-\\frac{x^2}{2}+x$",
+      "$F(x)=\\frac{x^4}{4}-\\frac{x^2}{2}+x+C$",
+      "$F(x)=3x^2-1$",
+      "$F(x)=x^4-x^2+1+C$"
+    ],
+    "answer": "B"
+  },
+  {
+    "topic": "Nguyên hàm cơ bản",
+    "question": "Tìm nguyên hàm $\\int(4x^3+2x+1)\\,dx$.",
+    "type": "choice",
+    "options": [
+      "$4x^4+2x^2+x+C$",
+      "$x^4+2x^2+x+C$",
+      "$x^4+x^2+x+C$",
+      "$\\frac{x^4}{4}+x^2+x+C$"
+    ],
+    "answer": "C"
+  },
+  {
+    "topic": "Nguyên hàm cơ bản",
+    "question": "Nếu $\\int f(x)\\,dx=x^2+4x+C$ thì $f(x)$ bằng:",
+    "type": "choice",
+    "options": [
+      "$\\frac{x^3}{3}+4$",
+      "$2x+4$",
+      "$\\frac{x^3}{3}+4x$",
+      "$\\frac{x^3}{3}+2x^2$"
+    ],
+    "answer": "B"
+  },
+  {
+    "topic": "Nguyên hàm cơ bản",
+    "question": "Họ nguyên hàm của hàm số $f(x)=x+\\frac{1}{x}$ là:",
+    "type": "choice",
+    "options": [
+      "$\\frac{x^2}{2}-\\ln|x|+C$",
+      "$\\frac{x^2}{2}+\\ln|x|+C$",
+      "$x^2+\\ln|x|+C$",
+      "$1-\\frac{1}{x^2}+C$"
+    ],
+    "answer": "B"
+  },
+  {
+    "topic": "Nguyên hàm cơ bản",
+    "question": "Nguyên hàm của hàm số $y=x^2-3x+\\frac{1}{x}$ là:",
+    "type": "choice",
+    "options": [
+      "$\\frac{x^3}{3}-\\frac{3x^2}{2}+\\frac{1}{x^2}+C$",
+      "$\\frac{x^3}{3}-\\frac{3x^2}{2}+\\ln x+C$",
+      "$\\frac{x^3}{3}-\\frac{3x^2}{2}+\\ln|x|+C$",
+      "$\\frac{x^3}{3}-\\frac{3x^2}{2}-\\ln|x|+C$"
+    ],
+    "answer": "C"
+  },
+  {
+    "topic": "Nguyên hàm cơ bản",
+    "question": "Tìm họ nguyên hàm của hàm số $f(x)=x^2+\\frac{3}{x}-2\\sqrt{x}$.",
+    "type": "choice",
+    "options": [
+      "$\\int f(x)\\,dx=x-\\frac{3}{x^2}-\\frac{1}{\\sqrt{x}}+C$",
+      "$\\int f(x)\\,dx=\\frac{x^3}{3}+3\\ln|x|-3\\sqrt{x^3}+C$",
+      "$\\int f(x)\\,dx=2x-\\frac{3}{x^2}-\\frac{1}{\\sqrt{x}}+C$",
+      "$\\int f(x)\\,dx=\\frac{x^3}{3}+3\\ln|x|-\\frac{4}{3}\\sqrt{x^3}+C$"
+    ],
+    "answer": "D"
+  },
+  {
+    "topic": "Nguyên hàm cơ bản",
+    "question": "Cho hàm số $f(x)=2x+\\frac{1}{2\\sqrt{x}}+\\frac{1}{x}$. Trong các khẳng định sau, khẳng định nào đúng?",
+    "type": "choice",
+    "options": [
+      "$\\int f(x)\\,dx=2+\\sqrt{x}+\\ln|x|+C$",
+      "$\\int f(x)\\,dx=x^2+\\sqrt{x}-\\frac{1}{x^2}+C$",
+      "$\\int f(x)\\,dx=2+\\sqrt{x}-\\frac{1}{x^2}+C$",
+      "$\\int f(x)\\,dx=x^2+\\sqrt{x}+\\ln|x|+C$"
+    ],
+    "answer": "D"
+  },
+  {
+    "topic": "Nguyên hàm cơ bản",
+    "question": "Nếu $\\int f(x)\\,dx=\\frac{1}{x}+\\ln x+C$ thì $f(x)$ là:",
+    "type": "choice",
+    "options": [
+      "$f(x)=\\sqrt{x}+\\ln x+C$",
+      "$f(x)=\\sqrt{x}+\\frac{1}{x}+\\ln x+C$",
+      "$f(x)=\\frac{x-1}{x^2}$",
+      "$f(x)=-\\frac{1}{x^2}+\\ln x+C$"
+    ],
+    "answer": "C"
+  },
+  {
+    "topic": "Nguyên hàm cơ bản",
+    "question": "Họ tất cả các nguyên hàm của hàm số $f(x)=\\frac{x-2}{x}$ trên khoảng $(0;+\\infty)$ là:",
+    "type": "choice",
+    "options": [
+      "$x+\\frac{2}{x^2}+C$",
+      "$x-2\\ln x+C$",
+      "$x+2\\ln x+C$",
+      "$x-\\frac{2}{x^2}+C$"
+    ],
+    "answer": "B"
+  },
+  {
+    "topic": "Nguyên hàm cơ bản",
+    "question": "Cho hàm số $f(x)=3^x-1$, trong các khẳng định sau khẳng định nào đúng?",
+    "type": "choice",
+    "options": [
+      "$\\int f(x)\\,dx=\\frac{3^x}{\\ln 3}-x+C$",
+      "$\\int f(x)\\,dx=3^x\\ln 3-x+C$",
+      "$\\int f(x)\\,dx=3^x-x+C$",
+      "$\\int f(x)\\,dx=\\frac{3^x}{\\ln 3}+x+C$"
+    ],
+    "answer": "A"
+  },
+  {
+    "topic": "Nguyên hàm cơ bản",
+    "question": "Họ nguyên hàm của hàm số $f(x)=\\frac{1}{x^2}+2^x$ là:",
+    "type": "choice",
+    "options": [
+      "$F(x)=\\ln x^2+2^x\\ln 2+C$",
+      "$F(x)=\\ln x^2+\\frac{2^x}{\\ln 2}+C$",
+      "$F(x)=-\\frac{1}{x}+\\frac{2^x}{\\ln 2}+C$",
+      "$F(x)=\\frac{1}{x}+2^x\\ln 2+C$"
+    ],
+    "answer": "C"
+  },
+  {
+    "topic": "Nguyên hàm cơ bản",
+    "question": "Họ nguyên hàm của hàm số $f(x)=e^x-2x$ là:",
+    "type": "choice",
+    "options": [
+      "$e^x-x^2+C$",
+      "$e^x-2+C$",
+      "$e^x-\\frac{x^2}{2}+C$",
+      "$e^x-2x^2+C$"
+    ],
+    "answer": "A"
+  },
+  {
+    "topic": "Nguyên hàm cơ bản",
+    "question": "Họ tất cả các nguyên hàm của hàm số $f(x)=1+\\sin x$ là:",
+    "type": "choice",
+    "options": [
+      "$1+\\cos x+C$",
+      "$1-\\cos x+C$",
+      "$x+\\cos x+C$",
+      "$x-\\cos x+C$"
+    ],
+    "answer": "D"
+  },
+  {
+    "topic": "Nguyên hàm cơ bản",
+    "question": "Một nguyên hàm của hàm số $f(x)=2x-\\sin x$ là:",
+    "type": "choice",
+    "options": [
+      "$F(x)=x^2+\\cos x-1$",
+      "$F(x)=x^2-\\cos x$",
+      "$F(x)=2-\\cos x$",
+      "$F(x)=2+\\cos x$"
+    ],
+    "answer": "A"
+  },
+  {
+    "topic": "Nguyên hàm cơ bản",
+    "question": "Tìm nguyên hàm của hàm số $f(x)=3x^2+8\\sin x$.",
+    "type": "choice",
+    "options": [
+      "$\\int f(x)\\,dx=6x-8\\cos x+C$",
+      "$\\int f(x)\\,dx=6x+8\\cos x+C$",
+      "$\\int f(x)\\,dx=x^3-8\\cos x+C$",
+      "$\\int f(x)\\,dx=x^3+8\\cos x+C$"
+    ],
+    "answer": "C"
+  },
+  {
+    "topic": "Nguyên hàm cơ bản",
+    "question": "Biết một nguyên hàm của hàm số $y=f(x)$ là $F(x)=x^2+4x+1$. Khi đó, giá trị của hàm số $f(3)$ là:",
+    "type": "choice",
+    "options": [
+      "$f(3)=30$",
+      "$f(3)=6$",
+      "$f(3)=22$",
+      "$f(3)=10$"
+    ],
+    "answer": "D"
+  },
+  {
+    "topic": "Nguyên hàm cơ bản",
+    "question": "Cho hàm số $f(x)=2x+\\frac{1}{x}+1$. $F(x)$ là một nguyên hàm của $f(x)$ thỏa $F(1)=0$. Trong các khẳng định sau, khẳng định nào đúng?",
+    "type": "choice",
+    "options": [
+      "$F(x)=x^2+x+\\ln|x|-2$",
+      "$F(x)=x^2+x+\\ln|x|+2$",
+      "$F(x)=x^2+x-\\ln|x|-2$",
+      "$F(x)=x^2-x+\\ln|x|+2$"
+    ],
+    "answer": "A"
+  },
+  {
+    "topic": "Nguyên hàm cơ bản",
+    "question": "$F(x)$ là nguyên hàm của hàm số $f(x)=\\frac{1}{x}+\\frac{2}{x^2}$ ($x\\ne 0$), biết rằng $F(1)=2020$. Tính $F(2)$.",
+    "type": "choice",
+    "options": [
+      "$F(2)=\\ln 2+2021$",
+      "$F(2)=2\\ln 2+2020$",
+      "$F(2)=\\ln 2-2021$",
+      "$F(2)=\\ln 2+2022$"
+    ],
+    "answer": "A"
+  },
+  {
+    "topic": "Nguyên hàm cơ bản",
+    "question": "Cho hàm số $f(x)=x^2+\\sin x+1$. Biết $F(x)$ là một nguyên hàm của $f(x)$ và $F(0)=1$. Tìm $F(x)$.",
+    "type": "choice",
+    "options": [
+      "$F(x)=x^3-\\cos x+x+2$",
+      "$F(x)=\\frac{x^3}{3}+\\cos x+x$",
+      "$F(x)=\\frac{x^3}{3}-\\cos x+x+2$",
+      "$F(x)=\\frac{x^3}{3}-\\cos x+2$"
+    ],
+    "answer": "C"
+  }
+]

@@ -18,6 +18,13 @@ test('level thresholds match cumulative XP',()=>{
  assert.equal(levelInfo(0).level,1);assert.equal(levelInfo(99).level,1);assert.equal(levelInfo(100).level,2);assert.equal(levelInfo(299).level,2);assert.equal(levelInfo(300).level,3);assert.equal(levelInfo(600).level,4);
  assert.deepEqual(levelInfo(120),{level:2,current:20,needed:200,progress:10});
 });
+test('growth durations span 30 minutes to 3 days with a distinct time for each plant',()=>{
+ const minutes=plants.map(p=>p.minutes);
+ assert.equal(Math.min(...minutes),30);
+ assert.equal(Math.max(...minutes),3*24*60);
+ assert.equal(new Set(minutes).size,plants.length);
+ for (const tier of [1,2]) assert.ok(Math.max(...plants.filter(p=>p.tier===tier).map(p=>p.minutes)) < Math.min(...plants.filter(p=>p.tier===tier+1).map(p=>p.minutes)));
+});
 test('growth is clamped and ready after closing the app',()=>{
  const p={planted_at:new Date(1000).toISOString(),ready_at:new Date(11000).toISOString()};
  assert.equal(growth(p,0),0);assert.equal(growth(p,6000),.5);assert.equal(growth(p,20000),1);

@@ -18,3 +18,19 @@
 .seed-odds-trigger{min-height:44px;max-width:100%;border:0;padding:0;background:transparent;color:#684820;font-size:12px;font-weight:900;text-align:left;line-height:1.5;text-decoration:underline;text-underline-offset:3px}.seed-odds-trigger:hover{color:#385c28}.odds-dialog{width:min(480px,calc(100% - 24px));max-height:min(680px,85dvh);padding:0}.odds-dialog>.dialog-heading{position:sticky;top:0;z-index:1;background:#fff8e4;padding:16px 20px;margin:0}.odds-dialog>.dialog-heading h2{font-size:20px}.odds-dialog>.seed-odds-modal{padding:8px 20px 20px}.seed-odds-modal li{padding:12px 0;font-size:14px;overflow-wrap:anywhere}.seed-odds-modal li span{font-size:12px}
 
 .mystery-card{color:#8a7657}.mystery-art{display:grid;place-items:center;font-size:32px;font-weight:900;letter-spacing:2px;color:#a38d67}.collection-mystery-art{height:110px;width:100%}.mystery-card .primary{margin-top:auto}@media(max-width:540px){.collection-mystery-art{height:83px}}
+.watering { margin: 16px 0; padding: 14px; border: 1px solid #a1c6b0; border-radius: 10px; background: #eff9ed; color: #294d37; }
+.watering h3 { margin: 0 0 6px; }
+.watering p { margin: 8px 0; }
+.watering label { display: block; font-size: 1.15rem; font-weight: 700; margin-bottom: 8px; }
+.watering-answer { display: flex; gap: 8px; align-items: stretch; margin-bottom: 8px; }
+.watering-answer input { min-width: 0; width: 100%; padding: 10px; border: 1px solid #658671; border-radius: 6px; background: white; color: #1d3828; }
+.watering-answer button { width: auto; white-space: nowrap; }
+.watering-prompt { font-weight: 700; white-space: pre-wrap; overflow-wrap: anywhere; }
+.watering-options { border: 0; padding: 0; margin: 8px 0; }
+.watering-options label { display: flex; align-items: flex-start; gap: 8px; font-size: 1rem; font-weight: 400; overflow-wrap: anywhere; }
+.watering-options input { flex: none; }
+.question-bank pre { max-width: 100%; overflow: auto; padding: 12px; background: #f4ead3; white-space: pre; }
+.question-bank .bank-prompt { white-space: pre-wrap; overflow-wrap: anywhere; }
+.math-display { display: block; max-width: 100%; overflow-x: auto; overflow-y: hidden; }
+.watering-options label > span { min-width: 0; max-width: 100%; }
+.watering-options input[type="radio"] { width: 20px; height: 20px; min-height: 0; padding: 0; margin: 3px 0 0; accent-color: #477132; }

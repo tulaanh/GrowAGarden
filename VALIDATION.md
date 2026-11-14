@@ -1,5 +1,14 @@
 # Kiểm chứng bản nhiệm vụ và cửa hàng
 
+## Refactor đồng bộ và hiệu năng (14/11/2026)
+
+- Các fixture SQL chạy trên PostgreSQL PGlite trong bộ nhớ, với schema Auth/Storage mô phỏng; không ghi dữ liệu Supabase thật. Kiểm tra các migration, RLS, cây đã thu hoạch, các luồng kinh tế và cheat. Kiểm tra phân trang với 1.100 nhiệm vụ, 1.050 bài duyệt, 1.100 giao dịch và 1.200 cây đã thu hoạch.
+- Query plan trên 5.100 cây giả: sau migration, Postgres chọn index `garden_plots_discovery_idx` khi ép so sánh các đường index. Đây là kiểm tra khả năng sử dụng index, không phải benchmark production.
+- Test đồng bộ kiểm tra gộp request, bỏ response cũ khi đổi phiên, lưu thành công nhưng refresh lỗi, mã yêu cầu khi thử lại và lỗi dọn upload. Test đồng hồ xác nhận component cha không render theo nhịp đồng hồ và dừng khi tab ẩn.
+- Số request đọc/khởi tạo cho màn hình vườn khi đăng nhập lần đầu theo code: 14 trước, 9 sau; lượt làm mới thông thường: 14 trước, 7 sau. Kích thước JavaScript tham chiếu từ HTML export đo bằng gzip cục bộ: 304.535 byte trước, 302.478 byte sau; chưa đo thời gian tải thực tế, FPS hoặc thiết bị thật.
+- Chưa triển khai migration lên Supabase đang chạy; phải áp dụng migration trước frontend. PGlite không thay thế kiểm thử tích hợp Auth/Storage thật hoặc kiểm thử các giao dịch đồng thời qua HTTP.
+- Chủ ứng dụng tự kiểm tra UI: đăng nhập/đăng xuất và đổi tài khoản; mua hạt, gieo/bón/thu hoạch, mở ô; nộp và duyệt bài, xem tệp; xem thêm nhiệm vụ/lịch sử; kéo, zoom và điều hướng bàn phím trên điện thoại/máy tính.
+
 ## Giao diện khu đất và cảnh quan (14/11/2026)
 
 - Điều chỉnh theo yêu cầu: khôi phục ảnh đất trống/đất đã trồng, tỷ lệ cây và nhãn thu hoạch như giao diện ban đầu. Giữ cảnh quan bao quanh và hệ tọa độ chung.

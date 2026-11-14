@@ -33,17 +33,4 @@
 .field :global(.plot-plus) { font-size:20px; }
 .field :global(.plot-number) { font-size:9px;bottom:-9px;white-space:nowrap; }
 .field :global(.harvest-tag) { font-size:9px;bottom:-16px; }
-.mapToolbar { position:fixed;bottom:calc(100px + env(safe-area-inset-bottom));left:24px;right:24px;display:flex;align-items:end;justify-content:flex-end;pointer-events:none; }
-.mapControls { display:flex;align-items:center;flex:none;padding:4px;background:#fff5db;border:1px solid #9d8457;border-radius:9px;box-shadow:0 3px 0 #526a3940;pointer-events:auto; }
-.mapControls button { min-width:44px;min-height:44px;border:0;border-radius:5px;background:transparent;color:#4d462c;font-size:24px;font-weight:800; }
-.mapControls button:hover:not(:disabled) { background:#ebd8ac; }
-.mapControls button:disabled { color:#8b8066;opacity:.55; }
-.mapControls button:focus-visible { outline:3px solid #335c3b;outline-offset:-3px; }
-.mapControls output { min-width:44px;text-align:center;color:#554c33;font-size:12px;font-weight:800;font-variant-numeric:tabular-nums; }
-.mapControls .recenter { margin-left:4px;padding:0 12px;border-left:1px solid #d7c39a;border-radius:0 5px 5px 0;font-size:12px; }
-@media(max-width:700px) {
- .mapToolbar { left:12px;right:12px;bottom:calc(92px + env(safe-area-inset-bottom));align-items:center;flex-direction:column; }
-}
-@media(max-height:600px) {
- .mapToolbar { align-items:end; }
-}
+.waterTag { position:absolute;bottom:47px;left:calc(50% + 20px);transform:translateX(-50%);z-index:3;display:grid;place-items:center;width:22px;height:22px;background:#e4f5f5;border:1px solid #48828a;border-radius:50%;pointer-events:none; }

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Nunito } from 'next/font/google';
 import {ViewportLock} from './viewport-lock';
+import 'katex/dist/katex.min.css';
 import './globals.css';
 const nunito=Nunito({subsets:['latin','vietnamese'],display:'swap'});
 
