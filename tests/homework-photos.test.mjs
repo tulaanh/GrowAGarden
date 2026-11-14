@@ -68,26 +68,40 @@ async function setup(t, getUserMedia) {
   };
 }
 
-test('captures five photos in one camera session, removes and appends without losing earlier pages', async t => {
+test('captures ten photos, shows every preview in camera and allows removing and retaking at the limit', async t => {
   let opens = 0, stops = 0;
   const h = await setup(t, async () => { opens++; return { getTracks: () => [{ stop: () => stops++ }] }; });
   await h.open();
-  for (let i = 0; i < 5; i++) await h.snap();
+  for (let i = 0; i < 10; i++) await h.snap();
   assert.equal(opens, 1);
-  assert.equal(stops, 1);
-  assert.equal(h.files().length, 5);
-  assert.equal(new Set(h.files().map(f => f.name)).size, 5);
+  assert.equal(stops, 0);
+  assert.equal(h.files().length, 10);
+  assert.equal(new Set(h.files().map(f => f.name)).size, 10);
   assert.ok(h.files().every(f => f.type === 'image/jpeg' && f.size > 0));
-  assert.equal(h.root.root.findAllByType('video').length, 0);
-  assert.equal(h.button('Chụp thêm ảnh').props.disabled, true);
+  const camera = () => h.root.root.findByType('dialog');
+  assert.equal(camera().findAllByType('img').length, 10);
+  assert.ok(camera().findAllByType('img').every(image => image.props.src.startsWith('blob:')));
+  assert.equal(h.button('Đã đủ ảnh').props.disabled, true);
   const retained = h.files().filter((_, i) => i !== 1);
-  await act(async () => h.button('Xóa ảnh 2').props.onClick());
+  await act(async () => camera().findByProps({ 'aria-label': 'Xóa ảnh 2' }).props.onClick());
   assert.deepEqual(h.files(), retained);
+  assert.equal(camera().findAllByType('img').length, 9);
   assert.ok(h.revoked() > 0);
-  await h.open();
   await h.snap();
-  assert.deepEqual(h.files().slice(0, 4), retained);
-  assert.equal(h.files().length, 5);
+  assert.deepEqual(h.files().slice(0, 9), retained);
+  assert.equal(h.files().length, 10);
+  assert.equal(opens, 1);
+  await act(async () => h.button('Đóng camera').props.onClick());
+  assert.equal(stops, 1);
+  assert.equal(h.root.root.findAllByType('video').length, 0);
+  assert.equal(h.root.root.findAllByType('img').length, 10);
+  assert.equal(h.button('Chụp thêm ảnh').props.disabled, true);
+  await act(async () => h.button('Xóa ảnh 2').props.onClick());
+  const beforeReopen = [...h.files()];
+  await h.open();
+  assert.equal(camera().findAllByType('img').length, 9);
+  await h.snap();
+  assert.deepEqual(h.files().slice(0, 9), beforeReopen);
   assert.equal(opens, 2);
 });
 
@@ -108,9 +122,9 @@ test('file selection appends after camera denial, rejects invalid batches and re
   await change(picker(), [a]);
   await change(picker(), [b]);
   assert.deepEqual(h.files(), [a, a, b]);
-  await change(picker(), [a, a, a]);
+  await change(picker(), Array(8).fill(a));
   assert.equal(h.files().length, 3);
-  assert.match(h.root.root.findByProps({ role: 'alert' }).props.children, /tối đa 5/);
+  assert.match(h.root.root.findByProps({ role: 'alert' }).props.children, /tối đa 10/);
   await change(picker(), [new File(['text'], 'bad.txt', { type: 'text/plain' })]);
   assert.equal(h.files().length, 3);
   await h.disable();
@@ -149,7 +163,7 @@ test('camera opens as a modal, updates photo count and Escape closes only the ca
   assert.equal(camera().props['aria-label'], 'Chụp ảnh bài làm toàn màn hình');
   await h.snap();
   const counter = camera().findByProps({ role: 'status' });
-  assert.match([counter.props.children].flat().join(''), /1\/5/);
+  assert.match([counter.props.children].flat().join(''), /1\/10/);
   const event = { preventDefault: t.mock.fn(), stopPropagation: t.mock.fn() };
   await act(async () => camera().props.onCancel(event));
   assert.equal(event.preventDefault.mock.callCount(), 1);

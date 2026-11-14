@@ -50,7 +50,9 @@ test('file validation rejects the entire batch before upload',()=>{
  assert.doesNotThrow(()=>validateFiles([file('image/png',10)],'garden-homework'));
  assert.throws(()=>validateFiles([file('image/png',10),file('text/plain',10)],'garden-homework'));
  assert.throws(()=>validateFiles([file('image/png',0)],'garden-homework'));
- assert.throws(()=>validateFiles(Array(6).fill(file('image/png',10)),'garden-homework'));
+ assert.doesNotThrow(()=>validateFiles(Array(10).fill(file('image/png',10)),'garden-homework'));
+ assert.throws(()=>validateFiles(Array(11).fill(file('image/png',10)),'garden-homework'));
+ assert.throws(()=>validateFiles(Array(6).fill(file('image/png',10)),'garden-task-files'));
 });
 
 test('upload validates before sending and preserves the original error when cleanup fails',async()=>{

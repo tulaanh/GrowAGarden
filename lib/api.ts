@@ -1,4 +1,5 @@
 import { supabase } from "./supabase";
+import { HOMEWORK_PHOTO_LIMIT } from "./file-limits";
 import type {
   Attempt,
   CatalogItem,
@@ -363,7 +364,8 @@ export async function loadHistoryPage<T extends Attempt | Review>(
 export function validateFiles(files: File[], bucket: string) {
   if (!["garden-task-files", "garden-homework"].includes(bucket))
     throw new Error("Kho tệp không hợp lệ.");
-  if (files.length > 5) throw new Error("Mỗi lần nộp tối đa 5 tệp.");
+  const limit = bucket === "garden-homework" ? HOMEWORK_PHOTO_LIMIT : 5;
+  if (files.length > limit) throw new Error(`Mỗi lần nộp tối đa ${limit} tệp.`);
   const allowed =
     bucket === "garden-task-files"
       ? ["image/jpeg", "image/png", "image/webp", "application/pdf"]

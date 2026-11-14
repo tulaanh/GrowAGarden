@@ -23,7 +23,7 @@ Hạt gacha được mua vào kho; khi gieo, máy chủ chọn và lưu loài c�
 
 Đăng ký bằng email và mật khẩu, không cần xác nhận email. Tài khoản quản lý tulaanh0317@gmail.com đã được gắn quyền phía máy chủ. Vào Tài khoản → Quản lý nhiệm vụ & cửa hàng để tạo bản nháp, đăng bài, xem ảnh nộp, duyệt, trả bài hoặc thưởng thêm.
 
-Mọi tài khoản mới khác là người chơi. Quyền quản lý nằm trong schema riêng, không dựa vào thông tin vai trò do trình duyệt gửi lên. Người chơi thấy các bài được đăng và lịch sử của mình; tệp bài nộp chỉ chủ bài và quản lý được mở. Mỗi tệp tối đa 10 MB; mỗi lần đính kèm tối đa 5 tệp.
+Mọi tài khoản mới khác là người chơi. Quyền quản lý nằm trong schema riêng, không dựa vào thông tin vai trò do trình duyệt gửi lên. Người chơi thấy các bài được đăng và lịch sử của mình; tệp bài nộp chỉ chủ bài và quản lý được mở. Mỗi tệp tối đa 10 MB; học sinh nộp tối đa 10 ảnh mỗi lần, giáo viên đính kèm tối đa 5 tệp cho đề bài. Camera mở toàn màn hình, hiển thị ảnh đã chụp và cho xóa ảnh để chụp lại trước khi nộp. Áp dụng migration `20261114141414_increase_homework_photo_limit.sql` trước khi dùng giới hạn 10 ảnh trên máy chủ.
 
 Trong Quản lý → Cheat menu, admin có thể cộng Đồng tri thức, XP, thêm hạt/phân bón và làm chín cây của chính mình. Quyền được kiểm tra lại tại máy chủ; mỗi thao tác có mã yêu cầu chống ghi lặp và lịch sử trong schema riêng. Cộng tiền cũng ghi vào lịch sử ví. Giới hạn mỗi lần: 1.000.000 tiền hoặc XP, 9.999 vật phẩm. Làm chín cây vẫn cần thu hoạch để nhận XP và nông sản.
 
