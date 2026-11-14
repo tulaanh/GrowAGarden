@@ -103,6 +103,10 @@ export function GardenMap({plots,catalog,unlockedSlots,now,onSelect,onUnlock}:{p
    else if(directions[event.key]){event.preventDefault();move(...directions[event.key]);}
   }}>
   <div ref={scene} className={styles.scene}>
+   <div className={styles.farmSurroundings} aria-hidden="true">
+    <div className={styles.path}/>
+    <div className={styles.fenceLeft}/><div className={styles.fenceRight}/>
+   </div>
   {plantingSlots.map(position=>{
    const plot=bySlot.get(position.id),unlocked=opened.has(position.id),grown=plot&&Date.parse(plot.ready_at)<=now;
    const screen=slotScreenPosition(position,size.width,size.height,settledView,settledView.zoom);
