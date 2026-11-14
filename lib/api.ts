@@ -48,7 +48,7 @@ const columns = {
   profile: "user_id,coins,xp,display_name",
   plot: "id,slot,seed_id,source_seed_id,planted_at,ready_at,next_water_at,growth_seconds,xp_reward,harvested",
   catalog:
-    "id,name,kind,price,grow_seconds,xp,min_level,reduction_seconds,active,retired",
+    "id,name,kind,price,grow_seconds,xp,min_level,reduction_seconds,active,retired,yield_min,yield_max",
   task: "id,title,body,reward,due_at,status,files,created_at",
   progress:
     "id,user_id,task_id,status,reward_snapshot,submitted_at,approved_at,bonus_given",

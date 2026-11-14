@@ -1,4 +1,4 @@
-export type View = "garden" | "tasks" | "shop" | "account" | "admin";
+export type View = "garden" | "tasks" | "shop" | "warehouse" | "account" | "admin";
 export type DataScope =
   "profile" | "catalog" | "garden" | "inventory" | "collection";
 export type Change = DataScope | "tasks" | "reviews" | "ledger";

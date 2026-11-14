@@ -290,6 +290,7 @@ export function Admin({
                     p_reduction: Math.max(60, catalog.reduction_seconds),
                     p_active: catalog.active,
                   });
+                  if (catalog.kind === "seed") await rpc("garden_save_yield", { p_item: catalog.id, p_min: catalog.yield_min ?? 1, p_max: catalog.yield_max ?? 3 });
                   setCatalog(null);
                 },
                 "Đã cập nhật cửa hàng.",
@@ -347,6 +348,10 @@ export function Admin({
                     })
                   }
                 />
+                <label htmlFor="yield-min">Sản lượng tối thiểu</label>
+                <input id="yield-min" type="number" min={1} max={100} required value={catalog.yield_min ?? 1} onChange={e => setCatalog({...catalog, yield_min: Number(e.target.value)})} />
+                <label htmlFor="yield-max">Sản lượng tối đa</label>
+                <input id="yield-max" type="number" min={catalog.yield_min ?? 1} max={100} required value={catalog.yield_max ?? 3} onChange={e => setCatalog({...catalog, yield_max: Number(e.target.value)})} />
                 <label htmlFor="catalog-xp">XP khi thu hoạch</label>
                 <input
                   id="catalog-xp"

@@ -86,6 +86,7 @@ const viewScopes: Record<View, DataScope[]> = {
   garden: ["profile", "catalog", "garden", "inventory"],
   tasks: ["profile"],
   shop: ["profile", "catalog", "garden", "inventory"],
+  warehouse: ["profile", "catalog", "inventory", "collection"],
   account: ["profile", "catalog", "garden", "inventory", "collection"],
   admin: ["profile", "catalog", "garden", "inventory"],
 };
@@ -100,7 +101,8 @@ type GameContextValue = {
   busy: boolean;
   error: string;
   setError: (error: string) => void;
-  notice: string;
+  notices: { id: number; text: string }[];
+  dismissNotice: (id: number) => void;
   setNotice: (notice: string) => void;
   run: Run;
   refresh: () => Promise<void>;
@@ -123,7 +125,10 @@ export function GameProvider({
   const [loading, setLoading] = useState(!!userId),
     [busy, setBusy] = useState(false);
   const [error, setError] = useState(""),
-    [notice, setNotice] = useState("");
+    [notices, setNotices] = useState<{id: number; text: string}[]>([]);
+  const nextNotice = useRef(0);
+  const setNotice = useCallback((message: string) => { if (message) setNotices(previous => [...previous, {id: ++nextNotice.current, text: message}]); }, []);
+  const dismissNotice = useCallback((id: number) => setNotices(previous => previous.filter(notice => notice.id !== id)), []);
   const coordinator = useRef(new RequestCoordinator());
   const retry = useRef(new RetryRequests());
   const subscriptions = useRef(new Set<Subscription>());
@@ -239,12 +244,6 @@ export function GameProvider({
     };
   }, [userId, refresh]);
 
-  useEffect(() => {
-    if (!notice) return;
-    const timer = setTimeout(() => setNotice(""), 6000);
-    return () => clearTimeout(timer);
-  }, [notice]);
-
   const run: Run = useCallback(
     async (job, message, changes) => {
       if (working.current) return;
@@ -252,11 +251,13 @@ export function GameProvider({
       setBusy(true);
       setError("");
       try {
-        const result = await mutateAndRefresh(job, () =>
+        const result = await mutateAndRefresh(async () => {
+          await job();
+          if (active.current && message) setNotice(message);
+        }, () =>
           active.current ? refreshChanges(changes, true) : Promise.resolve(),
         );
         if (!active.current) return;
-        if (message) setNotice(message);
         if (result.syncError)
           setError(
             "Đã lưu thao tác. Chưa tải được dữ liệu mới; bấm Thử lại để đồng bộ.",
@@ -268,7 +269,7 @@ export function GameProvider({
         if (active.current) setBusy(false);
       }
     },
-    [refreshChanges],
+    [refreshChanges, setNotice],
   );
 
   const value = useMemo(
@@ -279,14 +280,15 @@ export function GameProvider({
       busy,
       error,
       setError,
-      notice,
+      notices,
+      dismissNotice,
       setNotice,
       run,
       refresh,
       register,
       retry: retry.current,
     }),
-    [session, data, loading, busy, error, notice, run, refresh, register],
+    [session, data, loading, busy, error, notices, dismissNotice, run, refresh, register],
   );
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
 }

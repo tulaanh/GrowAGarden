@@ -53,5 +53,11 @@ test('migrations and transactional SQL fixtures on local Postgres', async t => {
   for (const file of ['tests/economy.sql','tests/admin-cheats.sql','tests/gacha.sql','tests/tropical-crops.sql','tests/grass-planting.sql','tests/scoped-reads.sql','tests/watering.sql']) {
    try { await db.exec(await readFile(file,'utf8')); } catch(error) { throw new Error(file+': '+error.message,{cause:error}); }
   }
+  await db.exec(await readFile('supabase/migrations/20261114124706_harvest_yield.sql','utf8'));
+  await db.exec(await readFile('supabase/migrations/20261114125602_realistic_crop_yields.sql','utf8'));
+  const configuredYields = await db.query("select count(*)::int as total from public.garden_catalog where kind='seed' and not retired and yield_min >= 1 and yield_max >= yield_min");
+  if (configuredYields.rows[0].total !== 21) throw Error('Missing crop yields');
+  const yieldConfig = await db.query("select yield_min,yield_max from public.garden_catalog where id='carrot'");
+  if (yieldConfig.rows[0].yield_min !== 2 || yieldConfig.rows[0].yield_max !== 5) throw Error('Incorrect carrot yield');
  } finally { await db.close(); }
 });

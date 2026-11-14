@@ -4,14 +4,21 @@ import dynamic from "next/dynamic";
 import type { Session } from "@supabase/supabase-js";
 import { supabase } from "../lib/supabase";
 import { rpc } from "../lib/api";
-import { levelInfo, levelTitle } from "../lib/game";
+import { catalogArt, catalogLabel, harvestArt, levelInfo, levelTitle } from "../lib/game";
 import { slotUnlockCost } from "../lib/garden-map";
 import type { View } from "../lib/client-types";
-import { Dialog, Icon, Money } from "./ui";
+import { Art, Dialog, Icon, Money } from "./ui";
 import { GardenMap } from "./garden-map";
 import { GameProvider, useGame, useSession } from "./game-session";
 
 const fallback = () => <p role="status">Đang tải...</p>;
+function Toast({ id, text, dismiss }: { id: number; text: string; dismiss: (id: number) => void }) {
+  useEffect(() => {
+    const timer = setTimeout(() => dismiss(id), 2500);
+    return () => clearTimeout(timer);
+  }, [id, dismiss]);
+  return <div className="toast">{text}</div>;
+}
 const Tasks = dynamic(() => import("./tasks").then((m) => m.Tasks), {
   loading: fallback,
 });
@@ -83,7 +90,8 @@ function GameShell({
     busy,
     error,
     setError,
-    notice,
+    notices,
+    dismissNotice,
     run,
     refresh,
   } = useGame();
@@ -225,11 +233,9 @@ function GameShell({
             </button>
           </div>
         )}
-        {notice && (
-          <div className="toast" role="status">
-            {notice}
-          </div>
-        )}
+        <div className="toast-stack" role="status" aria-live="polite" aria-relevant="additions">
+          {notices.slice(0, 3).map(notice => <Toast key={notice.id} {...notice} dismiss={dismissNotice} />)}
+        </div>
         {view === "garden" && (
           <GardenMap
             plots={game.plots}
@@ -247,6 +253,21 @@ function GameShell({
           />
         )}
         {view === "shop" && <Shop needLogin={needLogin} />}
+        {view === "warehouse" && (
+          <section className="content-panel parchment">
+            <h2>Kho đồ</h2>
+            <h3>Hạt giống &amp; phân bón</h3>
+            <div className="collection">
+              {game.inventory.filter(i => i.quantity > 0).map(i => { const item = game.catalog.find(c => c.id === i.item_id); return item ? <div className="collection-item" key={i.item_id}><Art name={catalogArt(item)} /><strong>{catalogLabel(item)}</strong><span>Số lượng: {i.quantity}</span></div> : null; })}
+            </div>
+            {!game.inventory.some(i => i.quantity > 0) && <p>Chưa có hạt giống hoặc phân bón.</p>}
+            <h3>Nông sản</h3>
+            <div className="collection">
+              {game.collection.filter(i => i.quantity > 0).map(i => { const item = game.catalog.find(c => c.id === i.seed_id); return item ? <div className="collection-item" key={i.seed_id}><Art name={harvestArt(i.seed_id)} /><strong>{item.name}</strong><span>Số lượng: {i.quantity}</span></div> : null; })}
+            </div>
+            {!game.collection.some(i => i.quantity > 0) && <p>Chưa có nông sản.</p>}
+          </section>
+        )}
         {view === "account" && (
           <Account
             navigate={navigate}
@@ -266,6 +287,7 @@ function GameShell({
             ["garden", "Khu vườn"],
             ["tasks", "Nhiệm vụ"],
             ["shop", "Cửa hàng"],
+            ["warehouse", "Kho đồ"],
             ["account", "Tài khoản"],
           ] as [View, string][]
         ).map(([id, label]) => (

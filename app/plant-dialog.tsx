@@ -24,7 +24,7 @@ export function PlantDialog({
   setSlot: (slot: number | null) => void;
   navigate: (view: View) => void;
 }) {
-  const { data: game, busy, run, error } = useGame();
+  const { data: game, busy, run, error, setNotice } = useGame();
   const now = useClock();
   const plot = game.plots.find((p) => p.slot === slot);
   const visual = plot ? plantVisual(plot, now) : null;
@@ -79,7 +79,7 @@ export function PlantDialog({
           )}
           <p className="center">{timeLeft(plot.ready_at, now)}</p>
           <p className="center helper">
-            Thu hoạch nhận {plot.xp_reward} XP và 1 nông sản
+            Thu hoạch nhận {plot.xp_reward} XP và {game.catalog.find(c => c.id === plot.seed_id)?.yield_min ?? 1}–{game.catalog.find(c => c.id === plot.seed_id)?.yield_max ?? 3} nông sản
           </p>
           {Date.parse(plot.ready_at) <= now ? (
             <button
@@ -88,10 +88,11 @@ export function PlantDialog({
               onClick={() =>
                 run(
                   async () => {
-                    await rpc("garden_harvest", { p_plot: plot.id });
+                    const amount = await rpc<number>("garden_harvest_quantity", { p_plot: plot.id });
+                    setNotice(`Đã thu hoạch ${amount} ${itemName(plot.seed_id, game.catalog)} và nhận ${plot.xp_reward} XP!`);
                     setSlot(null);
                   },
-                  "Đã thu hoạch nông sản và nhận XP!",
+                  undefined,
                   ["profile", "garden", "collection"],
                 )
               }

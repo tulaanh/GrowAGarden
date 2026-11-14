@@ -1,4 +1,4 @@
-export type CatalogItem = { id: string; name: string; kind: 'seed' | 'gacha' | 'fertilizer'; price: number; grow_seconds: number; xp: number; min_level: number; reduction_seconds: number; active: boolean; retired?: boolean };
+export type CatalogItem = { id: string; name: string; kind: 'seed' | 'gacha' | 'fertilizer'; price: number; grow_seconds: number; xp: number; min_level: number; reduction_seconds: number; active: boolean; retired?: boolean; yield_min?: number; yield_max?: number };
 export type Profile = { user_id: string; coins: number; xp: number; display_name: string };
 export type Plot = { id: string; slot: number; seed_id: string; source_seed_id: string | null; planted_at: string; ready_at: string; next_water_at: string; growth_seconds: number; xp_reward: number; harvested: boolean };
 export type SeedDrop = { seed_id: string; plant_id: string; weight: number };
