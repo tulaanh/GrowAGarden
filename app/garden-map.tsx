@@ -103,11 +103,10 @@ export function GardenMap({plots,catalog,unlockedSlots,now,onSelect,onUnlock}:{p
    else if(directions[event.key]){event.preventDefault();move(...directions[event.key]);}
   }}>
   <div ref={scene} className={styles.scene}>
-   <img className={styles.farmhouse} src="/art/farm/farmhouse-garden.png" alt="" width="480" height="480" draggable={false}/>
   {plantingSlots.map(position=>{
    const plot=bySlot.get(position.id),unlocked=opened.has(position.id),grown=plot&&Date.parse(plot.ready_at)<=now;
    const screen=slotScreenPosition(position,size.width,size.height,settledView,settledView.zoom);
-   const visible=screen.x>=55&&screen.x<=size.width-55&&screen.y>=(size.width<=540?120:140)&&screen.y<=size.height-100;
+   const visible=screen.x>=55&&screen.x<=size.width-55&&screen.y>=(size.width<=540?250:290)&&screen.y<=size.height-100;
    return <div data-planting-slot={position.id} key={position.id}>
     <div className={styles.ground+' '+(!unlocked&&!plot?styles.lockedGround:'')} style={{left:position.x,top:position.y}}>
      <img src="/art/farm/items/plot_grass.png" alt="" width="512" height="256" draggable={false}/>
