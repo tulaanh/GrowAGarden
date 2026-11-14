@@ -1,5 +1,17 @@
 # Kiểm chứng bản nhiệm vụ và cửa hàng
 
+## Giao diện khu đất và cảnh quan (14/11/2026)
+
+- Điều chỉnh theo yêu cầu: khôi phục ảnh đất trống/đất đã trồng, tỷ lệ cây và nhãn thu hoạch như giao diện ban đầu. Giữ cảnh quan bao quanh và hệ tọa độ chung.
+
+- PASS: `npm test`, 15/15 kiểm tra. Có kiểm tra 64 tọa độ không trùng nhau (16 ô trồng + 48 ô cảnh quan), lối đi bao quanh, hàng rào theo cạnh ô và cổng hai ô; kiểm tra tỷ lệ giữa đất và cảnh quan ở zoom 80%, 100%, 160% khi di chuyển.
+- PASS: `npx tsc --noEmit` và `npm run build`.
+- PASS: Rà soát mã: nút gieo/mở ô giữ callback hiện có; thu phóng và Về giữa có xử lý thật; lớp cây và hàng rào không chặn vùng bấm; trạng thái focus có dấu hiệu hình học; ảnh trang trí có alt rỗng và kích thước; cảnh quan không có chuyển động lặp.
+- Hướng thiết kế: kế thừa Cozy Tropical Farm, dùng cỏ xanh/đất nâu/lối đi màu cát, vàng cho thu hoạch. Cảnh quan theo lưới để biểu đạt kích thước ô và ranh giới khu trồng. Số ô mở và giá mở lấy từ dữ liệu hiện có.
+- Chưa kiểm tra trực quan, thao tác chuột/chạm hoặc bàn phím trên trình duyệt; phần này vẫn do chủ ứng dụng thực hiện theo ghi chú của dự án. Các kết quả tự động trên không thay thế kiểm tra giao diện thực tế.
+
+## Các đợt kiểm tra trước
+
 - PASS: `npm test` kiểm tra mốc XP, cấp độ và tính tăng trưởng theo thời gian.
 - PASS: `tests/economy.sql` kiểm tra nộp, trả bài, nộp lại, duyệt, thưởng thêm sau duyệt, chống thưởng lặp, thiếu tiền, khóa theo cấp, bón phân, chống thu hoạch sớm/lặp và snapshot XP. Fixture rollback.
 - PASS: Kiểm tra HTTP với tài khoản quản lý và hai người chơi tạm: bài nháp được cách ly, người chơi không có quyền quản lý, ảnh riêng tư chỉ chủ bài và quản lý mở được.

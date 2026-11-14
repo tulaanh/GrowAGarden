@@ -48,6 +48,14 @@ Sau hai migration `20261113110115_expand_grass_planting.sql` và `20261113154419
 
 ## Minh họa và kiểm chứng
 
+### Lưới cảnh quan khu vườn
+
+Một ô đất chuẩn có hình chiếu isometric 192 × 96 px ở mức thu phóng 100%, được khai báo duy nhất bằng `SLOT_WIDTH` và `SLOT_HEIGHT` trong `lib/garden-map.ts`. Luống trồng, lối đi và viền cỏ dùng cùng lưới `gardenGridPosition(column, row)`. Lối đi bao quanh rộng một ô, viền cỏ rộng một ô; mỗi đoạn hàng rào theo đúng một cạnh ô, chừa cổng rộng hai ô. Toàn bộ cảnh nằm trong cùng một lớp di chuyển và thu phóng 80–160%.
+
+Màu cỏ xanh, đất nâu và lối đi màu cát tiếp nối bộ cây Cozy Tropical Farm hiện có. Phần đất trống, đất có cây và trạng thái thu hoạch giữ nguyên ảnh, kích thước và nhãn của giao diện ban đầu; dùng lại `soil_unworked`, `soil_tilled` hoặc đất tích hợp trong ảnh cây. Nhãn khóa ghi chi phí thật. Các chi tiết cảnh quan tĩnh để thao tác trồng cây là điểm tập trung. Nút +, − và Về giữa điều khiển góc nhìn; dùng Tab để chọn ô ngoài khung nhìn sẽ đưa ô đó về giữa.
+
+### Bộ ảnh
+
 Ảnh cây dùng gói Cozy Tropical Farm do chủ ứng dụng cung cấp: `public/art/farm/plants/<loài>/` chứa ảnh giai đoạn, `public/art/farm/items/` chứa túi giống và nông sản. Có 147 WebP (khoảng 1,72 MB). Metadata, nguồn và điểm neo ở `lib/farm-art.json`; hướng dẫn ở `public/art/GROWTH-ASSETS.md`. Gói tải về được giữ ngoài public tại `asset-sources/Farming-Game-Assets/`; ảnh cây cũ lưu ở `asset-sources/previous-game-plants/`. Có thể tái xuất bằng `node scripts/prepare-farm-art.mjs`. Nền dùng ảnh `public/art/farm/items/plot_grass.png`; bảng tên và hạt gacha giữ bộ minh họa imagegen trước đây. Chữ, nút và số liệu vẫn là HTML thật.
 
 `tests/economy.sql` kiểm tra chuỗi nộp/trả/nộp lại/duyệt, thưởng một lần, cấp độ mua hàng, bón phân, thu hoạch và giữ snapshot XP. Toàn bộ fixture chạy trong giao dịch rollback. Kiểm tra HTTP trực tiếp bằng ba tài khoản tạm đã xác nhận RLS, Storage riêng tư và xử lý yêu cầu mua/trồng/thu hoạch đồng thời; các tài khoản và dữ liệu thử được dọn sau kiểm tra.

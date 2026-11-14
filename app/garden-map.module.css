@@ -1,18 +1,49 @@
-.field { position:fixed;inset:0;z-index:-1;isolation:isolate;overflow:hidden;overscroll-behavior:none;touch-action:none;user-select:none;cursor:grab;background:#000; }
-.scene { position:absolute;left:50%;top:calc(50% + 90px);transform-origin:0 0;will-change:transform; }
-.ground { position:absolute;width:192px;height:96px;transform:translate(-50%,-50%);pointer-events:none; }
+.field {
+ position:fixed;inset:0;z-index:-1;isolation:isolate;overflow:clip;
+ overscroll-behavior:none;touch-action:none;user-select:none;cursor:grab;
+ background:#88a96b;
+ background-image:radial-gradient(ellipse at 50% 44%,#b5cd88 0%,#94b573 52%,#76995e 100%);
+}
+.field:focus-visible { outline:3px solid #fff2b7;outline-offset:-5px; }
+.scene { position:absolute;left:50%;top:calc(50% + var(--garden-origin-y));transform-origin:0 0;will-change:transform; }
+.ground,.lockedSlot { position:absolute;width:var(--tile-width);height:var(--tile-height);transform:translate(-50%,-50%); }
+.ground { pointer-events:none; }
 .ground img { display:block;width:100%;height:100%;max-width:none; }
 .lockedGround img { filter:grayscale(.65) brightness(.78); }
+.meadow img { filter:saturate(.4) brightness(.98); }
+.meadow { opacity:.8; }
+.fence { position:absolute;overflow:visible;width:calc(var(--tile-width)/2);height:calc(var(--tile-height)/2);transform:translate(-50%,-50%);pointer-events:none; }
+.fenceReverse { transform:translate(-50%,-50%) scaleX(-1); }
 .dragging,.dragging button { cursor:grabbing; }
-.lockedSlot { position:absolute;z-index:1;width:192px;height:96px;transform:translate(-50%,-50%);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);border:0;background:transparent;color:#6c4c28;display:grid;place-items:center; }
-.lockedSlot:hover { background:#fff2b326; }.lockedSlot:focus-visible { background:#fff2b35c;outline:0; }
-.lockedSlot:not(:disabled):active { transform:translate(-50%,-50%); }
-.lockLabel { display:flex;flex-direction:column;align-items:center;gap:2px;min-width:100px;padding:4px 8px;border:2px solid #a87c43;border-radius:8px;background:#fff2cf;box-shadow:0 2px 0 #704a2866; }
-.lockLabel strong { display:flex;align-items:center;gap:4px;font-size:11px;line-height:16px; }.lockLabel>span { font-size:10px;line-height:12px; }
+.lockedSlot {
+ border:0;padding:0;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);
+ background:transparent;display:grid;place-items:center;color:#fff5d8;
+}
 .position { position:absolute;width:100px;height:52px;transform:translate(-50%,-50%); }
 .field .plot { width:100%;height:52px; }
+.lockedSlot:hover { background:#fff3b87a; }
+.lockedSlot:focus-visible { outline:0;background:#fff1b3; }
+.lockedSlot:focus-visible .lockLabel { outline:3px solid #334e2a;outline-offset:2px; }
+.lockedSlot:not(:disabled):active { transform:translate(-50%,-50%);background:#fff1b3; }
+.lockLabel { display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 12px;border:1px solid #e0d4a3;border-radius:5px;background:#f5edcf;color:#4d5030; }
+.lockLabel strong { display:flex;align-items:center;gap:5px;font-size:11px;line-height:14px; }
+.lockLabel>span { font-size:11px;line-height:13px; }
 .field :global(.farm-plant) { --plant-height:90px; }
 .field :global(.plant-art) { width:100%;left:0; }
 .field :global(.plot-plus) { font-size:20px; }
 .field :global(.plot-number) { font-size:9px;bottom:-9px;white-space:nowrap; }
 .field :global(.harvest-tag) { font-size:9px;bottom:-16px; }
+.mapToolbar { position:fixed;bottom:calc(100px + env(safe-area-inset-bottom));left:24px;right:24px;display:flex;align-items:end;justify-content:flex-end;pointer-events:none; }
+.mapControls { display:flex;align-items:center;flex:none;padding:4px;background:#fff5db;border:1px solid #9d8457;border-radius:9px;box-shadow:0 3px 0 #526a3940;pointer-events:auto; }
+.mapControls button { min-width:44px;min-height:44px;border:0;border-radius:5px;background:transparent;color:#4d462c;font-size:24px;font-weight:800; }
+.mapControls button:hover:not(:disabled) { background:#ebd8ac; }
+.mapControls button:disabled { color:#8b8066;opacity:.55; }
+.mapControls button:focus-visible { outline:3px solid #335c3b;outline-offset:-3px; }
+.mapControls output { min-width:44px;text-align:center;color:#554c33;font-size:12px;font-weight:800;font-variant-numeric:tabular-nums; }
+.mapControls .recenter { margin-left:4px;padding:0 12px;border-left:1px solid #d7c39a;border-radius:0 5px 5px 0;font-size:12px; }
+@media(max-width:700px) {
+ .mapToolbar { left:12px;right:12px;bottom:calc(92px + env(safe-area-inset-bottom));align-items:center;flex-direction:column; }
+}
+@media(max-height:600px) {
+ .mapToolbar { align-items:end; }
+}
