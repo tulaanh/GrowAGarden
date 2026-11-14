@@ -14,7 +14,6 @@ import {
   Dialog,
   Empty,
   FileLinks,
-  FilePicker,
   Icon,
   Money,
 } from "./ui";
@@ -22,6 +21,7 @@ import { useGame } from "./game-session";
 import { usePagedList, useResource } from "./data-hooks";
 import { PageControls } from "./page-controls";
 import { ProgressHistory } from "./progress-history";
+import { HomeworkPhotos } from "./homework-photos";
 
 type OpenFile = (path: string, bucket: string) => void;
 export function Tasks({
@@ -250,7 +250,7 @@ function TaskDialog({
       {selectedTask.status === "published" &&
       (!ownProgress || ownProgress.status === "returned") ? (
         <>
-          <FilePicker id="submission" files={files} onChange={setFiles} />
+          <HomeworkPhotos files={files} onChange={setFiles} disabled={busy} />
           <button
             className="primary"
             disabled={busy || files.length === 0}
