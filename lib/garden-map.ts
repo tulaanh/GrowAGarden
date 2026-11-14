@@ -41,7 +41,7 @@ export function slotScreenPosition(slot:{x:number;y:number},width:number,height:
 }
 
 export function pinchGardenView(view:{x:number;y:number;zoom:number},start:{x:number;y:number},center:{x:number;y:number},startDistance:number,distance:number,origin:{x:number;y:number}) {
- const zoom=Math.max(0.8,Math.min(1.6,view.zoom*distance/Math.max(1,startDistance)));
+ const zoom=Math.max(0.5,Math.min(1.6,view.zoom*distance/Math.max(1,startDistance)));
  const ratio=zoom/view.zoom;
  return {x:center.x-origin.x-(start.x-origin.x-view.x)*ratio,y:center.y-origin.y-(start.y-origin.y-view.y)*ratio,zoom};
 }

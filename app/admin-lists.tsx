@@ -1,9 +1,9 @@
 "use client";
-import { useState } from "react";
+
 import { loadReviewPage, loadTaskPage } from "../lib/api";
 import { statusText, type Task } from "../lib/game";
 import { useGame } from "./game-session";
-import { usePagedList } from "./data-hooks";
+import { usePagedList, useSessionPreference } from "./data-hooks";
 import { DateLabel, Empty, Money } from "./ui";
 import { PageControls } from "./page-controls";
 
@@ -64,7 +64,7 @@ export function AdminReviewList({
 }: {
   onReview: (id: string) => void;
 }) {
-  const [filter, setFilter] = useState("submitted");
+  const [filter, setFilter] = useSessionPreference("admin-review-filter", "submitted");
   const page = usePagedList(
     "admin-reviews:" + filter,
     (cursor, signal) => loadReviewPage(filter, cursor, signal),

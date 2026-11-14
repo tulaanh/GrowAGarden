@@ -1,179 +1,60 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import type { Change, Cursor, Page } from "../lib/client-types";
-import { errorMessage, RequestCoordinator } from "../lib/requests";
 import { useGame } from "./game-session";
 
-export function useResource<T>(
-  key: string,
-  load: (signal: AbortSignal) => Promise<T>,
-  changes: Change[],
-) {
-  const { register } = useGame();
-  const loader = useRef(load);
-  loader.current = load;
-  const coordinator = useRef(new RequestCoordinator());
-  const [state, setState] = useState<{
-    key: string;
-    value?: T;
-    loading: boolean;
-    error: string;
-  }>({ key, loading: true, error: "" });
-  const refresh = useCallback(
-    async (force = false) => {
-      if (force) coordinator.current.invalidate(key);
-      try {
-        await coordinator.current.run(
-          key,
-          (signal) => loader.current(signal),
-          (value) => setState({ key, value, loading: false, error: "" }),
-        );
-      } catch (error) {
-        setState((previous) => ({
-          ...previous,
-          loading: false,
-          error: errorMessage(error),
-        }));
-        throw error;
-      }
-    },
-    [key],
-  );
-  const changeKey = changes.join(",");
-  useEffect(() => {
-    coordinator.current.reset();
-    setState({ key, loading: true, error: "" });
-    const unregister = register({
-      changes: changeKey.split(",") as Change[],
-      refresh,
-    });
-    void refresh().catch(() => {});
-    return () => {
-      unregister();
-      coordinator.current.reset();
-    };
-  }, [key, changeKey, register, refresh]);
-  return {
-    ...(state.key === key
-      ? state
-      : { loading: true, error: "", value: undefined }),
-    refresh: () => refresh(true),
-  };
+export function useSessionPreference<T>(key: string, initial: T) {
+  const { cache } = useGame();
+  const [value, setValue] = useState<T>(() => cache.preferences.has(key) ? cache.preferences.get(key) as T : initial);
+  return [value, (next: T) => { cache.preferences.set(key, next); setValue(next); }] as const;
 }
 
-export function usePagedList<T extends { id: string }>(
-  key: string,
-  load: (cursor: Cursor | null, signal: AbortSignal) => Promise<Page<T>>,
-  changes: Change[],
-) {
-  const { register } = useGame();
+export function useResource<T>(key: string, load: (signal: AbortSignal) => Promise<T>, changes: Change[]) {
+  const { cache, register } = useGame();
   const loader = useRef(load);
   loader.current = load;
-  const coordinator = useRef(new RequestCoordinator());
-  const pageCount = useRef(1);
-  const [state, setState] = useState<{
-    key: string;
-    items: T[];
-    next: Cursor | null;
-    loading: boolean;
-    error: string;
-  }>({ key, items: [], next: null, loading: true, error: "" });
-  const current = useRef(state);
-  current.current = state;
-  const refresh = useCallback(
-    async (force = false) => {
-      if (force) coordinator.current.invalidate(key);
-      try {
-        await coordinator.current.run(
-          key,
-          async (signal) => {
-            let cursor: Cursor | null = null;
-            const items: T[] = [];
-            for (let i = 0; i < pageCount.current; i++) {
-              const page = await loader.current(cursor, signal);
-              items.push(...page.items);
-              cursor = page.next;
-              if (!cursor) break;
-            }
-            return {
-              items: [
-                ...new Map(items.map((item) => [item.id, item])).values(),
-              ],
-              next: cursor,
-            };
-          },
-          (page) => setState({ key, ...page, loading: false, error: "" }),
-        );
-      } catch (error) {
-        setState((previous) => ({
-          ...previous,
-          loading: false,
-          error: errorMessage(error),
-        }));
-        throw error;
-      }
-    },
-    [key],
-  );
-  const more = useCallback(async () => {
-    const snapshot = current.current;
-    if (!snapshot.next || snapshot.loading || snapshot.key !== key) return;
-    setState((previous) => ({ ...previous, loading: true, error: "" }));
-    // One queue owns both refresh and pagination, so a late page cannot replace refreshed rows.
-    coordinator.current.invalidate(key);
-    try {
-      await coordinator.current.run(
-        key,
-        (signal) => loader.current(snapshot.next, signal),
-        (page) => {
-          pageCount.current++;
-          setState({
-            key,
-            items: [
-              ...new Map(
-                [...snapshot.items, ...page.items].map((item) => [
-                  item.id,
-                  item,
-                ]),
-              ).values(),
-            ],
-            next: page.next,
-            loading: false,
-            error: "",
-          });
-        },
-      );
-    } catch (error) {
-      setState((previous) => ({
-        ...previous,
-        loading: false,
-        error: errorMessage(error),
-      }));
-    }
-  }, [key]);
+  const state = useSyncExternalStore(cache.subscribe, () => cache.get<T>(key), () => cache.get<T>(key));
+  const refresh = useCallback((force = false) => cache.load(key, signal => loader.current(signal), force), [cache, key]);
   const changeKey = changes.join(",");
   useEffect(() => {
-    coordinator.current.reset();
-    pageCount.current = 1;
-    setState({ key, items: [], next: null, loading: true, error: "" });
-    const unregister = register({
-      changes: changeKey.split(",") as Change[],
-      refresh,
-    });
+    cache.track(key, changeKey.split(","));
+    const unregister = register({ changes: changeKey.split(",") as Change[], refresh });
     void refresh().catch(() => {});
-    return () => {
-      unregister();
-      coordinator.current.reset();
-    };
-  }, [key, changeKey, register, refresh]);
-  return {
-    ...(state.key === key
-      ? state
-      : { items: [], next: null, loading: true, error: "" }),
-    more,
-    refresh: () => refresh(true),
-  };
+    return unregister;
+  }, [cache, key, changeKey, register, refresh]);
+  return { key, value: state.value, error: state.error, loading: state.value === undefined && (state.loading || !state.error), refresh: () => refresh(true) };
+}
+
+type CachedPages<T> = { items: T[]; next: Cursor | null; pages: number };
+export function usePagedList<T extends { id: string }>(key: string, load: (cursor: Cursor | null, signal: AbortSignal) => Promise<Page<T>>, changes: Change[]) {
+  const { cache } = useGame();
+  const loader = useRef(load);
+  loader.current = load;
+  const resource = useResource<CachedPages<T>>(key, async signal => {
+    const count = cache.get<CachedPages<T>>(key).value?.pages ?? 1;
+    const items: T[] = [];
+    let next: Cursor | null = null;
+    let pages = 0;
+    for (let i=0; i<count; i++) {
+      const page = await loader.current(next, signal);
+      items.push(...page.items); next = page.next; pages++;
+      if (!next) break;
+    }
+    return {items: [...new Map(items.map(item => [item.id,item])).values()], next, pages};
+  }, changes);
+  const more = useCallback(async () => {
+    const state = cache.get<CachedPages<T>>(key);
+    const snapshot = state.value;
+    if (!snapshot?.next || state.loading) return;
+    // Rebuild expired pages before extending them so cursors match the current list.
+    if (!cache.fresh(key)) { await resource.refresh().catch(() => {}); return; }
+    await cache.load(key, async signal => {
+      const page = await loader.current(snapshot.next,signal);
+      return {items: [...new Map([...snapshot.items,...page.items].map(item => [item.id,item])).values()], next: page.next, pages: snapshot.pages+1};
+    }, true).catch(() => {});
+  }, [cache, key, resource.refresh]);
+  return { items: resource.value?.items ?? [], next: resource.value?.next ?? null, loading: resource.loading || cache.get(key).loading, error: resource.error, more, refresh: resource.refresh };
 }
 
 export function useClock(enabled = true) {

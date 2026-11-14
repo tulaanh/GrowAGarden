@@ -18,7 +18,7 @@ import {
   Money,
 } from "./ui";
 import { useGame } from "./game-session";
-import { usePagedList, useResource } from "./data-hooks";
+import { usePagedList, useResource, useSessionPreference } from "./data-hooks";
 import { PageControls } from "./page-controls";
 import { ProgressHistory } from "./progress-history";
 import { HomeworkPhotos } from "./homework-photos";
@@ -34,7 +34,7 @@ export function Tasks({
   openFile: OpenFile;
 }) {
   const { data: game, session, setError } = useGame();
-  const [taskFilter, setTaskFilter] = useState<"open" | "all">("open");
+  const [taskFilter, setTaskFilter] = useSessionPreference<"open" | "all">("tasks-filter", "open");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const page = usePagedList(
     "tasks:" + taskFilter,

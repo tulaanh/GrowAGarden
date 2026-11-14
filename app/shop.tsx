@@ -3,17 +3,20 @@ import { useState, useMemo } from "react";
 import { rpc } from "../lib/api";
 import {
   catalogArt,
+  harvestArt,
   catalogLabel,
   levelInfo,
   seedOdds,
   type CatalogItem,
 } from "../lib/game";
 import type { GameData } from "../lib/game";
-import { Art, Money, SeedOdds } from "./ui";
+import { Art, Money, SeedOdds, VndMoney } from "./ui";
+import { useSessionPreference } from "./data-hooks";
 import { useGame } from "./game-session";
 
 export function Shop({ needLogin }: { needLogin: () => boolean }) {
   const { data: game, session, busy, run, retry } = useGame();
+  const [tab, setTab] = useSessionPreference<"buy" | "sell">("shop-tab", "buy");
   const lv = levelInfo(game.profile?.xp || 0);
   const stocks = useMemo(
     () => new Map(game.inventory.map((i) => [i.item_id, i.quantity])),
@@ -27,8 +30,13 @@ export function Shop({ needLogin }: { needLogin: () => boolean }) {
           <p className="kicker">MỘT HẠT NHỎ, MỘT KHU VƯỜN LỚN</p>
           <h2>Cửa hàng</h2>
         </div>
-        <Money amount={game.profile?.coins || 0} />
+        {tab === "buy" ? <Money amount={game.profile?.coins || 0} /> : <VndMoney amount={game.profile?.vnd || 0} />}
       </div>
+      <div className="tabs" aria-label="Chọn mua hoặc bán">
+        <button type="button" className={tab === "buy" ? "active" : ""} aria-pressed={tab === "buy"} onClick={() => setTab("buy")}>Mua</button>
+        <button type="button" className={tab === "sell" ? "active" : ""} aria-pressed={tab === "sell"} onClick={() => setTab("sell")}>Bán</button>
+      </div>
+      {tab === "sell" ? <ProduceSales needLogin={needLogin} /> : <>
       <p className="panel-description">
         Gieo hạt gacha để khám phá cây mới và mở khóa hạt giống của cây đó trong
         cửa hàng.
@@ -103,6 +111,7 @@ export function Shop({ needLogin }: { needLogin: () => boolean }) {
       <p className="helper">
         Đồng tri thức nhận từ bài tập được duyệt. Thu hoạch cho nông sản và XP.
       </p>
+      </>}
     </section>
   );
 }
@@ -197,4 +206,32 @@ function ShopCard({
       </button>
     </article>
   );
+}
+
+function ProduceSales({needLogin}:{needLogin:()=>boolean}) {
+  const {data, session, busy, run, retry, setNotice} = useGame();
+  const produce = data.collection.filter(c => c.quantity > 0).map(c => ({stock:c, item:data.catalog.find(i => i.id === c.seed_id)})).filter(c => c.item?.kind === "seed");
+  return <>
+    <p className="panel-description">Bán nông sản đã thu hoạch để nhận VNĐ. Chọn số lượng và xem tổng tiền trước khi bán.</p>
+    {!session ? <button className="secondary" onClick={needLogin}>Đăng nhập để bán nông sản</button> : !produce.length ? <p className="empty">Bạn chưa có nông sản để bán. Hãy thu hoạch cây trong vườn.</p> : <div className="shop-grid">{produce.map(({stock,item}) => <SellCard key={stock.seed_id} item={item!} owned={stock.quantity} busy={busy} onSell={quantity => {
+      if (needLogin()) return;
+      void run(async () => {
+        const total = await retry.run(JSON.stringify(["sell",stock.seed_id,quantity,item!.sell_price]), request => rpc<number>("garden_sell_produce",{p_item:stock.seed_id,p_quantity:quantity,p_price:item!.sell_price,p_request:request}));
+        setNotice(`Đã bán ${quantity} ${item!.name}, nhận ${total.toLocaleString("vi-VN")} VNĐ.`);
+      }, undefined, ["profile","collection"]);
+    }} />)}</div>}
+  </>;
+}
+function SellCard({item,owned,busy,onSell}:{item:CatalogItem;owned:number;busy:boolean;onSell:(quantity:number)=>void}) {
+  const [quantity,setQuantity]=useState(1);
+  const price=item.sell_price ?? 0;
+  const valid=Number.isInteger(quantity) && quantity>=1 && quantity<=Math.min(owned,99);
+  return <article className="shop-card">
+    <div className="shop-art"><Art name={harvestArt(item.id)} /></div>
+    <h3>{item.name}</h3><span className="owned">Trong kho: {owned}</span>
+    <p>Giá bán: {price.toLocaleString("vi-VN")} VNĐ / sản phẩm</p>
+    <label htmlFor={"sell-"+item.id}>Số lượng bán</label>
+    <input id={"sell-"+item.id} type="number" min={1} max={Math.min(owned,99)} step={1} value={quantity} onChange={e=>setQuantity(Number(e.target.value))} />
+    <button className="primary" disabled={busy || !valid || price<=0} onClick={()=>onSell(quantity)}>{busy ? "Đang bán..." : price<=0 ? "Chưa thể bán" : !valid ? "Chọn số lượng hợp lệ" : `Bán · Nhận ${(price*quantity).toLocaleString("vi-VN")} VNĐ`}</button>
+  </article>;
 }

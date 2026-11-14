@@ -110,7 +110,7 @@ export function PlantDialog({
                     async () => {
                       await rpc("garden_fertilize", { p_plot: plot.id });
                     },
-                    "Đã bón phân cho cây.",
+                    undefined,
                     ["garden", "inventory"],
                   )
                 }
@@ -151,9 +151,7 @@ export function PlantDialog({
                 async () => {
                   await rpc("garden_plant", { p_slot: slot, p_seed: item.id });
                 },
-                item.kind === "gacha"
-                  ? "Đã gieo hạt! Cây bạn nhận được đang ở vị trí này."
-                  : "Đã gieo hạt giống.",
+                undefined,
                 ["garden", "inventory"],
               )
             }

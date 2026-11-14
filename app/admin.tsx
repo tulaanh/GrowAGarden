@@ -10,7 +10,7 @@ import {
 } from "../lib/game";
 import { Art, Dialog, FilePicker, SeedOdds } from "./ui";
 import { useGame } from "./game-session";
-import { useResource } from "./data-hooks";
+import { useResource, useSessionPreference } from "./data-hooks";
 import { loadPendingCount } from "../lib/api";
 import { AdminTaskList, AdminReviewList } from "./admin-lists";
 import { ReviewDialog } from "./review-dialog";
@@ -35,7 +35,7 @@ export function Admin({
     "reviews",
     "tasks",
   ]);
-  const [tab, setTab] = useState("tasks");
+  const [tab, setTab] = useSessionPreference("admin-tab", "tasks");
   const [editor, setEditor] = useState(false),
     [taskId, setTaskId] = useState<string | null>(null);
   const [title, setTitle] = useState(""),

@@ -24,7 +24,8 @@ test('migrations and transactional SQL fixtures on local Postgres', async t => {
    'supabase/migrations/20261114102633_one_minute_watering.sql',
    'supabase/migrations/20261114102951_watering_server_clock.sql',
    'supabase/migrations/20261114103125_watering_quiz_bonus_time.sql',
-   'supabase/migrations/20261114104039_end_watering_on_wrong_answer.sql'];
+   'supabase/migrations/20261114104039_end_watering_on_wrong_answer.sql',
+   'supabase/migrations/20261114134110_watering_xp_rewards.sql'];
   let beforePlan;
   for (const file of migrations) {
    if (file.includes('scoped_game_reads')) {
@@ -57,6 +58,8 @@ test('migrations and transactional SQL fixtures on local Postgres', async t => {
   await db.exec(await readFile('supabase/migrations/20261114125602_realistic_crop_yields.sql','utf8'));
   const configuredYields = await db.query("select count(*)::int as total from public.garden_catalog where kind='seed' and not retired and yield_min >= 1 and yield_max >= yield_min");
   if (configuredYields.rows[0].total !== 21) throw Error('Missing crop yields');
+  await db.exec(await readFile('supabase/migrations/20261114134530_produce_sales.sql','utf8'));
+  await db.exec(await readFile('tests/produce-sales.sql','utf8'));
   const yieldConfig = await db.query("select yield_min,yield_max from public.garden_catalog where id='carrot'");
   if (yieldConfig.rows[0].yield_min !== 2 || yieldConfig.rows[0].yield_max !== 5) throw Error('Incorrect carrot yield');
  } finally { await db.close(); }

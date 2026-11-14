@@ -47,7 +47,7 @@ begin
  exception when raise_exception then if sqlerrm like 'TEST:%' then raise; end if; end;
  perform set_config('request.jwt.claim.sub',u::text,true);
  result:=public.garden_watering_submit(plot,(q->>'id')::uuid,' 2 ');
- if not (result->>'correct')::boolean or (result->>'expires_at')::timestamptz<>(q->>'expires_at')::timestamptz+interval '15 seconds' or (select ready_at from public.garden_plots where id=plot)<>before_ready-interval '1 minute' then raise exception 'TEST: correct answer bonus'; end if;
+ if not (result->>'correct')::boolean or (result->>'expires_at')::timestamptz<>(q->>'expires_at')::timestamptz or (select ready_at from public.garden_plots where id=plot)<>before_ready-interval '5 minutes' or (select xp from public.garden_profiles where user_id=u)<>10 or (result->>'xp_awarded')::integer<>10 then raise exception 'TEST: correct answer bonus'; end if;
  if (public.garden_watering_start(plot)->>'expires_at')::timestamptz<>(result->>'expires_at')::timestamptz then raise exception 'TEST: reopened session deadline changed'; end if;
  perform public.garden_watering_finish(plot);
  if exists(select 1 from garden_private.watering_sessions where plot_id=plot) or (select next_water_at from public.garden_plots where id=plot)<=clock_timestamp() then raise exception 'TEST: manual finish'; end if;
@@ -72,5 +72,14 @@ begin
  if q->>'type'<>'choice' or jsonb_array_length(q->'options')<>4 or q ? 'answer' then raise exception 'TEST: choice question'; end if;
  result:=public.garden_watering_submit(plot,(q->>'id')::uuid,'b');
  if not (result->>'correct')::boolean then raise exception 'TEST: choice answer'; end if;
+ q:=result;
+ update public.garden_plots set ready_at=clock_timestamp()+interval '1 minute' where id=plot;
+ result:=public.garden_watering_submit(plot,(q->>'id')::uuid,'b');
+ if not (result->>'ready')::boolean or not (result->>'finished')::boolean or (select ready_at from public.garden_plots where id=plot)>clock_timestamp() or (select xp from public.garden_profiles where user_id=u)<>30 then raise exception 'TEST: ready crop reward'; end if;
+ begin
+  perform public.garden_watering_submit(plot,(q->>'id')::uuid,'b');
+  raise exception 'TEST: duplicate reward accepted';
+ exception when raise_exception then if sqlerrm like 'TEST:%' then raise; end if; end;
+ if (select xp from public.garden_profiles where user_id=u)<>30 then raise exception 'TEST: duplicate XP'; end if;
 end $$;
 rollback;

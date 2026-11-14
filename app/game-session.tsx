@@ -19,6 +19,7 @@ import {
   errorMessage,
   mutateAndRefresh,
   RequestCoordinator,
+  SessionCache,
   RetryRequests,
   WakeGate,
 } from "../lib/requests";
@@ -85,7 +86,7 @@ export function useSession() {
 const viewScopes: Record<View, DataScope[]> = {
   garden: ["profile", "catalog", "garden", "inventory"],
   tasks: ["profile"],
-  shop: ["profile", "catalog", "garden", "inventory"],
+  shop: ["profile", "catalog", "garden", "inventory", "collection"],
   warehouse: ["profile", "catalog", "inventory", "collection"],
   account: ["profile", "catalog", "garden", "inventory", "collection"],
   admin: ["profile", "catalog", "garden", "inventory"],
@@ -96,6 +97,7 @@ type Subscription = {
 };
 type GameContextValue = {
   session: Session | null;
+  cache: SessionCache;
   data: GameData;
   loading: boolean;
   busy: boolean;
@@ -106,6 +108,7 @@ type GameContextValue = {
   setNotice: (notice: string) => void;
   run: Run;
   refresh: () => Promise<void>;
+  refreshAffected: (changes: Change[]) => Promise<void>;
   retry: RetryRequests;
   register: (subscription: Subscription) => () => void;
 };
@@ -130,6 +133,7 @@ export function GameProvider({
   const setNotice = useCallback((message: string) => { if (message) setNotices(previous => [...previous, {id: ++nextNotice.current, text: message}]); }, []);
   const dismissNotice = useCallback((id: number) => setNotices(previous => previous.filter(notice => notice.id !== id)), []);
   const coordinator = useRef(new RequestCoordinator());
+  const cache = useRef(new SessionCache()).current;
   const retry = useRef(new RetryRequests());
   const subscriptions = useRef(new Set<Subscription>());
   const active = useRef(true),
@@ -156,16 +160,17 @@ export function GameProvider({
       }
       await bootstrap.current;
       if (!active.current) return;
+      if (changes) cache.invalidate(changes);
       const selected = changes
         ? scopes.current.filter((scope) => changes.includes(scope))
         : scopes.current;
       const jobs = selected.map((scope) => {
-        if (force) coordinator.current.invalidate(scope);
-        return coordinator.current.run(
-          scope,
-          (signal) => loadScope(scope, userId, signal),
-          (patch) => setData((previous) => ({ ...previous, ...patch })),
-        );
+        const key = "scope:" + scope;
+        cache.track(key, [scope]);
+        return cache.load(key, async (signal) => loadScope(scope, userId, signal), force).then(() => {
+          const patch = cache.get<Partial<GameData>>(key).value;
+          if (active.current && patch) setData(previous => ({...previous, ...patch}));
+        });
       });
       for (const subscription of subscriptions.current) {
         if (
@@ -176,9 +181,10 @@ export function GameProvider({
       }
       await Promise.all(jobs);
     },
-    [userId],
+    [userId, cache],
   );
-  const refresh = useCallback(() => refreshChanges(), [refreshChanges]);
+  const refresh = useCallback(() => refreshChanges(undefined, true), [refreshChanges]);
+  const refreshAffected = useCallback((changes: Change[]) => refreshChanges(changes, true), [refreshChanges]);
 
   useEffect(() => {
     active.current = true;
@@ -194,13 +200,14 @@ export function GameProvider({
     return () => {
       active.current = false;
       coordinator.current.reset();
+      cache.reset();
     };
   }, [userId]);
 
   useEffect(() => {
     let current = true;
-    setLoading(!!userId);
-    refresh()
+    setLoading(!!userId && viewScopes[view].some(scope => cache.get("scope:" + scope).value === undefined));
+    refreshChanges()
       .catch((e) => {
         if (current) setError(errorMessage(e));
       })
@@ -210,7 +217,7 @@ export function GameProvider({
     return () => {
       current = false;
     };
-  }, [userId, view, refresh]);
+  }, [userId, view, refreshChanges, cache]);
 
   useEffect(() => {
     if (!userId) return;
@@ -219,18 +226,18 @@ export function GameProvider({
     const schedule = () => {
       clearTimeout(timer);
       if (document.visibilityState === "visible")
-        timer = setTimeout(tick, 30000);
+        timer = setTimeout(tick, 15000);
     };
     const tick = () => {
       if (document.visibilityState !== "visible") return;
       if (!working.current && gate.accept(Date.now())) {
-        void refresh().catch(() => {});
+        void refreshChanges().catch(() => {});
       }
       schedule();
     };
     const wake = () => {
       if (document.visibilityState === "visible" && !working.current && gate.accept(Date.now())) {
-        void refresh().catch(() => {});
+        void refreshChanges().catch(() => {});
       }
       schedule();
     };
@@ -242,7 +249,7 @@ export function GameProvider({
       window.removeEventListener("focus", wake);
       document.removeEventListener("visibilitychange", wake);
     };
-  }, [userId, refresh]);
+  }, [userId, refreshChanges]);
 
   const run: Run = useCallback(
     async (job, message, changes) => {
@@ -275,6 +282,7 @@ export function GameProvider({
   const value = useMemo(
     () => ({
       session,
+      cache,
       data,
       loading,
       busy,
@@ -285,10 +293,11 @@ export function GameProvider({
       setNotice,
       run,
       refresh,
+      refreshAffected,
       register,
       retry: retry.current,
     }),
-    [session, data, loading, busy, error, notices, dismissNotice, run, refresh, register],
+    [session, data, loading, busy, error, notices, dismissNotice, run, refresh, refreshAffected, register],
   );
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
 }

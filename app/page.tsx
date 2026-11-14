@@ -7,7 +7,7 @@ import { rpc } from "../lib/api";
 import { catalogArt, catalogLabel, harvestArt, levelInfo, levelTitle } from "../lib/game";
 import { slotUnlockCost } from "../lib/garden-map";
 import type { View } from "../lib/client-types";
-import { Art, Dialog, Icon, Money } from "./ui";
+import { Art, Dialog, Icon, Money, VndMoney } from "./ui";
 import { GardenMap } from "./garden-map";
 import { GameProvider, useGame, useSession } from "./game-session";
 
@@ -185,30 +185,28 @@ function GameShell({
             className="player"
             onClick={() => navigate("account")}
             aria-label={
-              "Mở tài khoản · Cấp " + lv.level + " · " + levelTitle(lv.level)
+              "Mở tài khoản · Cấp " + lv.level + " · " + lv.current + "/" + lv.needed + " XP · " + levelTitle(lv.level)
             }
           >
             <span className="avatar">
               <Icon name="account" />
             </span>
             <span>
-              <strong>{game.profile?.display_name || "Người làm vườn"}</strong>
+              <small>Cấp {lv.level} · {lv.current}/{lv.needed} XP</small>
               <span className="xp-bar">
                 <span style={{ width: lv.progress + "%" }} />
               </span>
-              <small>
-                Cấp {lv.level} · {lv.current}/{lv.needed} XP
-              </small>
               <span className="player-title">{levelTitle(lv.level)}</span>
             </span>
           </button>
-          <button
-            className="wallet"
-            onClick={() => navigate("account")}
-            aria-label={"Ví " + (game.profile?.coins || 0) + " Đồng tri thức"}
-          >
-            <Money amount={game.profile?.coins || 0} />
-          </button>
+          <div className="wallet-balances">
+            <button className="wallet" onClick={() => navigate("account")} aria-label={"Ví " + (game.profile?.coins || 0) + " Đồng tri thức"}>
+              <Money amount={game.profile?.coins || 0} />
+            </button>
+            <button className="wallet" onClick={() => navigate("shop")} aria-label={"Mở cửa hàng · " + (game.profile?.vnd || 0) + " VNĐ"}>
+              <VndMoney amount={game.profile?.vnd || 0} />
+            </button>
+          </div>
         </div>
       </header>
       <main className={"main-content view-" + view}>

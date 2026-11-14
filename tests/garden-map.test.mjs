@@ -59,7 +59,7 @@ test('fence follows tile edges and leaves a two-tile entrance connected to the p
 test('decoration and planting positions share the same projection while zooming and panning',()=>{
  const tile=gardenSurroundings.find(tile=>tile.column===-1&&tile.row===0);
  const plot=gardenGridPosition(0,0);
- for(const zoom of [.8,1,1.6]){
+ for(const zoom of [.5,.8,1,1.6]){
   const camera={x:117,y:-63};
   const a=slotScreenPosition(tile,390,844,camera,zoom),b=slotScreenPosition(plot,390,844,camera,zoom);
   assert.ok(Math.abs(b.x-a.x-SLOT_WIDTH/2*zoom)<1e-8);
@@ -72,5 +72,5 @@ test('pinch zoom keeps the touched garden point under the fingers and respects z
  assert.deepEqual(pinchGardenView(view,start,start,100,150,origin),{x:0,y:15,zoom:1.5});
  assert.deepEqual(pinchGardenView(view,start,{x:235,y:552},100,150,origin),{x:10,y:25,zoom:1.5});
  assert.equal(pinchGardenView(view,start,start,100,300,origin).zoom,1.6);
- assert.equal(pinchGardenView(view,start,start,100,10,origin).zoom,0.8);
+ assert.equal(pinchGardenView(view,start,start,100,10,origin).zoom,0.5);
 });
